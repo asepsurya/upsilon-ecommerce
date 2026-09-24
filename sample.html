@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="web_standard" name="shell-type" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        @layer base {
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                overscroll-behavior: none;
+            }
+
+            main>:first-child {
+                margin-top: 0 !important;
+            }
+
+            main>:last-child {
+                margin-bottom: 0 !important;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+        id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-fixed-dim": "#e9c349", "primary": "#f2ca50", "surface": "#131314", "error-container": "#93000a", "on-primary-container": "#554300", "inverse-on-surface": "#313031", "surface-dim": "#131314", "primary-fixed": "#ffe088", "surface-container-lowest": "#0e0e0f", "error": "#ffb4ab", "tertiary": "#cecece", "on-secondary-fixed-variant": "#5a4302", "on-error": "#690005", "tertiary-container": "#b2b3b3", "secondary": "#e4c277", "tertiary-fixed-dim": "#c6c6c6", "surface-container-high": "#2a2a2b", "on-tertiary-fixed-variant": "#454747", "on-error-container": "#ffdad6", "secondary-fixed": "#ffdf9b", "surface-bright": "#3a393a", "surface-container": "#201f20", "tertiary-fixed": "#e2e2e2", "on-background": "#e5e2e3", "on-primary": "#3c2f00", "on-secondary": "#3f2e00", "background": "#131314", "on-primary-fixed": "#241a00", "on-tertiary-fixed": "#1a1c1c", "on-tertiary-container": "#444546", "primary-container": "#d4af37", "on-surface-variant": "#d0c5af", "inverse-surface": "#e5e2e3", "surface-variant": "#353436", "outline": "#99907c", "secondary-fixed-dim": "#e4c277", "on-tertiary": "#2f3131", "on-secondary-fixed": "#251a00", "secondary-container": "#5d4604", "surface-tint": "#e9c349", "outline-variant": "#4d4635", "on-surface": "#e5e2e3", "surface-container-highest": "#353436", "on-secondary-container": "#d5b46b", "on-primary-fixed-variant": "#574500", "inverse-primary": "#735c00", "surface-container-low": "#1c1b1c" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xs": "0.25rem", "space-sm": "0.5rem", "gutter-mobile": "1rem", "gutter": "2rem", "margin": "4rem", "space-md": "1rem", "margin-mobile": "1.5rem", "space-xl": "4rem", "space-lg": "2rem" }, "fontFamily": { "display-hero": ["Playfair Display"], "title-editorial": ["Playfair Display"], "headline-lg-mobile": ["Playfair Display"], "headline-md": ["Playfair Display"], "headline-sm": ["Playfair Display"], "body-sm": ["Plus Jakarta Sans"], "label-caps": ["Plus Jakarta Sans"], "headline-lg": ["Playfair Display"], "body-md": ["Plus Jakarta Sans"], "display-hero-mobile": ["Playfair Display"], "label-sm": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"] }, "fontSize": { "display-hero": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.02em", "fontWeight": "400" }], "title-editorial": ["20px", { "lineHeight": "28px", "letterSpacing": "0.01em", "fontWeight": "400" }], "headline-lg-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "400" }], "headline-md": ["32px", { "lineHeight": "40px", "fontWeight": "400" }], "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "400" }], "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.14em", "fontWeight": "600" }], "headline-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0.01em", "fontWeight": "400" }], "display-hero-mobile": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }], "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "300" }] } } } };</script>
+</head>
+
+<body
+    class="bg-background font-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container">
+    <header
+        class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-2xl shadow-[0_1px_8px_rgba(0,0,0,0.6)]">
+        <div
+            class="w-full bg-surface-container-low px-gutter-mobile lg:px-margin py-1.5 flex items-center justify-between text-center">
+            <div class="hidden md:flex items-center gap-space-sm"><span
+                    class="material-symbols-outlined text-[14px] text-primary">verified</span><span
+                    class="font-label-caps text-label-caps tracking-widest text-primary uppercase">Maison Privée</span>
+            </div>
+            <p
+                class="w-full md:w-auto font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant">
+                Complimentary Global Express Delivery on Orders Over $500 • Atelier Noir Private Client Services</p>
+            <div class="hidden md:flex items-center gap-space-md"><span
+                    class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Concierge</span><span
+                    class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Appointments</span>
+            </div>
+        </div>
+        <div
+            class="h-20 w-full max-w-[1600px] mx-auto px-gutter-mobile lg:px-margin flex items-center justify-between gap-gutter">
+            <div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm" data-path="home"
+                    href="#"><img alt="Atelier Noir Luxury Logo" class="h-8 w-auto object-contain"
+                        src="https://lh3.googleusercontent.com/aida/AEtjO1V8NzYzD8kXD0WWnpXuh1I7XmTts8x4MlWzhzHvv5KdyGEa9reOiLDokmM1aPzs3igTyD7hc40RJZu_nYBZN-UT-H-Mi2c9TekQI8Iee7ToPjAuY7U0cgIaO-dGleYpIX74Pl6VOye8s7iXooeJEFzaAPiSNT1OINyAY5bzUcC2tEois-qTSSzhoRnxcLpHjM8k5X3gynHa7oBa-a9L73cqg5Da5xgPfWml0TUrHxv4uaLgfBePqGel8GE" /><span
+                        class="font-headline-sm text-headline-sm tracking-tight text-on-surface uppercase">Atelier
+                        Noir</span></a></div>
+            <nav class="hidden xl:flex items-center gap-space-lg h-full"
+                data-active-classes="text-primary border-b border-primary"><a
+                    class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors py-2"
+                    data-path="new-arrivals" href="#">New Arrivals</a><a
+                    class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors py-2"
+                    data-path="haute-couture" href="#">Haute Couture</a><a
+                    class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors py-2"
+                    data-path="ready-to-wear" href="#">Ready-to-Wear</a><a
+                    class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors py-2"
+                    data-path="mens-tailoring" href="#">Men's Tailoring</a><a
+                    class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors py-2"
+                    data-path="leather-goods" href="#">Leather Goods</a><a
+                    class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors py-2"
+                    data-path="editorial" href="#">Editorial</a></nav>
+            <div class="flex items-center gap-space-md">
+                <div
+                    class="hidden lg:flex items-center bg-surface-container px-space-sm py-1.5 rounded-none border border-outline-variant focus-within:border-primary transition-colors">
+                    <span class="material-symbols-outlined text-outline text-[18px] mr-2">search</span><input
+                        class="bg-transparent font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none w-44 tracking-wide"
+                        placeholder="Search the collection..." type="text" />
+                </div>
+                <div class="flex items-center"><select aria-label="Select Currency"
+                        class="bg-transparent font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant hover:text-primary cursor-pointer border-none focus:outline-none pr-1">
+                        <option class="bg-surface text-on-surface" value="USD">USD $</option>
+                        <option class="bg-surface text-on-surface" value="EUR">EUR €</option>
+                        <option class="bg-surface text-on-surface" value="GBP">GBP £</option>
+                    </select></div><a
+                    class="relative p-1.5 text-on-surface-variant hover:text-primary transition-colors"
+                    data-path="wishlist" href="#"><span
+                        class="material-symbols-outlined text-[20px]">favorite</span></a><a
+                    class="relative p-1.5 text-on-surface-variant hover:text-primary transition-colors" data-path="bag"
+                    href="#"><span class="material-symbols-outlined text-[20px]">shopping_bag</span><span
+                        class="absolute -top-1 -right-1 bg-primary text-on-primary font-label-caps text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span></a>
+                <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center cursor-pointer ml-1"><span
+                        class="material-symbols-outlined text-on-primary text-[18px]">person</span></div>
+            </div>
+        </div>
+    </header>
+    <main class="w-full pt-28 bg-background min-h-screen">
+        <div class="flex flex-col w-full">
+            <!-- Top Luxury Service Bar -->
+            <section
+                class="w-full bg-surface-container-lowest px-margin-mobile lg:px-margin py-space-sm border-b border-surface-variant/40">
+                <div
+                    class="max-w-[1600px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-space-sm items-center text-center">
+                    <div class="flex items-center justify-center gap-space-xs py-1">
+                        <span class="material-symbols-outlined text-primary text-[16px]">all_inclusive</span>
+                        <span
+                            class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant text-[10px]">Lifetime
+                            Garment Care Guarantee</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-space-xs py-1">
+                        <span class="material-symbols-outlined text-primary text-[16px]">local_shipping</span>
+                        <span
+                            class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant text-[10px]">Complimentary
+                            White-Glove Global Delivery</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-space-xs py-1">
+                        <span class="material-symbols-outlined text-primary text-[16px]">straighten</span>
+                        <span
+                            class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant text-[10px]">Complimentary
+                            Bespoke Alterations</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-space-xs py-1">
+                        <span class="material-symbols-outlined text-primary text-[16px]">support_agent</span>
+                        <span
+                            class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant text-[10px]">Private
+                            Salon Concierge 24/7</span>
+                    </div>
+                </div>
+            </section>
+            <!-- 1. Hero Showcase Section -->
+            <section class="relative w-full overflow-hidden bg-surface-container-lowest">
+                <div class="relative min-h-[82vh] lg:min-h-[88vh] flex items-center justify-start">
+                    <!-- High Fashion Editorial Background -->
+                    <div class="absolute inset-0 z-0 bg-cover bg-center transition-transform duration-1000 scale-105"
+                        data-alt="Editorial haute couture fashion shot in low-key lighting. An imposing statuesque model wearing an architectural black double-faced cashmere coat with sharp structural lapels against a dark obsidian minimalist stone set. Warm golden light spills delicately along the shoulder seams, creating intense dramatic contrast and high-fashion allure."
+                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDgsECjR9G93d9x-D_AfymE0eBvJDpE3ZzWsKfaMpjGyWJtow8OFK9I9nN6xAo29dhAmZJNTW3SEIeJUBPasUYRP-gF-eN_PffFDny9mvdC3oof3pdkr1OOwTkDHIHy9WFfE_ssvqejSAUtDOnI7zID-s2RGm8wqbYLOMdfm-StSryD2LJ3V9WWI_gDd2I66qcuDAa_1yZ1IpjAPS0CPo4prc_n3Gjw9Y7Uh2IRLyGRwqiY8gJeIRHL')">
+                    </div>
+                    <!-- Dramatic Atmospheric Scrim -->
+                    <div
+                        class="absolute inset-0 z-10 bg-gradient-to-r from-surface-container-lowest via-surface-container-lowest/80 to-transparent">
+                    </div>
+                    <div
+                        class="absolute inset-0 z-10 bg-gradient-to-t from-surface-container-lowest via-transparent to-surface-container-lowest/30">
+                    </div>
+                    <!-- Hero Content -->
+                    <div
+                        class="relative z-20 max-w-[1600px] w-full mx-auto px-margin-mobile lg:px-margin py-space-xl flex flex-col justify-center">
+                        <div class="max-w-2xl flex flex-col gap-space-md">
+                            <!-- Limited Edition Micro Badge -->
+                            <div class="flex items-center gap-space-sm">
+                                <span
+                                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high/90 backdrop-blur-md border border-primary/20 text-primary">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                    <span
+                                        class="font-label-caps text-label-caps tracking-widest uppercase text-[10px]">Limited
+                                        Edition • 50 Monolithic Pieces</span>
+                                </span>
+                                <span
+                                    class="font-label-caps text-label-caps tracking-widest uppercase text-outline text-[10px] hidden sm:inline">Runway
+                                    Presentation FW25</span>
+                            </div>
+                            <!-- Editorial Title -->
+                            <h1
+                                class="font-headline-lg lg:font-display-hero text-headline-lg lg:text-display-hero text-on-surface tracking-tight uppercase leading-none">
+                                Autumn / Winter<br />
+                                <span class="italic font-display-hero text-primary font-normal">Couture
+                                    Collection</span>
+                            </h1>
+                            <!-- Body Description -->
+                            <p class="font-body-lg text-body-lg text-tertiary max-w-xl font-light leading-relaxed">
+                                Sculptural silhouettes meticulously sculpted from double-faced Italian cashmere,
+                                structured Como silk-twill, and raw wool. An uncompromising study in dark skeuomorphic
+                                precision.
+                            </p>
+                            <!-- CTAs -->
+                            <div class="flex flex-wrap items-center gap-space-md pt-space-sm">
+                                <a class="inline-flex items-center justify-center px-8 py-4 bg-primary text-on-primary font-label-caps text-label-caps tracking-widest uppercase hover:bg-secondary transition-colors shadow-[0_4px_24px_rgba(242,202,80,0.2)] cursor-pointer"
+                                    href="#curated-collection">
+                                    Discover The Collection
+                                </a>
+                                <button
+                                    class="inline-flex items-center justify-center px-8 py-4 bg-surface-container-high/70 backdrop-blur-md border border-outline-variant hover:border-primary text-on-surface font-label-caps text-label-caps tracking-widest uppercase hover:text-primary transition-colors cursor-pointer"
+                                    onclick="document.getElementById('booking-modal').classList.remove('hidden')"
+                                    type="button">
+                                    Book Atelier Fitting
+                                </button>
+                            </div>
+                            <!-- Meta Specification Line -->
+                            <div
+                                class="flex items-center gap-space-lg pt-space-md border-t border-outline-variant/30 text-on-surface-variant">
+                                <div>
+                                    <span
+                                        class="block font-label-caps text-[10px] tracking-widest uppercase text-outline">Atelier
+                                        Origin</span>
+                                    <span class="font-body-sm text-body-sm text-on-surface font-medium">Biella &amp;
+                                        Milan, Italy</span>
+                                </div>
+                                <div class="w-px h-6 bg-outline-variant/50"></div>
+                                <div>
+                                    <span
+                                        class="block font-label-caps text-[10px] tracking-widest uppercase text-outline">Material
+                                        Certification</span>
+                                    <span class="font-body-sm text-body-sm text-on-surface font-medium">100% Traceable
+                                        Organic</span>
+                                </div>
+                                <div class="w-px h-6 bg-outline-variant/50"></div>
+                                <div>
+                                    <span
+                                        class="block font-label-caps text-[10px] tracking-widest uppercase text-outline">Fitting
+                                        Availability</span>
+                                    <span class="font-body-sm text-body-sm text-primary font-medium">Private Suites
+                                        Open</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- 2. Category Circles Showcase -->
+            <section class="w-full bg-surface-container-low py-space-xl border-y border-outline-variant/20">
+                <div class="max-w-[1600px] mx-auto px-margin-mobile lg:px-margin">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-space-lg">
+                        <div>
+                            <span
+                                class="font-label-caps text-label-caps uppercase tracking-widest text-primary block mb-space-xs">Archival
+                                Categorization</span>
+                            <h2 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">
+                                Curated Universes</h2>
+                        </div>
+                        <p class="font-body-sm text-body-sm text-outline max-w-sm mt-2 md:mt-0">
+                            Tailored structures, fluid evening drapery, and fine leather crafted with mathematical
+                            equilibrium.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-space-md">
+                        <!-- Category 1 -->
+                        <a class="group flex flex-col items-center text-center" href="#curated-collection">
+                            <div
+                                class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full p-1 bg-gradient-to-b from-primary/30 to-transparent group-hover:from-primary transition-all duration-500 mb-space-sm overflow-hidden">
+                                <div
+                                    class="w-full h-full rounded-full overflow-hidden bg-surface-container-high relative">
+                                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        data-alt="Close up of bespoke black wool tailoring with structured padded shoulder and sharp peak lapel on dark stone backdrop, fashion photography"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKjLlrmI4lXzZuRExloKP76xYUD20KKZyAmyZKbR1Xlxbv82FwM3B57mwGgjYi_QsQVEcqStiq77gh_uT_WuYgfhxzBg2J-al7CvTTB8_Oin1KqjnaAOtx525-fxDNj7007_G_N8eoU-942MQ3p8oKQtYmwSAz-WKsRUFEvYFFXCjEiteKlIU-xT7A76v1Bbq0xKqOrDlPL6dBZavM0H8zxeXJOrZhv0HZvpkDe4s1twAYHoeezeKB" />
+                                    <div
+                                        class="absolute inset-0 bg-surface/20 group-hover:bg-transparent transition-colors">
+                                    </div>
+                                </div>
+                            </div>
+                            <span
+                                class="font-headline-sm text-base text-on-surface group-hover:text-primary transition-colors uppercase tracking-tight">Tailoring</span>
+                            <span class="font-label-caps text-[10px] uppercase tracking-widest text-outline">18
+                                Silhouettes</span>
+                        </a>
+                        <!-- Category 2 -->
+                        <a class="group flex flex-col items-center text-center" href="#curated-collection">
+                            <div
+                                class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full p-1 bg-gradient-to-b from-primary/30 to-transparent group-hover:from-primary transition-all duration-500 mb-space-sm overflow-hidden">
+                                <div
+                                    class="w-full h-full rounded-full overflow-hidden bg-surface-container-high relative">
+                                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        data-alt="Lustrous black silk georgette gown draped elegantly over a model in dramatic high fashion editorial lighting, champagne golden glows"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtcGV6AzRIurZEBXomIXhKG_ttSkkFslD9BOkze4BTUE4VIIropiNSzMI5R6dPDMQmKD73J35k7TcA2wXtQIpBur-nLAFFbMBb0qX05NMxhRO5vXQEhOyU7CKnFgnJj4FbgKH3ZjxxH-7bb-mZLkHYuA_9oI3GlhooH9pJZkAMrm0AxwVn2A9g-PLnfRyNdbZ5CMhtP2oCciJcQOoFWfjI8PILg2AgNXzs32TYp7OurhxZ9zKNPqO6" />
+                                    <div
+                                        class="absolute inset-0 bg-surface/20 group-hover:bg-transparent transition-colors">
+                                    </div>
+                                </div>
+                            </div>
+                            <span
+                                class="font-headline-sm text-base text-on-surface group-hover:text-primary transition-colors uppercase tracking-tight">Eveningwear</span>
+                            <span class="font-label-caps text-[10px] uppercase tracking-widest text-outline">24
+                                Styles</span>
+                        </a>
+                        <!-- Category 3 -->
+                        <a class="group flex flex-col items-center text-center" href="#curated-collection">
+                            <div
+                                class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full p-1 bg-gradient-to-b from-primary/30 to-transparent group-hover:from-primary transition-all duration-500 mb-space-sm overflow-hidden">
+                                <div
+                                    class="w-full h-full rounded-full overflow-hidden bg-surface-container-high relative">
+                                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        data-alt="Heavy textured double-faced charcoal cashmere coat with oversized belt and collar on a fashion model in monochrome luxury setting"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfxmbEAtf3uZZ65MqqP-5R7dGPQygP-MgJ8c-EUf2H7lDsnsBGF0v4NxvUvxIpVKqcRcD2h2FApbOLlVuWxIDz4ImqYSgUu3VUd15O9gquWPo5La1wFe9XeoH422NcgjTWtI2CVegOakVs33SbxgT2UGOq5FyweihvZo74Iws5uGJiGJXUBqOBNMHYn9MJ-h2u6ZWLUJVGRBdsKx_jDsR1PJtVF-oNZtGxvxrRg4aSnWwoOgk5HF6Y" />
+                                    <div
+                                        class="absolute inset-0 bg-surface/20 group-hover:bg-transparent transition-colors">
+                                    </div>
+                                </div>
+                            </div>
+                            <span
+                                class="font-headline-sm text-base text-on-surface group-hover:text-primary transition-colors uppercase tracking-tight">Outerwear</span>
+                            <span class="font-label-caps text-[10px] uppercase tracking-widest text-outline">14
+                                Masterpieces</span>
+                        </a>
+                        <!-- Category 4 -->
+                        <a class="group flex flex-col items-center text-center" href="#curated-collection">
+                            <div
+                                class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full p-1 bg-gradient-to-b from-primary/30 to-transparent group-hover:from-primary transition-all duration-500 mb-space-sm overflow-hidden">
+                                <div
+                                    class="w-full h-full rounded-full overflow-hidden bg-surface-container-high relative">
+                                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        data-alt="Dense chunky ribbed knitwear in dark obsidian cashmere, luxury textural detail shot with soft golden specular rim light"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0cjnbHml2gYx8YPMOYnovb_y_pGa7gxViBc7Z0_ZjkGzB_0oVcpTmQN-RY-D5PrJ7qrvMaivKArW5mhobDP8pHwFbDJyUL9FIdUz6_q-smgc1glxFwvU8i5j3St94mh1DQYZ1y3_fGp0R9YpqWRjG9LVufUnAw61j8gTdOaNKkb7aVC9BpKmwkVs3M2H63qLbe-JkJ8kecZBTh0ZslYz7r_R8jzrDrt_2zlAKsOEaPAGrJLVPzn_x" />
+                                    <div
+                                        class="absolute inset-0 bg-surface/20 group-hover:bg-transparent transition-colors">
+                                    </div>
+                                </div>
+                            </div>
+                            <span
+                                class="font-headline-sm text-base text-on-surface group-hover:text-primary transition-colors uppercase tracking-tight">Knitwear</span>
+                            <span class="font-label-caps text-[10px] uppercase tracking-widest text-outline">12
+                                Compositions</span>
+                        </a>
+                        <!-- Category 5 -->
+                        <a class="group flex flex-col items-center text-center" href="#curated-collection">
+                            <div
+                                class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full p-1 bg-gradient-to-b from-primary/30 to-transparent group-hover:from-primary transition-all duration-500 mb-space-sm overflow-hidden">
+                                <div
+                                    class="w-full h-full rounded-full overflow-hidden bg-surface-container-high relative">
+                                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        data-alt="Sculpted box calfskin leather clutch with brushed brass architectural clasp resting on polished dark slate pedestal"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA17UsVZ5e6qUZ5X6PXGpcxd_QDC4NHAiVRJ1PW0GPvQb333UMIL0--_zT_CDhfvGPsVfIc5_aqRzVDK4HjuKC3kZ1fdtlKW69GDqCNQYMTxrAIGn96n90snsiLeEDkQpVr4eN5-w3VPZrp90sPQ0ln4p7mIpGqxLo6RVJiKH3tTwB5j3bNIsCTUYsKeZHQD9cgMuyawkLT1Xs9Ctjcw8b1a90tVZ_gAyypcdy6F-ZBTXG6XZRs5_8n" />
+                                    <div
+                                        class="absolute inset-0 bg-surface/20 group-hover:bg-transparent transition-colors">
+                                    </div>
+                                </div>
+                            </div>
+                            <span
+                                class="font-headline-sm text-base text-on-surface group-hover:text-primary transition-colors uppercase tracking-tight">Leather
+                                Goods</span>
+                            <span class="font-label-caps text-[10px] uppercase tracking-widest text-outline">16
+                                Objects</span>
+                        </a>
+                        <!-- Category 6 -->
+                        <a class="group flex flex-col items-center text-center" href="#curated-collection">
+                            <div
+                                class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full p-1 bg-gradient-to-b from-primary/30 to-transparent group-hover:from-primary transition-all duration-500 mb-space-sm overflow-hidden">
+                                <div
+                                    class="w-full h-full rounded-full overflow-hidden bg-surface-container-high relative">
+                                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        data-alt="Heavy 18k hammered yellow gold cuff bracelet embedded with raw black tourmaline crystal on dark velvet display"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOnv4mucDFCvJX-zQV8khhqt6BQBaOP0wTBfKHS_Z90QzAaGTJjuKhKzUFbj0g1pIV648w0Z6k8FgfbBWfyaddG1jauJQvj_XF_Jz8weS6RoAVEfTXWymPfyNBuBQbm5nSewlj3idktESubRnoN87E58r-v3_N17h6BzUQ9zOuVjAzhmVqTMg0gwF65v4f_V0VaLzMvUACNXSOrT31msIC6XMwWylbcFk67T5E5S8LSfb9ySCIOeBV" />
+                                    <div
+                                        class="absolute inset-0 bg-surface/20 group-hover:bg-transparent transition-colors">
+                                    </div>
+                                </div>
+                            </div>
+                            <span
+                                class="font-headline-sm text-base text-on-surface group-hover:text-primary transition-colors uppercase tracking-tight">Fine
+                                Jewelry</span>
+                            <span class="font-label-caps text-[10px] uppercase tracking-widest text-outline">9
+                                Artefacts</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+            <!-- 3. Curated Atelier Pieces / Garment Grid -->
+            <section class="w-full bg-surface py-space-xl" id="curated-collection">
+                <div class="max-w-[1600px] mx-auto px-margin-mobile lg:px-margin">
+                    <!-- Section Header -->
+                    <div class="flex flex-col md:flex-row md:items-end justify-between pb-space-lg">
+                        <div>
+                            <span
+                                class="font-label-caps text-label-caps uppercase tracking-widest text-primary block mb-space-xs">Seasonal
+                                Archival Release</span>
+                            <h2 class="font-headline-lg text-headline-lg text-on-surface uppercase tracking-tight">
+                                Curated Atelier Pieces</h2>
+                        </div>
+                        <!-- Filter Pills -->
+                        <div class="flex items-center gap-2 overflow-x-auto pt-4 md:pt-0 no-scrollbar"
+                            id="collection-filters">
+                            <button
+                                class="filter-pill active px-4 py-2 bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-widest transition-all">All
+                                Pieces</button>
+                            <button
+                                class="filter-pill px-4 py-2 bg-surface-container-high text-on-surface-variant hover:text-primary hover:bg-surface-variant border border-outline-variant/40 font-label-caps text-label-caps uppercase tracking-widest transition-all">Tailored
+                                Suits</button>
+                            <button
+                                class="filter-pill px-4 py-2 bg-surface-container-high text-on-surface-variant hover:text-primary hover:bg-surface-variant border border-outline-variant/40 font-label-caps text-label-caps uppercase tracking-widest transition-all">Silk
+                                Gowns</button>
+                            <button
+                                class="filter-pill px-4 py-2 bg-surface-container-high text-on-surface-variant hover:text-primary hover:bg-surface-variant border border-outline-variant/40 font-label-caps text-label-caps uppercase tracking-widest transition-all">Cashmere
+                                Knitwear</button>
+                            <button
+                                class="filter-pill px-4 py-2 bg-surface-container-high text-on-surface-variant hover:text-primary hover:bg-surface-variant border border-outline-variant/40 font-label-caps text-label-caps uppercase tracking-widest transition-all">Outerwear</button>
+                            <button
+                                class="filter-pill px-4 py-2 bg-surface-container-high text-on-surface-variant hover:text-primary hover:bg-surface-variant border border-outline-variant/40 font-label-caps text-label-caps uppercase tracking-widest transition-all">Fine
+                                Leather</button>
+                        </div>
+                    </div>
+                    <!-- 8-Card Luxury Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+                        <!-- Garment 1 -->
+                        <div
+                            class="group relative bg-surface-container flex flex-col justify-between border border-outline-variant/30 hover:border-primary/50 transition-all duration-500 shadow-md">
+                            <div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-highest">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    data-alt="Oversized silk-twill dark obsidian trench coat styled on a male model with sculptural lapels and minimalist brass buttons against deep shadow"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWk6E7dJeg9_ma7-fiBVauvmas0ykE3L3rkcvdlS8gsdk23v-Uz4uFjrXgGnwwfpuGjkKAwe5HGpHCqq4sx8QIBdBtyOpQEztfBR4dvSPum5zXeFVQJV-IZX1RYvfkeILj9CcWumVkpH48Qzh808c4q4N_vTeStMqE05-jtYjibDNuPyuzSR9f9PzaZmYV3pMZJYZwxgZhOWfZqjAEP9ddmoSPrzlKDSqPi-vPwVDPGSmh1MgYt46D" />
+                                <!-- Badge -->
+                                <span
+                                    class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 text-primary border border-primary/20 font-label-caps text-[10px] uppercase tracking-widest">
+                                    Bespoke
+                                </span>
+                                <!-- Wishlist Button -->
+                                <button aria-label="Add to wishlist"
+                                    class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">favorite</span>
+                                </button>
+                                <!-- Hover Slide-up Quick Reserve -->
+                                <div
+                                    class="absolute inset-x-0 bottom-0 p-space-sm bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2">
+                                    <button
+                                        class="w-full py-2.5 bg-primary text-on-primary font-label-caps text-[11px] tracking-widest uppercase hover:bg-secondary transition-colors font-semibold">
+                                        Quick Reserve
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-space-md flex flex-col gap-1.5">
+                                <div class="flex items-center justify-between text-outline text-[11px]">
+                                    <span class="font-label-caps tracking-widest uppercase text-primary">Atelier
+                                        Tailoring</span>
+                                    <span class="font-body-sm">Edition 08/50</span>
+                                </div>
+                                <h3
+                                    class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight">
+                                    Oversized Silk-Twill Trench Coat
+                                </h3>
+                                <p class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-1">
+                                    Pure Mulberry Silk • Como, Italy
+                                </p>
+                                <div
+                                    class="flex items-center justify-between pt-space-xs border-t border-outline-variant/20 mt-1">
+                                    <span class="font-label-sm text-base text-on-surface font-semibold">$3,450</span>
+                                    <span
+                                        class="font-label-caps text-[10px] text-primary tracking-widest uppercase">Includes
+                                        Fitting</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Garment 2 -->
+                        <div
+                            class="group relative bg-surface-container flex flex-col justify-between border border-outline-variant/30 hover:border-primary/50 transition-all duration-500 shadow-md">
+                            <div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-highest">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    data-alt="Hand-stitched double-breasted charcoal wool blazer worn by high-fashion model with razor-sharp shoulders and satin peak collar"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZAHRyrwMOu5H4TsyjVXB4M-0dwZg5J5Of4PK5qoyZyGvp4jsXoFag1zd7Z__HWQbsjuNrDHz4ZGNNYFP_HztYnRW34TojQDCk3_uLPeN1gJxZdEwaavaL0xAYBagIpGgPRpwUcSMmqqK1P--S911kREuuVRrS8gRvXJabroIB4oO5yIAr7i6xC7SaYmDHDWACriCkh72FISQzaDcMlAplbmp3wMC9B7qR1vsw9nnpsshlzNcA3Ale" />
+                                <span
+                                    class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 text-primary border border-primary/20 font-label-caps text-[10px] uppercase tracking-widest">
+                                    Runway SS25
+                                </span>
+                                <button aria-label="Add to wishlist"
+                                    class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">favorite</span>
+                                </button>
+                                <div
+                                    class="absolute inset-x-0 bottom-0 p-space-sm bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2">
+                                    <button
+                                        class="w-full py-2.5 bg-primary text-on-primary font-label-caps text-[11px] tracking-widest uppercase hover:bg-secondary transition-colors font-semibold">
+                                        Quick Reserve
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-space-md flex flex-col gap-1.5">
+                                <div class="flex items-center justify-between text-outline text-[11px]">
+                                    <span class="font-label-caps tracking-widest uppercase text-primary">Sartorial
+                                        Master</span>
+                                    <span class="font-body-sm">Edition 14/40</span>
+                                </div>
+                                <h3
+                                    class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight">
+                                    Hand-Stitched Wool Blazer
+                                </h3>
+                                <p class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-1">
+                                    Super 160s Virgin Wool • Biella Mills
+                                </p>
+                                <div
+                                    class="flex items-center justify-between pt-space-xs border-t border-outline-variant/20 mt-1">
+                                    <span class="font-label-sm text-base text-on-surface font-semibold">$2,800</span>
+                                    <span
+                                        class="font-label-caps text-[10px] text-primary tracking-widest uppercase">Includes
+                                        Fitting</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Garment 3 -->
+                        <div
+                            class="group relative bg-surface-container flex flex-col justify-between border border-outline-variant/30 hover:border-primary/50 transition-all duration-500 shadow-md">
+                            <div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-highest">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    data-alt="Dramatic pleated silk georgette floor-length evening gown with deep obsidian sheen and delicate gold filament embroidery on the back"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbzjmQzS-h35TGB_b_UlBDFliwq4f72dB8lOItBoIVfkj09WRg6zKeQRSXMipiDuA0LJ1U59m1HRiheNH4lgULc-d1Vm5KmDEtOP1c5k3WUqjMsrPCbZmpXGBrtaQGj66B4jP4jsU5E6CWA9vK2W0rBCH_EroeBBO73Xkd_ASwb-Dx77Zlkr0w0eJMHQN22hUTGYbSBUA_EHxi-E-xen1h8aQ8BiVdKJxkolCL0G_aMtEX0vQDUk-N" />
+                                <span
+                                    class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 text-primary border border-primary/20 font-label-caps text-[10px] uppercase tracking-widest">
+                                    Sustainable Silk
+                                </span>
+                                <button aria-label="Add to wishlist"
+                                    class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">favorite</span>
+                                </button>
+                                <div
+                                    class="absolute inset-x-0 bottom-0 p-space-sm bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2">
+                                    <button
+                                        class="w-full py-2.5 bg-primary text-on-primary font-label-caps text-[11px] tracking-widest uppercase hover:bg-secondary transition-colors font-semibold">
+                                        Quick Reserve
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-space-md flex flex-col gap-1.5">
+                                <div class="flex items-center justify-between text-outline text-[11px]">
+                                    <span class="font-label-caps tracking-widest uppercase text-primary">Couture
+                                        Soirée</span>
+                                    <span class="font-body-sm">Edition 04/25</span>
+                                </div>
+                                <h3
+                                    class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight">
+                                    Pleated Silk Georgette Gown
+                                </h3>
+                                <p class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-1">
+                                    100% Organic Silk • Lyon Weavers
+                                </p>
+                                <div
+                                    class="flex items-center justify-between pt-space-xs border-t border-outline-variant/20 mt-1">
+                                    <span class="font-label-sm text-base text-on-surface font-semibold">$3,650</span>
+                                    <span
+                                        class="font-label-caps text-[10px] text-primary tracking-widest uppercase">Includes
+                                        Fitting</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Garment 4 -->
+                        <div
+                            class="group relative bg-surface-container flex flex-col justify-between border border-outline-variant/30 hover:border-primary/50 transition-all duration-500 shadow-md">
+                            <div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-highest">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    data-alt="Ribbed Mongolian cashmere black turtleneck sweater with thick neck roll and ribbed cuffs photographed in soft golden warm light"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7unaK1g0lY1gCK5xYcZX6_uCFASG4_yQpy30FDgJlDSh6i0U1Z__YR3Cdhu9PV6AYT_P1bf6JTqUax_y6YwJUpXTUiKJq_cANOLjeHAgTL4ky1QOzP8Bt32Rlj27n3NShbK0TqdB2nXFqnaE8eDzv7-uikLwTe3aX4Y7BQ7sRFYspd3vtC-38TDw7jLXkw5cRrSrglLSQbXwssTSlFecVEQZg4PcFukYIvMCqoPf6djib0yTFvAOL" />
+                                <span
+                                    class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 text-primary border border-primary/20 font-label-caps text-[10px] uppercase tracking-widest">
+                                    Loro Piana Yarn
+                                </span>
+                                <button aria-label="Add to wishlist"
+                                    class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">favorite</span>
+                                </button>
+                                <div
+                                    class="absolute inset-x-0 bottom-0 p-space-sm bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2">
+                                    <button
+                                        class="w-full py-2.5 bg-primary text-on-primary font-label-caps text-[11px] tracking-widest uppercase hover:bg-secondary transition-colors font-semibold">
+                                        Quick Reserve
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-space-md flex flex-col gap-1.5">
+                                <div class="flex items-center justify-between text-outline text-[11px]">
+                                    <span class="font-label-caps tracking-widest uppercase text-primary">Permanent
+                                        Archive</span>
+                                    <span class="font-body-sm">Edition 22/60</span>
+                                </div>
+                                <h3
+                                    class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight">
+                                    Ribbed Mongolian Turtleneck
+                                </h3>
+                                <p class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-1">
+                                    100% Loro Piana Cashmere • Biella
+                                </p>
+                                <div
+                                    class="flex items-center justify-between pt-space-xs border-t border-outline-variant/20 mt-1">
+                                    <span class="font-label-sm text-base text-on-surface font-semibold">$1,450</span>
+                                    <span
+                                        class="font-label-caps text-[10px] text-tertiary tracking-widest uppercase">Immediate
+                                        Dispatch</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Garment 5 -->
+                        <div
+                            class="group relative bg-surface-container flex flex-col justify-between border border-outline-variant/30 hover:border-primary/50 transition-all duration-500 shadow-md">
+                            <div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-highest">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    data-alt="Structured Italian satin tuxedo with shawl collar and obsidian mother-of-pearl buttons on male model in minimalist high luxury salon"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnlNfh7J6CgbLgiJkVmKxRjViu_AqC2z_Bi6ZTlCijLlckcMAxnEEpa-S8lJIJtZoUkRUg99CmtrUJXLOj9YovU8hQV1micUbHxc2esWk_o-A_glMgvfD5Zh4ehlN0DBPel8aXY2vgFUAuCg895yDKd6hYhfB8rTbZwcFCpNNsCnJEl3vYHagkMViYLZd-n1tAo72bncoXOQAcPeoFMc8IPgA9oZdcIV4kXTKy761UaEWW9DL9qZBF" />
+                                <span
+                                    class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 text-primary border border-primary/20 font-label-caps text-[10px] uppercase tracking-widest">
+                                    Bespoke
+                                </span>
+                                <button aria-label="Add to wishlist"
+                                    class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">favorite</span>
+                                </button>
+                                <div
+                                    class="absolute inset-x-0 bottom-0 p-space-sm bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2">
+                                    <button
+                                        class="w-full py-2.5 bg-primary text-on-primary font-label-caps text-[11px] tracking-widest uppercase hover:bg-secondary transition-colors font-semibold">
+                                        Quick Reserve
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-space-md flex flex-col gap-1.5">
+                                <div class="flex items-center justify-between text-outline text-[11px]">
+                                    <span class="font-label-caps tracking-widest uppercase text-primary">Formal
+                                        Atelier</span>
+                                    <span class="font-body-sm">Edition 06/30</span>
+                                </div>
+                                <h3
+                                    class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight">
+                                    Structured Italian Satin Tuxedo
+                                </h3>
+                                <p class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-1">
+                                    Silk Duchesse • Milanese Atelier
+                                </p>
+                                <div
+                                    class="flex items-center justify-between pt-space-xs border-t border-outline-variant/20 mt-1">
+                                    <span class="font-label-sm text-base text-on-surface font-semibold">$4,200</span>
+                                    <span
+                                        class="font-label-caps text-[10px] text-primary tracking-widest uppercase">Includes
+                                        Fitting</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Garment 6 -->
+                        <div
+                            class="group relative bg-surface-container flex flex-col justify-between border border-outline-variant/30 hover:border-primary/50 transition-all duration-500 shadow-md">
+                            <div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-highest">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    data-alt="Asymmetric cut-out dark velvet dress with subtle sculpted waistline and deep obsidian matte texture, luxury editorial model pose"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbd43_Asyz8VVoNcfXDGxHfTX0GEyi744NgGIvNuITwOeAWEovmxeBle_zDn6h7FXN_HHtBaeAY-N1W92TdmLE_cj8cVBYX9_QzlCYvaMcWD91fJpsyEXFHCxiwmx2Z_cCSG9bkCoNujEcVowsTUeRoPoWP3LBMlvp-LNp00P6bM3tS6MA9L15BfJ8W_hr_GgxW2OzYRQEB2V8_-qFdPgG9xSpfBLV7UJ5Pz02nM8JFywU9xgbUnCj" />
+                                <span
+                                    class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 text-primary border border-primary/20 font-label-caps text-[10px] uppercase tracking-widest">
+                                    Runway SS25
+                                </span>
+                                <button aria-label="Add to wishlist"
+                                    class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">favorite</span>
+                                </button>
+                                <div
+                                    class="absolute inset-x-0 bottom-0 p-space-sm bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2">
+                                    <button
+                                        class="w-full py-2.5 bg-primary text-on-primary font-label-caps text-[11px] tracking-widest uppercase hover:bg-secondary transition-colors font-semibold">
+                                        Quick Reserve
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-space-md flex flex-col gap-1.5">
+                                <div class="flex items-center justify-between text-outline text-[11px]">
+                                    <span class="font-label-caps tracking-widest uppercase text-primary">Sculptural
+                                        Nocturne</span>
+                                    <span class="font-body-sm">Edition 03/35</span>
+                                </div>
+                                <h3
+                                    class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight">
+                                    Asymmetric Cut-Out Velvet Dress
+                                </h3>
+                                <p class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-1">
+                                    Silk-Plush Velvet • Venice
+                                </p>
+                                <div
+                                    class="flex items-center justify-between pt-space-xs border-t border-outline-variant/20 mt-1">
+                                    <span class="font-label-sm text-base text-on-surface font-semibold">$2,950</span>
+                                    <span
+                                        class="font-label-caps text-[10px] text-primary tracking-widest uppercase">Includes
+                                        Fitting</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Garment 7 -->
+                        <div
+                            class="group relative bg-surface-container flex flex-col justify-between border border-outline-variant/30 hover:border-primary/50 transition-all duration-500 shadow-md">
+                            <div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-highest">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    data-alt="Monolithic architectural black leather trench coat made of full grain nappa with clean hidden horn button placket"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzAonUE5-YRscA-KobTkvOqDkjOOkPHudZNCeY5_OJn_jsFqqlX2hyvf-t0UYEDsW35-LSnPSJ9GfPDtCwcukwJXfp4PqdCUPGuYf1z8HKBzaYb6dVz7Fu2YpCR0BtNPKuCQwuhZ1VOctBNRuzQIUmHSufuxIVuKB-Mtzmv_BaRNkW9q4COvIcAC1G8DfipPGqWOPjcSe2Q_40Nxv0nkN50idCYO0PMYomSv4lKiGo2jpCtIPLDVha" />
+                                <span
+                                    class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 text-primary border border-primary/20 font-label-caps text-[10px] uppercase tracking-widest">
+                                    Bespoke Hide
+                                </span>
+                                <button aria-label="Add to wishlist"
+                                    class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">favorite</span>
+                                </button>
+                                <div
+                                    class="absolute inset-x-0 bottom-0 p-space-sm bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2">
+                                    <button
+                                        class="w-full py-2.5 bg-primary text-on-primary font-label-caps text-[11px] tracking-widest uppercase hover:bg-secondary transition-colors font-semibold">
+                                        Quick Reserve
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-space-md flex flex-col gap-1.5">
+                                <div class="flex items-center justify-between text-outline text-[11px]">
+                                    <span class="font-label-caps tracking-widest uppercase text-primary">Cuir
+                                        Imperial</span>
+                                    <span class="font-body-sm">Edition 02/20</span>
+                                </div>
+                                <h3
+                                    class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight">
+                                    Florentine Nappa Leather Overcoat
+                                </h3>
+                                <p class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-1">
+                                    Vegetable-Tanned Calfskin • Florence
+                                </p>
+                                <div
+                                    class="flex items-center justify-between pt-space-xs border-t border-outline-variant/20 mt-1">
+                                    <span class="font-label-sm text-base text-on-surface font-semibold">$5,100</span>
+                                    <span
+                                        class="font-label-caps text-[10px] text-primary tracking-widest uppercase">Includes
+                                        Fitting</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Garment 8 -->
+                        <div
+                            class="group relative bg-surface-container flex flex-col justify-between border border-outline-variant/30 hover:border-primary/50 transition-all duration-500 shadow-md">
+                            <div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-highest">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    data-alt="Fine gauge cashmere sleeveless vest with subtle metallic gold threads woven into charcoal dark yarn on haute couture model"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFQIBU6eglxpkwKZT81r5bvFJZ51vuNko6cWhJw_r1RHNIb7YRTDN3BKIn7JdupamvCZ54Dt8llsRjeEDCIuBVxSdukkFyaO5zCevT-I7ckuMGE6gLnPlwb8hqjEeN9CY_oQ_MX2r1uO8a7bwh8STrHw1uh2eHFEGFPvjo8xjyZlEV8HZwHT2iCgr0ZfPwSQKI3UZmO2daNemMzU31Cr1-geAzjTZ3LphXkOhv9_VSkXbgBYoVSmCY" />
+                                <span
+                                    class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 text-primary border border-primary/20 font-label-caps text-[10px] uppercase tracking-widest">
+                                    Limited 25
+                                </span>
+                                <button aria-label="Add to wishlist"
+                                    class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">favorite</span>
+                                </button>
+                                <div
+                                    class="absolute inset-x-0 bottom-0 p-space-sm bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2">
+                                    <button
+                                        class="w-full py-2.5 bg-primary text-on-primary font-label-caps text-[11px] tracking-widest uppercase hover:bg-secondary transition-colors font-semibold">
+                                        Quick Reserve
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-space-md flex flex-col gap-1.5">
+                                <div class="flex items-center justify-between text-outline text-[11px]">
+                                    <span class="font-label-caps tracking-widest uppercase text-primary">Knitwear
+                                        Atelier</span>
+                                    <span class="font-body-sm">Edition 11/25</span>
+                                </div>
+                                <h3
+                                    class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight">
+                                    Raw Filament Cashmere Shell
+                                </h3>
+                                <p class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-1">
+                                    Cashmere &amp; Gold Silk • Scottish Highlands
+                                </p>
+                                <div
+                                    class="flex items-center justify-between pt-space-xs border-t border-outline-variant/20 mt-1">
+                                    <span class="font-label-sm text-base text-on-surface font-semibold">$980</span>
+                                    <span
+                                        class="font-label-caps text-[10px] text-tertiary tracking-widest uppercase">Immediate
+                                        Dispatch</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- View All Button -->
+                    <div class="w-full flex justify-center pt-space-xl">
+                        <button
+                            class="px-10 py-3.5 bg-transparent border border-outline hover:border-primary text-on-surface hover:text-primary font-label-caps text-label-caps uppercase tracking-widest transition-all">
+                            Explore All 142 Runway Artefacts
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <!-- 4. Featured Editorial Duet / Dual Promotional Banners -->
+            <section class="w-full bg-surface-container-lowest py-space-xl">
+                <div class="max-w-[1600px] mx-auto px-margin-mobile lg:px-margin">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+                        <!-- Left Banner: Bespoke Tailoring Services -->
+                        <div
+                            class="relative min-h-[500px] lg:min-h-[560px] flex flex-col justify-end p-space-lg lg:p-space-xl overflow-hidden group border border-outline-variant/30">
+                            <div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-1000"
+                                data-alt="Master Italian tailor in Milanese atelier working with chalk and tape measure over dark charcoal wool fabric on an antique solid oak workbench, soft warm workshop lamp light"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBT-T0wfESH0AKiW_Y4mW0U-uoTmt4sry-3tjS0Q6fhirr65gRULPzvd9Tl7w2sNVsPdmULlBlO0nN0F7TUezHdKL_aAt_Eu3tG1oV_C-HbvA8bbnw2ne-qL2BEx9Wu7XV8ydNQZ7rYNpLQsQUZ7G7ulimG6DMHBaHlgQGywMhcx460dIcMofT2eREYFGLsYDa1GfUB_TIP8Rll_d3f018Lo0xZiuDGzJTizyeJU3lw5Wfe34mOcOAZ')">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/70 to-transparent">
+                            </div>
+                            <div class="relative z-10 flex flex-col gap-space-sm max-w-md">
+                                <span
+                                    class="font-label-caps text-label-caps uppercase tracking-widest text-primary">Made-to-Measure
+                                    Guild</span>
+                                <h3 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">
+                                    Bespoke Tailoring Services
+                                </h3>
+                                <p class="font-body-md text-body-md text-tertiary font-light">
+                                    Individual measurements taken in private salon suites. Cut, constructed, and
+                                    hand-canvassed by three generations of Milanese artisans.
+                                </p>
+                                <div class="pt-space-xs">
+                                    <a class="inline-flex items-center gap-2 text-primary font-label-caps text-label-caps uppercase tracking-widest group-hover:translate-x-1 transition-transform"
+                                        href="#">
+                                        <span>Explore Made-to-Measure</span>
+                                        <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Right Banner: The Evening Capsule -->
+                        <div
+                            class="relative min-h-[500px] lg:min-h-[560px] flex flex-col justify-end p-space-lg lg:p-space-xl overflow-hidden group border border-outline-variant/30">
+                            <div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-1000"
+                                data-alt="A fashion model wearing an architectural black silk gown embroidered with hand-placed micro obsidian and champagne glass beads glistening subtly under spotlight in a minimalist opera hall"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCbRdaoNrejQGK-eIlC3WmC3n5PW8qnTLuhARInrKi5Lak5TVA1xfExVetuXOnpd9NVwaN7G9wdvWTiK98rzacA4Wj2u1R_RF5-6ObuUywNytDUapoWWhgc0NV-Wq5DGJsIp6YYuQZKbLGAa9BqRtI3fG9Q-L1yvXgQ86CPykImjfSLDSqhcnYZyP5z7I6iJeno9bYNjE6mri0N0nbMiUEmON8xGCFNZojcdC8ce14pkxVFUGC_PxLZ')">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/70 to-transparent">
+                            </div>
+                            <div class="relative z-10 flex flex-col gap-space-sm max-w-md">
+                                <span
+                                    class="font-label-caps text-label-caps uppercase tracking-widest text-primary">Nocturne
+                                    Series</span>
+                                <h3 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">
+                                    The Evening Capsule
+                                </h3>
+                                <p class="font-body-md text-body-md text-tertiary font-light">
+                                    Architectural draping and hand-embroidered Czech glass beads. Silhouettes engineered
+                                    for majestic nocturnal presence and absolute stillness.
+                                </p>
+                                <div class="pt-space-xs">
+                                    <a class="inline-flex items-center gap-2 text-primary font-label-caps text-label-caps uppercase tracking-widest group-hover:translate-x-1 transition-transform"
+                                        href="#">
+                                        <span>Shop Eveningwear Capsule</span>
+                                        <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- 5. Editorial Story & Craftsmanship Feature ('The Atelier Philosophy') -->
+            <section class="w-full bg-surface-container py-space-xl lg:py-24 border-y border-outline-variant/20">
+                <div class="max-w-[1600px] mx-auto px-margin-mobile lg:px-margin">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center">
+                        <!-- Imagery Asymmetry -->
+                        <div class="lg:col-span-6 relative">
+                            <div
+                                class="relative z-10 w-full aspect-[4/5] bg-surface-container-highest overflow-hidden border border-outline-variant/40 shadow-2xl">
+                                <img class="w-full h-full object-cover"
+                                    data-alt="Macro extreme close-up of dark cashmere textile showing intricate double-faced weave, hand sewn gold thread stitches, and high artisanal precision with soft atmospheric lighting"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKaFfyOiX9TAwwRuReV3dqO9KspXclRPJASLBsmg_QDrWh7MeBr92JioObUsBhBOsIJFMXJQseU1fBa3Yfy21An7kXMe0zuEICxpVWuYOnQtMXO8WD8l4PmuW1FzKjl0hRXk4Mlltk8jb-CfnzHhoOwxNGZOw32dKmBpl41qzaaE6OD32SG87XspTu88ozu4u_s9yweC9clgvqv52cOkFu8ZCYspEnGX0M6jr1QKGp53G8LM4j2-rL" />
+                            </div>
+                            <!-- Inset Overlap Card -->
+                            <div
+                                class="hidden sm:block absolute -bottom-8 -right-8 z-20 w-64 bg-surface-container-lowest/95 backdrop-blur-xl p-space-md border border-primary/30 shadow-2xl">
+                                <div class="flex items-center gap-2 text-primary mb-1">
+                                    <span class="material-symbols-outlined text-[20px]">verified</span>
+                                    <span class="font-label-caps text-[10px] uppercase tracking-widest">Guaranteed
+                                        Provenance</span>
+                                </div>
+                                <p class="font-body-sm text-[12px] text-on-surface-variant font-light">
+                                    Every garment carries an engraved serial hallmark and encrypted NFC passport.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Text Editorial Content -->
+                        <div class="lg:col-span-6 flex flex-col gap-space-md">
+                            <span class="font-label-caps text-label-caps uppercase tracking-widest text-primary">The
+                                Atelier Philosophy</span>
+                            <h2
+                                class="font-headline-lg text-headline-lg text-on-surface uppercase tracking-tight leading-tight">
+                                Monolithic Permanence<br />
+                                <span class="font-display-hero italic font-normal text-secondary">Over
+                                    Obsolescence</span>
+                            </h2>
+                            <blockquote
+                                class="border-l-2 border-primary pl-space-md my-space-xs font-title-editorial text-title-editorial text-on-surface italic font-normal">
+                                “Elegance is not about being noticed, it is about being remembered.”
+                                <footer
+                                    class="font-label-caps text-label-caps uppercase tracking-widest text-primary not-italic mt-2 block">
+                                    — Alessandro DeLuca, Master Head of Atelier
+                                </footer>
+                            </blockquote>
+                            <p class="font-body-md text-body-md text-on-surface-variant font-light leading-relaxed">
+                                In an era of disposable velocity, Atelier Noir operates under the discipline of
+                                permanence. We reject seasonal trends in favor of structural authority. Our garments are
+                                engineered in Biella and Lyon using zero synthetics, harvested ethically with full
+                                regenerative certification.
+                            </p>
+                            <!-- Metric Stats Counter -->
+                            <div class="grid grid-cols-3 gap-space-md pt-space-md border-t border-outline-variant/30">
+                                <div>
+                                    <span
+                                        class="font-headline-lg text-headline-md lg:text-headline-lg text-primary block leading-none">38</span>
+                                    <span
+                                        class="font-label-caps text-[10px] uppercase tracking-widest text-outline mt-1 block">Hand-Stitched
+                                        Hours Per Suit</span>
+                                </div>
+                                <div>
+                                    <span
+                                        class="font-headline-lg text-headline-md lg:text-headline-lg text-primary block leading-none">100%</span>
+                                    <span
+                                        class="font-label-caps text-[10px] uppercase tracking-widest text-outline mt-1 block">Organic
+                                        Silk &amp; Cashmere</span>
+                                </div>
+                                <div>
+                                    <span
+                                        class="font-headline-lg text-headline-md lg:text-headline-lg text-primary block leading-none">0%</span>
+                                    <span
+                                        class="font-label-caps text-[10px] uppercase tracking-widest text-outline mt-1 block">Synthetic
+                                        Blends</span>
+                                </div>
+                            </div>
+                            <div class="pt-space-sm">
+                                <button
+                                    class="px-8 py-3.5 bg-primary-container hover:bg-primary text-on-primary-container font-label-caps text-label-caps uppercase tracking-widest transition-colors">
+                                    Read The Manifesto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- 6. VIP Client Reviews & Press Accolades -->
+            <section class="w-full bg-surface-container-lowest py-space-xl">
+                <div class="max-w-[1600px] mx-auto px-margin-mobile lg:px-margin">
+                    <!-- Section Title -->
+                    <div class="text-center max-w-xl mx-auto mb-space-xl">
+                        <span
+                            class="font-label-caps text-label-caps uppercase tracking-widest text-primary block mb-space-xs">Critical
+                            Acclaim &amp; Patronage</span>
+                        <h2 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">The
+                            Discourse of Prestige</h2>
+                    </div>
+                    <!-- Press Quotes Bar -->
+                    <div
+                        class="grid grid-cols-2 md:grid-cols-4 gap-space-md pb-space-xl border-b border-outline-variant/20 text-center">
+                        <div class="p-space-md flex flex-col items-center justify-center">
+                            <span
+                                class="font-headline-sm text-headline-sm uppercase tracking-widest text-on-surface mb-1">Vogue</span>
+                            <p class="font-body-sm text-[11px] text-outline italic font-light">“The new apex of
+                                nocturnal Parisian tailoring.”</p>
+                        </div>
+                        <div class="p-space-md flex flex-col items-center justify-center">
+                            <span
+                                class="font-headline-sm text-headline-sm uppercase tracking-widest text-on-surface mb-1">Harper's
+                                Bazaar</span>
+                            <p class="font-body-sm text-[11px] text-outline italic font-light">“An intimidating standard
+                                of bespoke fabrication.”</p>
+                        </div>
+                        <div class="p-space-md flex flex-col items-center justify-center">
+                            <span
+                                class="font-headline-sm text-headline-sm uppercase tracking-widest text-on-surface mb-1">GQ</span>
+                            <p class="font-body-sm text-[11px] text-outline italic font-light">“Masterclass in
+                                architectural menswear silhouette.”</p>
+                        </div>
+                        <div class="p-space-md flex flex-col items-center justify-center">
+                            <span
+                                class="font-headline-sm text-headline-sm uppercase tracking-widest text-on-surface mb-1">Financial
+                                Times</span>
+                            <p class="font-body-sm text-[11px] text-outline italic font-light">“Haute couture that
+                                defies fleeting seasons.”</p>
+                        </div>
+                    </div>
+                    <!-- VIP Collector Testimonials Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg pt-space-xl">
+                        <!-- Review 1 -->
+                        <div
+                            class="bg-surface-container p-space-lg border border-outline-variant/30 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-1 text-primary mb-space-sm">
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                </div>
+                                <p
+                                    class="font-body-md text-body-md text-tertiary font-light leading-relaxed mb-space-md">
+                                    “The double-breasted wool blazer fits with the surgical balance of Savile Row, but
+                                    possesses a dark silhouette found nowhere else. The tactile sensation of the Loro
+                                    Piana weave is breathtaking.”
+                                </p>
+                            </div>
+                            <div
+                                class="border-t border-outline-variant/20 pt-space-sm flex items-center justify-between">
+                                <div>
+                                    <span
+                                        class="font-label-caps text-label-caps text-on-surface uppercase tracking-wider block">Lady
+                                        Genevieve M.</span>
+                                    <span class="font-body-sm text-[11px] text-outline">London • Private Client since
+                                        2021</span>
+                                </div>
+                                <span class="material-symbols-outlined text-primary text-[20px]">verified</span>
+                            </div>
+                        </div>
+                        <!-- Review 2 -->
+                        <div
+                            class="bg-surface-container p-space-lg border border-outline-variant/30 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-1 text-primary mb-space-sm">
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                </div>
+                                <p
+                                    class="font-body-md text-body-md text-tertiary font-light leading-relaxed mb-space-md">
+                                    “The private salon appointment at Place Vendôme was utterly discreet and peerless.
+                                    The silk georgette gown moves like liquid obsidian under ballroom lights. An
+                                    irreplaceable piece.”
+                                </p>
+                            </div>
+                            <div
+                                class="border-t border-outline-variant/20 pt-space-sm flex items-center justify-between">
+                                <div>
+                                    <span
+                                        class="font-label-caps text-label-caps text-on-surface uppercase tracking-wider block">Arthur
+                                        Vance</span>
+                                    <span class="font-body-sm text-[11px] text-outline">Paris • Guild Collector</span>
+                                </div>
+                                <span class="material-symbols-outlined text-primary text-[20px]">verified</span>
+                            </div>
+                        </div>
+                        <!-- Review 3 -->
+                        <div
+                            class="bg-surface-container p-space-lg border border-outline-variant/30 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-1 text-primary mb-space-sm">
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                    <span class="material-symbols-outlined text-[16px]">star</span>
+                                </div>
+                                <p
+                                    class="font-body-md text-body-md text-tertiary font-light leading-relaxed mb-space-md">
+                                    “I ordered the Florentine nappa overcoat bespoke. The white-glove courier delivery
+                                    arrived in a temperature-controlled cedar trunk. The level of uncompromising craft
+                                    is deeply inspiring.”
+                                </p>
+                            </div>
+                            <div
+                                class="border-t border-outline-variant/20 pt-space-sm flex items-center justify-between">
+                                <div>
+                                    <span
+                                        class="font-label-caps text-label-caps text-on-surface uppercase tracking-wider block">Kenji
+                                        Takahashi</span>
+                                    <span class="font-body-sm text-[11px] text-outline">Tokyo • Bespoke Patron</span>
+                                </div>
+                                <span class="material-symbols-outlined text-primary text-[20px]">verified</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- 7. Runway Journal & Style Insights -->
+            <section class="w-full bg-surface py-space-xl border-t border-outline-variant/20">
+                <div class="max-w-[1600px] mx-auto px-margin-mobile lg:px-margin">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-space-lg">
+                        <div>
+                            <span
+                                class="font-label-caps text-label-caps uppercase tracking-widest text-primary block mb-space-xs">The
+                                Noir Gazette</span>
+                            <h2 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">
+                                Runway Journal &amp; Insights</h2>
+                        </div>
+                        <a class="inline-flex items-center gap-2 text-primary font-label-caps text-label-caps uppercase tracking-widest hover:underline mt-2 md:mt-0"
+                            href="#">
+                            <span>Explore All Gazette Chronicles</span>
+                            <span class="material-symbols-outlined text-[16px]">north_east</span>
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+                        <!-- Article 1 -->
+                        <article
+                            class="group bg-surface-container flex flex-col border border-outline-variant/30 hover:border-primary/40 transition-colors">
+                            <div class="relative aspect-[16/10] overflow-hidden bg-surface-container-highest">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    data-alt="Black and white architectural fashion photo of hands tailoring the lapel of a heavy cashmere coat with needle and silk thread"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGrPMTmpj5sy8R7EGxmXOhLubTeuM4hMQDTAglgexkWKDqMSfNXmsZiTNN740icTMsymUya8PUJBKDkQqXR6Azv7sjUw4-dBMIHM3DBNPXUlUL8sy6_B9U3GMyjylXcAqBsy0Nl7URXDhDs6U5kuL2zEaHIyw4QoYPJMRXojEXFNwRNtnT_cJSNDwDBS3Kbl3dyqxWXCggLwM6YrvWVob6oiMV1zQrMJ81THpbmVHf_9sbZ4Dgf7ra" />
+                                <span
+                                    class="absolute top-3 left-3 bg-surface-container-lowest/90 px-2.5 py-1 text-primary font-label-caps text-[10px] uppercase tracking-widest">
+                                    Sartorial Anatomy
+                                </span>
+                            </div>
+                            <div class="p-space-md flex flex-col justify-between flex-1">
+                                <div>
+                                    <div class="flex items-center gap-space-sm text-outline text-[11px] mb-space-xs">
+                                        <span>October 24, 2025</span>
+                                        <span>•</span>
+                                        <span>6 min reading</span>
+                                    </div>
+                                    <h3
+                                        class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight mb-space-xs">
+                                        The Art of the Double-Faced Cashmere Lapel
+                                    </h3>
+                                    <p
+                                        class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-2">
+                                        An investigation into the hidden hand-rolling techniques perfected in Biella to
+                                        create seamless, monolithic coat edges.
+                                    </p>
+                                </div>
+                                <div
+                                    class="pt-space-sm mt-space-sm border-t border-outline-variant/20 flex items-center justify-between text-primary font-label-caps text-[11px] tracking-widest uppercase">
+                                    <span>Read Chronicle</span>
+                                    <span
+                                        class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                </div>
+                            </div>
+                        </article>
+                        <!-- Article 2 -->
+                        <article
+                            class="group bg-surface-container flex flex-col border border-outline-variant/30 hover:border-primary/40 transition-colors">
+                            <div class="relative aspect-[16/10] overflow-hidden bg-surface-container-highest">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    data-alt="High fashion runway setup with dark obsidian monoliths and models standing in a straight sharp geometric formation under singular linear spotlights"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIZT78m1nNa4FoSmnCebu59u4KMLoot5fauaS8J1KNF_DQbCyucoBFHH-tkNOLqjYd2fIA8xgHFunkcGVL51ZSfoZkIP1bRaqY7qAP8W4bOONPJfC9AMYD48w9hfVCpb9OHpwx8amN5mL_FSIRK8UJYgSV9LBHTR-uCDz6zOhSgbftWghUfAAkyHzH-aSKLwnhKvTMtY9PL16nnmlC1catr_wfGvRP2HYnFBWW9DzwyREBSjIeFFB0" />
+                                <span
+                                    class="absolute top-3 left-3 bg-surface-container-lowest/90 px-2.5 py-1 text-primary font-label-caps text-[10px] uppercase tracking-widest">
+                                    Trend Analysis
+                                </span>
+                            </div>
+                            <div class="p-space-md flex flex-col justify-between flex-1">
+                                <div>
+                                    <div class="flex items-center gap-space-sm text-outline text-[11px] mb-space-xs">
+                                        <span>November 02, 2025</span>
+                                        <span>•</span>
+                                        <span>8 min reading</span>
+                                    </div>
+                                    <h3
+                                        class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight mb-space-xs">
+                                        Spring Runway Forecast: Monochromatic Minimalism
+                                    </h3>
+                                    <p
+                                        class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-2">
+                                        Why global couture houses are abandoning high-saturation prints in favor of
+                                        razor-sharp matte black structural volumes.
+                                    </p>
+                                </div>
+                                <div
+                                    class="pt-space-sm mt-space-sm border-t border-outline-variant/20 flex items-center justify-between text-primary font-label-caps text-[11px] tracking-widest uppercase">
+                                    <span>Read Chronicle</span>
+                                    <span
+                                        class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                </div>
+                            </div>
+                        </article>
+                        <!-- Article 3 -->
+                        <article
+                            class="group bg-surface-container flex flex-col border border-outline-variant/30 hover:border-primary/40 transition-colors">
+                            <div class="relative aspect-[16/10] overflow-hidden bg-surface-container-highest">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    data-alt="Sunlight illuminating organic mulberry silk moths and raw silk cocoons alongside spool of shimmering black thread in French heritage textile mill"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCXouY-hqOr-DkCtn2uqNepWfvSdT4GyfAJZQquvBIDSug9UkQk4J8Wjq7Qhv7Yef2bMqOBDOsOKlInw9oQAntU79LTnoMZuX6GFsZi8gvD5H87DTtVatGTe9d_B50cqBTKlk4aJMwjQNE3lhV6jBxvmMnqA7Qs7EOyr10B6uKGOKG6k8R21Z6e2EeeC310XGsMRXnxBR4p3J3YWXG--WBD2gUBQCUeX3j5WyuLEmK8olITSdhZSTC" />
+                                <span
+                                    class="absolute top-3 left-3 bg-surface-container-lowest/90 px-2.5 py-1 text-primary font-label-caps text-[10px] uppercase tracking-widest">
+                                    Provenance
+                                </span>
+                            </div>
+                            <div class="p-space-md flex flex-col justify-between flex-1">
+                                <div>
+                                    <div class="flex items-center gap-space-sm text-outline text-[11px] mb-space-xs">
+                                        <span>November 12, 2025</span>
+                                        <span>•</span>
+                                        <span>5 min reading</span>
+                                    </div>
+                                    <h3
+                                        class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight mb-space-xs">
+                                        Regenerative Sericulture &amp; The Como Mills
+                                    </h3>
+                                    <p
+                                        class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-2">
+                                        Tracing our zero-carbon footprint silk supply chain from historical Italian
+                                        mulberry groves directly to our cutting tables.
+                                    </p>
+                                </div>
+                                <div
+                                    class="pt-space-sm mt-space-sm border-t border-outline-variant/20 flex items-center justify-between text-primary font-label-caps text-[11px] tracking-widest uppercase">
+                                    <span>Read Chronicle</span>
+                                    <span
+                                        class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+            <!-- 8. Private Fitting Booking Modal (Client-side interactive) -->
+            <div class="hidden fixed inset-0 z-50 flex items-center justify-center p-space-md bg-surface-container-lowest/90 backdrop-blur-xl"
+                id="booking-modal">
+                <div
+                    class="relative w-full max-w-lg bg-surface-container p-space-lg border border-primary/40 shadow-2xl">
+                    <div
+                        class="flex items-center justify-between pb-space-sm border-b border-outline-variant/30 mb-space-md">
+                        <div>
+                            <span
+                                class="font-label-caps text-[10px] uppercase tracking-widest text-primary block">Maison
+                                Privée</span>
+                            <h3 class="font-headline-sm text-headline-sm uppercase text-on-surface">Book Atelier Fitting
+                            </h3>
+                        </div>
+                        <button class="text-outline hover:text-on-surface transition-colors p-1"
+                            onclick="document.getElementById('booking-modal').classList.add('hidden')">
+                            <span class="material-symbols-outlined text-[24px]">close</span>
+                        </button>
+                    </div>
+                    <form class="flex flex-col gap-space-sm"
+                        onsubmit="event.preventDefault(); alert('Appointment request transmitted to your private concierge.'); document.getElementById('booking-modal').classList.add('hidden');">
+                        <div>
+                            <label
+                                class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">Full
+                                Name</label>
+                            <input
+                                class="w-full bg-surface-container-low border border-outline-variant p-2.5 text-on-surface font-body-sm focus:border-primary focus:outline-none"
+                                placeholder="e.g. Eleanor Vance" required="" type="text" />
+                        </div>
+                        <div>
+                            <label
+                                class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">Direct
+                                Contact / Concierge Email</label>
+                            <input
+                                class="w-full bg-surface-container-low border border-outline-variant p-2.5 text-on-surface font-body-sm focus:border-primary focus:outline-none"
+                                placeholder="e.g. client@private.com" required="" type="email" />
+                        </div>
+                        <div>
+                            <label
+                                class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">Salon
+                                Location</label>
+                            <select
+                                class="w-full bg-surface-container-low border border-outline-variant p-2.5 text-on-surface font-body-sm focus:border-primary focus:outline-none">
+                                <option>Paris • Place Vendôme Salon Privé</option>
+                                <option>Milan • Via Montenapoleone Atelier</option>
+                                <option>London • Mayfair Guild Suite</option>
+                                <option>New York • Madison Avenue Salon</option>
+                                <option>Tokyo • Ginza Private Residence</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label
+                                class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">Sartorial
+                                Interest</label>
+                            <select
+                                class="w-full bg-surface-container-low border border-outline-variant p-2.5 text-on-surface font-body-sm focus:border-primary focus:outline-none">
+                                <option>Bespoke Suiting &amp; Tailoring</option>
+                                <option>Haute Couture Eveningwear</option>
+                                <option>Custom Nappa Leather Outwear</option>
+                                <option>Bridal &amp; Gala Commission</option>
+                            </select>
+                        </div>
+                        <div class="pt-space-sm">
+                            <button
+                                class="w-full py-3.5 bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-widest hover:bg-secondary transition-colors font-semibold"
+                                type="submit">
+                                Confirm Fitting Request
+                            </button>
+                        </div>
+                        <p class="font-body-sm text-[10px] text-outline text-center mt-1">
+                            A dedicated private atelier valet will contact your office within two hours.
+                        </p>
+                    </form>
+                </div>
+            </div>
+            <script>
+                // Interactive filter pills toggle
+                document.querySelectorAll('#collection-filters .filter-pill').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('#collection-filters .filter-pill').forEach(b => {
+                            b.classList.remove('bg-primary', 'text-on-primary', 'active');
+                            b.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+                        });
+                        btn.classList.add('bg-primary', 'text-on-primary', 'active');
+                        btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+                    });
+                });
+            </script>
+        </div>
+    </main>
+    <footer class="w-full bg-surface-container-lowest border-t border-outline-variant/30 text-on-surface-variant">
+        <div class="w-full max-w-[1600px] mx-auto px-gutter-mobile lg:px-margin py-space-xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-lg mb-space-xl">
+                <div class="lg:col-span-2 pr-0 lg:pr-space-xl"><span
+                        class="font-headline-sm text-headline-sm tracking-tight text-on-surface uppercase block mb-space-sm">Atelier
+                        Noir</span>
+                    <p class="font-body-md text-body-md text-on-surface-variant mb-space-md max-w-md font-light">An
+                        architectural synthesis of haute couture precision, enigmatic obsidian aesthetics, and
+                        deliberate bespoke craftsmanship.</p>
+                    <div class="mb-space-md"><span
+                            class="font-label-caps text-label-caps uppercase tracking-widest text-primary block mb-space-xs">Subscribe
+                            to the Private Gazette</span>
+                        <div class="flex w-full max-w-sm"><input
+                                class="bg-surface-container border border-outline-variant px-space-md py-2 font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:border-primary focus:outline-none flex-1"
+                                placeholder="Enter your email address" type="email" /><button
+                                class="bg-primary-container hover:bg-primary text-on-primary-container font-label-caps text-label-caps uppercase tracking-widest px-space-md py-2 transition-colors"
+                                type="button">Acquire</button></div>
+                    </div>
+                    <p class="font-body-sm text-body-sm text-outline">Discreet releases, bespoke salon invitations, and
+                        archival reveals.</p>
+                </div>
+                <div><span
+                        class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface block mb-space-md">Client
+                        Services</span>
+                    <ul class="space-y-space-sm">
+                        <li class="font-body-sm text-body-sm hover:text-primary transition-colors cursor-pointer">
+                            Bespoke Concierge</li>
+                        <li class="font-body-sm text-body-sm hover:text-primary transition-colors cursor-pointer">
+                            Complimentary Global Express</li>
+                        <li class="font-body-sm text-body-sm hover:text-primary transition-colors cursor-pointer">
+                            White-Glove Returns &amp; Exchanges</li>
+                        <li class="font-body-sm text-body-sm hover:text-primary transition-colors cursor-pointer">
+                            Garment Care &amp; Restoration</li>
+                        <li class="font-body-sm text-body-sm hover:text-primary transition-colors cursor-pointer">
+                            Security &amp; Authenticity Verification</li>
+                    </ul>
+                </div>
+                <div><span
+                        class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface block mb-space-md">Atelier
+                        &amp; Maison</span>
+                    <ul class="space-y-space-sm">
+                        <li class="font-body-sm text-body-sm hover:text-primary transition-colors cursor-pointer">Book
+                            Private Salon Appointment</li>
+                        <li class="font-body-sm text-body-sm hover:text-primary transition-colors cursor-pointer">Place
+                            Vendôme Flagship</li>
+                        <li class="font-body-sm text-body-sm hover:text-primary transition-colors cursor-pointer">The
+                            Craftsmanship &amp; Provenance</li>
+                        <li class="font-body-sm text-body-sm hover:text-primary transition-colors cursor-pointer">
+                            Private Client Guild</li>
+                        <li class="font-body-sm text-body-sm hover:text-primary transition-colors cursor-pointer">
+                            Archival Collections</li>
+                    </ul>
+                </div>
+                <div><span
+                        class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface block mb-space-md">Sustainability
+                        &amp; Ethics</span>
+                    <p class="font-body-sm text-body-sm text-outline mb-space-md leading-relaxed">Monolithic permanence
+                        over seasonal obsolescence. Our circular ateliers employ 100% certified ethically sourced
+                        textiles and zero-waste pattern drafting.</p>
+                    <div class="flex items-center gap-space-xs text-primary"><span
+                            class="material-symbols-outlined text-[16px]">eco</span><span
+                            class="font-label-caps text-label-caps uppercase tracking-widest">2030 Carbon Neutrality
+                            Pledge</span></div>
+                </div>
+            </div>
+            <div
+                class="pt-space-lg border-t border-outline-variant/30 flex flex-col md:flex-row items-center justify-between gap-space-md">
+                <div class="flex items-center gap-space-md flex-wrap"><span
+                        class="font-label-caps text-[10px] uppercase tracking-widest text-outline">Accepted
+                        Instruments:</span><span
+                        class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant border border-outline-variant px-2 py-0.5">Visa
+                        Infinite</span><span
+                        class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant border border-outline-variant px-2 py-0.5">Mastercard
+                        World Elite</span><span
+                        class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant border border-outline-variant px-2 py-0.5">American
+                        Express Centurion</span><span
+                        class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant border border-outline-variant px-2 py-0.5">Apple
+                        Pay</span><span
+                        class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant border border-outline-variant px-2 py-0.5">Cryptocurrency
+                        (BTC/ETH)</span></div>
+                <div class="flex items-center gap-space-lg"><span class="font-body-sm text-body-sm text-outline">© 2025
+                        Atelier Noir S.A. All rights reserved.</span>
+                    <div class="flex items-center gap-space-sm"><span
+                            class="font-label-caps text-[10px] uppercase tracking-widest text-outline hover:text-primary transition-colors cursor-pointer">Privacy
+                            Policy</span><span class="text-outline">•</span><span
+                            class="font-label-caps text-[10px] uppercase tracking-widest text-outline hover:text-primary transition-colors cursor-pointer">Terms
+                            of Service</span><span class="text-outline">•</span><span
+                            class="font-label-caps text-[10px] uppercase tracking-widest text-outline hover:text-primary transition-colors cursor-pointer">Legal
+                            Notices</span></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,205 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductImage;
+use Illuminate\Database\Seeder as BaseSeeder;
+
+class ProductSeeder extends BaseSeeder
+{
+    public function run(): void
+    {
+        $categories = Category::all()->keyBy('slug');
+
+        $products = [
+            [
+                'name' => 'Oversized Silk-Twill Trench Coat',
+                'slug' => 'oversized-silk-twill-trench-coat',
+                'category' => 'outerwear',
+                'description' => 'Sculptural silhouettes meticulously sculpted from double-faced Italian cashmere, structured Como silk-twill, and raw wool. An uncompromising study in dark skeuomorphic precision.',
+                'material' => 'Pure Mulberry Silk • Como, Italy',
+                'size_fit' => 'Oversized architectural fit',
+                'base_price' => 3450,
+                'sale_price' => null,
+                'is_new_arrival' => true,
+                'is_featured' => true,
+                'is_bestseller' => false,
+                'sort_order' => 1,
+                'badge' => 'Bespoke',
+                'edition' => 'Edition 08/50',
+                'subtitle' => 'Atelier Tailoring',
+                'bottom_label' => 'Includes Fitting',
+                'image' => 'storage/images/sample/prod-trench.jpg',
+            ],
+            [
+                'name' => 'Hand-Stitched Wool Blazer',
+                'slug' => 'hand-stitched-wool-blazer',
+                'category' => 'tailoring',
+                'description' => 'Sculptural silhouettes meticulously sculpted from double-faced Italian cashmere, structured Como silk-twill, and raw wool. An uncompromising study in dark skeuomorphic precision.',
+                'material' => 'Super 160s Virgin Wool • Biella Mills',
+                'size_fit' => 'Slim architectural fit',
+                'base_price' => 2800,
+                'sale_price' => null,
+                'is_new_arrival' => true,
+                'is_featured' => true,
+                'is_bestseller' => false,
+                'sort_order' => 2,
+                'badge' => 'Runway SS25',
+                'edition' => 'Edition 14/40',
+                'subtitle' => 'Sartorial Master',
+                'bottom_label' => 'Includes Fitting',
+                'image' => 'storage/images/sample/prod-blazer.jpg',
+            ],
+            [
+                'name' => 'Pleated Silk Georgette Gown',
+                'slug' => 'pleated-silk-georgette-gown',
+                'category' => 'eveningwear',
+                'description' => 'Sculptural silhouettes meticulously sculpted from double-faced Italian cashmere, structured Como silk-twill, and raw wool. An uncompromising study in dark skeuomorphic precision.',
+                'material' => '100% Organic Silk • Lyon Weavers',
+                'size_fit' => 'Flowing evening silhouette',
+                'base_price' => 3650,
+                'sale_price' => null,
+                'is_new_arrival' => true,
+                'is_featured' => true,
+                'is_bestseller' => false,
+                'sort_order' => 3,
+                'badge' => 'Sustainable Silk',
+                'edition' => 'Edition 04/25',
+                'subtitle' => 'Couture Soirée',
+                'bottom_label' => 'Includes Fitting',
+                'image' => 'storage/images/sample/prod-gown.jpg',
+            ],
+            [
+                'name' => 'Ribbed Mongolian Turtleneck',
+                'slug' => 'ribbed-mongolian-turtleneck',
+                'category' => 'knitwear',
+                'description' => 'Sculptural silhouettes meticulously sculpted from double-faced Italian cashmere, structured Como silk-twill, and raw wool. An uncompromising study in dark skeuomorphic precision.',
+                'material' => '100% Loro Piana Cashmere • Biella',
+                'size_fit' => 'Regular fit',
+                'base_price' => 1450,
+                'sale_price' => null,
+                'is_new_arrival' => true,
+                'is_featured' => true,
+                'is_bestseller' => false,
+                'sort_order' => 4,
+                'badge' => 'Loro Piana Yarn',
+                'edition' => 'Edition 22/60',
+                'subtitle' => 'Permanent Archive',
+                'bottom_label' => 'Immediate Dispatch',
+                'image' => 'storage/images/sample/prod-turtleneck.jpg',
+            ],
+            [
+                'name' => 'Structured Italian Satin Tuxedo',
+                'slug' => 'structured-italian-satin-tuxedo',
+                'category' => 'tailoring',
+                'description' => 'Sculptural silhouettes meticulously sculpted from double-faced Italian cashmere, structured Como silk-twill, and raw wool. An uncompromising study in dark skeuomorphic precision.',
+                'material' => 'Silk Duchesse • Milanese Atelier',
+                'size_fit' => 'Slim formal fit',
+                'base_price' => 4200,
+                'sale_price' => null,
+                'is_new_arrival' => true,
+                'is_featured' => true,
+                'is_bestseller' => false,
+                'sort_order' => 5,
+                'badge' => 'Bespoke',
+                'edition' => 'Edition 06/30',
+                'subtitle' => 'Formal Atelier',
+                'bottom_label' => 'Includes Fitting',
+                'image' => 'storage/images/sample/prod-tuxedo.jpg',
+            ],
+            [
+                'name' => 'Asymmetric Cut-Out Velvet Dress',
+                'slug' => 'asymmetric-cut-out-velvet-dress',
+                'category' => 'eveningwear',
+                'description' => 'Sculptural silhouettes meticulously sculpted from double-faced Italian cashmere, structured Como silk-twill, and raw wool. An uncompromising study in dark skeuomorphic precision.',
+                'material' => 'Silk-Plush Velvet • Venice',
+                'size_fit' => 'Sculpted waistline',
+                'base_price' => 2950,
+                'sale_price' => null,
+                'is_new_arrival' => true,
+                'is_featured' => true,
+                'is_bestseller' => false,
+                'sort_order' => 6,
+                'badge' => 'Runway SS25',
+                'edition' => 'Edition 03/35',
+                'subtitle' => 'Sculptural Nocturne',
+                'bottom_label' => 'Includes Fitting',
+                'image' => 'storage/images/sample/prod-velvet.jpg',
+            ],
+            [
+                'name' => 'Florentine Nappa Leather Overcoat',
+                'slug' => 'florentine-nappa-leather-overcoat',
+                'category' => 'outerwear',
+                'description' => 'Sculptural silhouettes meticulously sculpted from double-faced Italian cashmere, structured Como silk-twill, and raw wool. An uncompromising study in dark skeuomorphic precision.',
+                'material' => 'Vegetable-Tanned Calfskin • Florence',
+                'size_fit' => 'Architectural oversized fit',
+                'base_price' => 5100,
+                'sale_price' => null,
+                'is_new_arrival' => true,
+                'is_featured' => true,
+                'is_bestseller' => false,
+                'sort_order' => 7,
+                'badge' => 'Bespoke Hide',
+                'edition' => 'Edition 02/20',
+                'subtitle' => 'Cuir Imperial',
+                'bottom_label' => 'Includes Fitting',
+                'image' => 'storage/images/sample/prod-overcoat.jpg',
+            ],
+            [
+                'name' => 'Raw Filament Cashmere Shell',
+                'slug' => 'raw-filament-cashmere-shell',
+                'category' => 'knitwear',
+                'description' => 'Sculptural silhouettes meticulously sculpted from double-faced Italian cashmere, structured Como silk-twill, and raw wool. An uncompromising study in dark skeuomorphic precision.',
+                'material' => 'Cashmere & Gold Silk • Scottish Highlands',
+                'size_fit' => 'Slim sleeveless fit',
+                'base_price' => 980,
+                'sale_price' => null,
+                'is_new_arrival' => true,
+                'is_featured' => true,
+                'is_bestseller' => false,
+                'sort_order' => 8,
+                'badge' => 'Limited 25',
+                'edition' => 'Edition 11/25',
+                'subtitle' => 'Knitwear Atelier',
+                'bottom_label' => 'Immediate Dispatch',
+                'image' => 'storage/images/sample/prod-shell.jpg',
+            ],
+        ];
+
+        foreach ($products as $index => $data) {
+            $category = $categories->get($data['category']);
+            if (! $category) {
+                continue;
+            }
+
+            $product = Product::create([
+                'category_id' => $category->id,
+                'name' => $data['name'],
+                'slug' => $data['slug'],
+                'description' => $data['description'],
+                'material' => $data['material'],
+                'size_fit' => $data['size_fit'],
+                'base_price' => $data['base_price'],
+                'sale_price' => $data['sale_price'],
+                'is_new_arrival' => $data['is_new_arrival'],
+                'is_featured' => $data['is_featured'],
+                'is_bestseller' => $data['is_bestseller'],
+                'sort_order' => $data['sort_order'],
+                'is_active' => true,
+                'badge' => $data['badge'],
+                'edition' => $data['edition'],
+                'subtitle' => $data['subtitle'],
+                'bottom_label' => $data['bottom_label'],
+            ]);
+
+            ProductImage::create([
+                'product_id' => $product->id,
+                'image' => $data['image'],
+                'is_primary' => true,
+                'sort_order' => 1,
+            ]);
+        }
+    }
+}
