@@ -101,8 +101,6 @@ class AdminController extends Controller
             'variants.*.price_override' => 'nullable|numeric|min:0',
             'variants.*.sale_price_override' => 'nullable|numeric|min:0',
             'variants.*.is_active' => 'boolean',
-            'images' => 'nullable|array',
-            'images.*' => 'image|max:5120',
         ]);
 
         $validated['is_active'] = $request->boolean('is_active', true);
@@ -161,8 +159,6 @@ class AdminController extends Controller
             'variants.*.price_override' => 'nullable|numeric|min:0',
             'variants.*.sale_price_override' => 'nullable|numeric|min:0',
             'variants.*.is_active' => 'boolean',
-            'images' => 'nullable|array',
-            'images.*' => 'image|max:5120',
         ]);
 
         $validated['is_active'] = $request->boolean('is_active', true);
@@ -203,7 +199,7 @@ class AdminController extends Controller
 
     public function uploadProductImages(Request $request, Product $product)
     {
-        $request->validate([
+        $validated = $request->validate([
             'images.*' => 'required|image|mimes:jpeg,png,gif,webp|max:5120',
         ]);
 
@@ -211,10 +207,11 @@ class AdminController extends Controller
 
         if ($request->hasFile('images')) {
             $hasPrimaryImage = $product->images()->where('is_primary', true)->exists();
-            $sortOrder = $product->images()->max('sort_order') + 1;
+            $sortOrder = $product->images()->max('sort_order') ?? 0;
+            $sortOrder++;
 
             foreach ($request->file('images') as $image) {
-                $path = $this->storeWebPImage($image, 'storage/products');
+                $path = $this->storeWebPImage($image, 'products');
 
                 $product->images()->create([
                     'image' => $path,
@@ -222,6 +219,7 @@ class AdminController extends Controller
                     'sort_order' => $sortOrder,
                 ]);
 
+                $count++;
                 $hasPrimaryImage = true;
                 $sortOrder++;
             }
@@ -301,10 +299,11 @@ class AdminController extends Controller
     {
         if ($request->hasFile('images')) {
             $hasPrimaryImage = $product->images()->where('is_primary', true)->exists();
-            $sortOrder = $product->images()->max('sort_order') + 1;
+            $sortOrder = $product->images()->max('sort_order') ?? 0;
+            $sortOrder++;
 
             foreach ($request->file('images') as $image) {
-                $path = $this->storeWebPImage($image, 'storage/products');
+                $path = $this->storeWebPImage($image, 'products');
 
                 $product->images()->create([
                     'image' => $path,

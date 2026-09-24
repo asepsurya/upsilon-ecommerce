@@ -78,7 +78,13 @@ window.AdminImageGallery = {
                 },
                 body: formData
             })
-                .then(r => r.json())
+                .then(r => {
+                    const contentType = r.headers.get('content-type') || '';
+                    if (!contentType.includes('application/json')) {
+                        throw new Error('Server returned non-JSON response');
+                    }
+                    return r.json();
+                })
                 .then(data => {
                     if (data.success) {
                         loadServerImages();
@@ -93,7 +99,13 @@ window.AdminImageGallery = {
             if (!config.indexUrl) return;
 
             fetch(config.indexUrl)
-                .then(r => r.json())
+                .then(r => {
+                    const contentType = r.headers.get('content-type') || '';
+                    if (!contentType.includes('application/json')) {
+                        throw new Error('Server returned non-JSON response');
+                    }
+                    return r.json();
+                })
                 .then(data => {
                     let html = '';
                     data.images.forEach(img => {
@@ -113,7 +125,8 @@ window.AdminImageGallery = {
                     previewContainer.innerHTML = html;
 
                     attachServerImageEvents();
-                });
+                })
+                .catch(err => console.error('Load images error:', err));
         }
 
         function attachServerImageEvents() {
@@ -132,12 +145,19 @@ window.AdminImageGallery = {
                             'Accept': 'application/json',
                         }
                     })
-                        .then(r => r.json())
+                        .then(r => {
+                            const contentType = r.headers.get('content-type') || '';
+                            if (!contentType.includes('application/json')) {
+                                throw new Error('Server returned non-JSON response');
+                            }
+                            return r.json();
+                        })
                         .then(data => {
                             if (data.success) {
                                 loadServerImages();
                             }
-                        });
+                        })
+                        .catch(err => console.error('Set primary error:', err));
                 });
 
                 const removeBtn = preview.querySelector('.remove-btn');
@@ -154,12 +174,19 @@ window.AdminImageGallery = {
                                 'Accept': 'application/json',
                             }
                         })
-                            .then(r => r.json())
+                            .then(r => {
+                                const contentType = r.headers.get('content-type') || '';
+                                if (!contentType.includes('application/json')) {
+                                    throw new Error('Server returned non-JSON response');
+                                }
+                                return r.json();
+                            })
                             .then(data => {
                                 if (data.success) {
                                     loadServerImages();
                                 }
-                            });
+                            })
+                            .catch(err => console.error('Delete image error:', err));
                     });
                 }
             });
