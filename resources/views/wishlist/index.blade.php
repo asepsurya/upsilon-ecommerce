@@ -13,7 +13,7 @@ My Wishlist - {{ config('app.name', 'Upsilon') }}
                         @foreach($wishlist as $item)
                             <div class="group">
                                 <div class="relative aspect-[3/4] bg-surface-container mb-4 overflow-hidden">
-                                    <img src="{{ asset($item->product->images->first()?->image ?? 'https://placehold.co/400x500/stone-200/stone-500?text=No+Image') }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <img src="{{ $item->product->images->first()?->url ?? 'https://placehold.co/400x500/stone-200/stone-500?text=No+Image' }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     <form method="POST" action="{{ route('wishlist.destroy', $item) }}" class="absolute top-4 right-4">
                                         @csrf
                                         @method('DELETE')

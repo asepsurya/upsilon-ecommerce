@@ -14,7 +14,7 @@
         <a href="{{ route('admin.categories.index') }}" class="admin-btn admin-btn-secondary admin-btn-sm">Back to Categories</a>
     </div>
     <div class="admin-card-body">
-        <form method="POST" action="{{ route('admin.categories.update', $category) }}">
+        <form method="POST" action="{{ route('admin.categories.update', $category) }}" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             <div class="admin-form-group">
@@ -28,7 +28,7 @@
             <div class="admin-form-group">
                 <label class="admin-form-label">Current Image</label>
                 @if($category->image)
-                    <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" class="w-16 h-16 object-cover border border-gray-200">
+                    <img src="{{ $category->image_url }}" alt="{{ $category->name }}" class="w-16 h-16 object-cover border border-gray-200">
                 @endif
             </div>
             <div class="admin-form-group">

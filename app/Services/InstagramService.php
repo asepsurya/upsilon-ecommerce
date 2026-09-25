@@ -5,6 +5,7 @@ namespace App\Services;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class InstagramService
 {
@@ -12,21 +13,28 @@ class InstagramService
 
     protected string $accountId;
 
-    protected string $apiVersion = 'v18.0';
+    protected string $apiVersion;
+
+    protected string $baseUrl;
 
     protected string $cacheKey = 'instagram_posts';
+
+    protected int $cacheTtl;
 
     public function __construct()
     {
         $this->accessToken = config('services.instagram.access_token') ?? env('INSTAGRAM_ACCESS_TOKEN');
         $this->accountId = config('services.instagram.account_id') ?? env('INSTAGRAM_ACCOUNT_ID');
+        $this->apiVersion = config('services.instagram.api_version', env('INSTAGRAM_API_VERSION', 'v22.0'));
+        $this->baseUrl = config('services.instagram.api_base_url', env('INSTAGRAM_API_BASE_URL', 'https://graph.facebook.com'));
+        $this->cacheTtl = (int) config('services.instagram.cache_ttl', env('INSTAGRAM_CACHE_TTL', 3600));
     }
 
     public function getRecentPosts(int $limit = 6): array
     {
-        return Cache::remember($this->cacheKey, 3600, function () use ($limit) {
+        return Cache::remember($this->cacheKey, $this->cacheTtl, function () use ($limit) {
             $response = Http::get(
-                "https://graph.instagram.com/{$this->apiVersion}/{$this->accountId}/media",
+                "{$this->baseUrl}/{$this->apiVersion}/{$this->accountId}/media",
                 [
                     'fields' => 'id,caption,media_type,media_url,permalink,timestamp,thumbnail_url',
                     'access_token' => $this->accessToken,
@@ -35,10 +43,29 @@ class InstagramService
             );
 
             if ($response->failed()) {
+                Log::warning('Instagram API request failed', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+
                 return [];
             }
 
-            return $response->json('data', []);
+            $data = $response->json('data', []);
+
+            if (isset($data['error'])) {
+                Log::warning('Instagram API returned an error', [
+                    'error' => $data['error'],
+                ]);
+
+                return [];
+            }
+
+            if (! is_array($data)) {
+                return [];
+            }
+
+            return $data;
         });
     }
 

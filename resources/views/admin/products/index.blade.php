@@ -40,7 +40,7 @@
                 @forelse($products as $product)
                     @php
                         $primaryImage = $product->images->firstWhere('is_primary', true) ?? $product->images->first();
-                        $imageSrc = $primaryImage ? asset($primaryImage->image) : 'https://placehold.co/60x70/stone-200/stone-500?text=No+Image';
+                        $imageSrc = $primaryImage ? $primaryImage->url : 'https://placehold.co/60x70/stone-200/stone-500?text=No+Image';
                         $totalStock = $product->variants->sum('stock');
                         $firstVariant = $product->variants->first();
                         $isSale = $product->sale_price && $product->sale_price < $product->base_price;

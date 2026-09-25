@@ -13,20 +13,27 @@ window.AdminVariants = {
             const panel = document.getElementById('size-panel');
             if (!panel) return;
 
-            let html = '<div class="flex flex-wrap gap-2">';
+            let html = '<div class="flex flex-wrap gap-2 mb-3">';
             sizes.forEach(size => {
                 const isSelected = selectedSizes.includes(size.id);
-                html += '<button type="button" class="size-pill' + (isSelected ? ' selected' : '') + '" data-size-id="' + size.id + '">' + size.name + '</button>';
+                html += '<button type="button" class="size-pill' + (isSelected ? ' selected' : '') + '" data-size-id="' + size.id + '" title="Sort: ' + (size.sort_order || 0) + '">' + size.name + '</button>';
             });
             html += '</div>';
-            html += '<button type="button" id="add-manual-size" class="admin-btn admin-btn-secondary admin-btn-sm mt-3">' +
+            html += '<button type="button" id="add-manual-size" class="admin-btn admin-btn-secondary admin-btn-sm">' +
                 '<span class="material-symbols-outlined" style="font-size: 16px;">add</span> Add New Size' +
             '</button>';
-            html += '<div id="manual-size-input" class="hidden mt-3">' +
-                '<div class="flex gap-2">' +
-                    '<input type="text" id="new-size-name" placeholder="Size name (e.g., XXL)" class="admin-form-input" style="max-width: 200px;">' +
-                    '<button type="button" id="create-size-btn" class="admin-btn admin-btn-primary admin-btn-sm">Add</button>' +
-                    '<button type="button" id="cancel-size-btn" class="admin-btn admin-btn-secondary admin-btn-sm">Cancel</button>' +
+            html += '<div id="manual-size-input" class="hidden mt-3 p-3 bg-surface-container rounded-lg">' +
+                '<div class="flex gap-2 flex-wrap">' +
+                    '<div class="flex-1 min-w-[150px]">' +
+                        '<label class="admin-form-label text-xs">Size Name</label>' +
+                        '<input type="text" id="new-size-name" placeholder="e.g., XXL" class="admin-form-input">' +
+                    '</div>' +
+                    '<div class="flex-1 min-w-[150px]">' +
+                        '<label class="admin-form-label text-xs">Sort Order</label>' +
+                        '<input type="number" id="new-size-sort" value="0" class="admin-form-input" min="0">' +
+                    '</div>' +
+                    '<button type="button" id="create-size-btn" class="admin-btn admin-btn-primary admin-btn-sm self-end">Create</button>' +
+                    '<button type="button" id="cancel-size-btn" class="admin-btn admin-btn-secondary admin-btn-sm self-end">Cancel</button>' +
                 '</div>' +
                 '<p class="text-xs text-muted-foreground mt-1">New sizes are added to the global size list.</p>' +
                 '</div>';
@@ -50,18 +57,21 @@ window.AdminVariants = {
             const addManualSize = document.getElementById('add-manual-size');
             const manualInput = document.getElementById('manual-size-input');
             const newNameInput = document.getElementById('new-size-name');
+            const newSortInput = document.getElementById('new-size-sort');
             const createBtn = document.getElementById('create-size-btn');
             const cancelBtn = document.getElementById('cancel-size-btn');
 
             if (addManualSize) {
                 addManualSize.addEventListener('click', () => {
                     manualInput.classList.remove('hidden');
+                    newNameInput.focus();
                 });
             }
             if (cancelBtn) {
                 cancelBtn.addEventListener('click', () => {
                     manualInput.classList.add('hidden');
                     newNameInput.value = '';
+                    newSortInput.value = '0';
                 });
             }
             if (createBtn) {
@@ -75,7 +85,7 @@ window.AdminVariants = {
                             'Content-Type': 'application/json',
                             'Accept': 'application/json',
                         },
-                        body: JSON.stringify({ name: name, sort_order: 0 })
+                        body: JSON.stringify({ name: name, sort_order: parseInt(newSortInput.value) || 0 })
                     })
                         .then(r => r.json())
                         .then(data => {
@@ -84,6 +94,7 @@ window.AdminVariants = {
                                 saveCurrentMatrixData();
                                 selectedSizes.push(data.size.id);
                                 newNameInput.value = '';
+                                newSortInput.value = '0';
                                 manualInput.classList.add('hidden');
                                 renderSizePanel();
                                 generateMatrix();
@@ -97,33 +108,33 @@ window.AdminVariants = {
             const panel = document.getElementById('color-panel');
             if (!panel) return;
 
-            let html = '<div class="flex flex-wrap gap-2">';
+            let html = '<div class="flex flex-wrap gap-2 mb-3">';
             colors.forEach(color => {
                 const isSelected = selectedColors.includes(color.id);
-                const swatch = color.hex_code ? '<span class="color-swatch" style="background-color: #' + color.hex_code.replace('#', '') + ';"></span>' : '';
+                const swatch = color.hex_code ? '<span class="color-swatch inline-block" style="background-color: #' + color.hex_code.replace('#', '') + ';"></span>' : '';
                 html += '<button type="button" class="color-pill' + (isSelected ? ' selected' : '') + '" data-color-id="' + color.id + '">' +
                     swatch + color.name +
                     '</button>';
             });
             html += '</div>';
-            html += '<button type="button" id="add-manual-color" class="admin-btn admin-btn-secondary admin-btn-sm mt-3">' +
+            html += '<button type="button" id="add-manual-color" class="admin-btn admin-btn-secondary admin-btn-sm">' +
                 '<span class="material-symbols-outlined" style="font-size: 16px;">add</span> Add New Color' +
             '</button>';
-            html += '<div id="manual-color-input" class="hidden mt-3">' +
-                '<div class="flex gap-2 items-end">' +
-                    '<div class="admin-form-group">' +
-                        '<label class="admin-form-label">Name</label>' +
-                        '<input type="text" id="new-color-name" placeholder="Color name" class="admin-form-input" style="max-width: 150px;">' +
+            html += '<div id="manual-color-input" class="hidden mt-3 p-3 bg-surface-container rounded-lg">' +
+                '<div class="flex gap-2 flex-wrap">' +
+                    '<div class="flex-1 min-w-[150px]">' +
+                        '<label class="admin-form-label text-xs">Color Name</label>' +
+                        '<input type="text" id="new-color-name" placeholder="e.g., Navy" class="admin-form-input">' +
                     '</div>' +
-                    '<div class="admin-form-group">' +
-                        '<label class="admin-form-label">Hex Code</label>' +
+                    '<div class="flex-1 min-w-[100px]">' +
+                        '<label class="admin-form-label text-xs">Hex Code</label>' +
                         '<div class="flex gap-2">' +
                             '<input type="color" id="new-color-hex" value="#000000" style="width: 50px; height: 36px; padding: 0; border: 1px solid #ddd; border-radius: 6px;">' +
                             '<input type="text" id="new-color-hex-text" value="#000000" class="admin-form-input" style="max-width: 100px;">' +
                         '</div>' +
                     '</div>' +
-                    '<button type="button" id="create-color-btn" class="admin-btn admin-btn-primary admin-btn-sm">Add</button>' +
-                    '<button type="button" id="cancel-color-btn" class="admin-btn admin-btn-secondary admin-btn-sm">Cancel</button>' +
+                    '<button type="button" id="create-color-btn" class="admin-btn admin-btn-primary admin-btn-sm self-end">Create</button>' +
+                    '<button type="button" id="cancel-color-btn" class="admin-btn admin-btn-secondary admin-btn-sm self-end">Cancel</button>' +
                 '</div>' +
                 '<p class="text-xs text-muted-foreground mt-1">New colors are added to the global color list.</p>' +
                 '</div>';
@@ -159,6 +170,8 @@ window.AdminVariants = {
                 cancelBtn.addEventListener('click', () => {
                     manualInput.classList.add('hidden');
                     nameInput.value = '';
+                    hexInput.value = '#000000';
+                    hexTextInput.value = '#000000';
                 });
             }
             if (hexInput && hexTextInput) {
@@ -188,6 +201,8 @@ window.AdminVariants = {
                                 saveCurrentMatrixData();
                                 selectedColors.push(data.color.id);
                                 nameInput.value = '';
+                                hexInput.value = '#000000';
+                                hexTextInput.value = '#000000';
                                 manualInput.classList.add('hidden');
                                 renderColorPanel();
                                 generateMatrix();
@@ -198,7 +213,7 @@ window.AdminVariants = {
         }
 
         function saveCurrentMatrixData() {
-            const rows = document.querySelectorAll('#variants-matrix-table tbody tr');
+            const rows = document.querySelectorAll('#variants-matrix-table tbody tr.variant-row');
             rows.forEach(row => {
                 const sizeId = parseInt(row.dataset.sizeId);
                 const colorId = parseInt(row.dataset.colorId);
@@ -254,28 +269,33 @@ window.AdminVariants = {
             if (!matrixContainer) return;
 
             if (selectedSizes.length === 0 && selectedColors.length === 0) {
-                matrixContainer.innerHTML = '<p class="text-sm text-muted-foreground py-4">Select size and color options above to generate variants.</p>';
+                matrixContainer.innerHTML = '<div class="empty-state"><div class="empty-icon"><span class="material-symbols-outlined">grid_on</span></div><p>Select size and color options above to generate variants.</p></div>';
                 return;
             }
 
             if (selectedSizes.length === 0 || selectedColors.length === 0) {
-                matrixContainer.innerHTML = '<p class="text-sm text-warning py-4">Select at least one size and one color to generate variants.</p>';
+                matrixContainer.innerHTML = '<div class="empty-state warning"><div class="empty-icon"><span class="material-symbols-outlined">warning</span></div><p>Select at least one size <strong>and</strong> one color to generate variants.</p></div>';
                 return;
             }
 
-            let html = '<table class="admin-table" id="variants-matrix-table">';
+            let html = '<div class="matrix-wrapper">';
+            html += '<table class="admin-table matrix-table" id="variants-matrix-table">';
             html += '<thead><tr>';
-            html += '<th>Size</th>';
-            html += '<th>Color</th>';
+            html += '<th rowspan="2" class="sticky-col size-col">Size</th>';
+            html += '<th rowspan="2" class="sticky-col color-col">Color</th>';
+            html += '<th colspan="4" class="stock-group">Stock & Pricing</th>';
+            html += '</tr>';
+            html += '<tr>';
             html += '<th>SKU</th>';
-            html += '<th>Stock</th>';
+            html += '<th>Qty</th>';
             html += '<th>Price Override</th>';
-            html += '<th>Sale Price Override</th>';
-            html += '<th>Active</th>';
-            html += '</tr></thead>';
+            html += '<th>Sale Price</th>';
+            html += '</tr>';
+            html += '</thead>';
             html += '<tbody>';
 
             let index = 0;
+            let totalStock = 0;
 
             selectedSizes.forEach(sizeId => {
                 selectedColors.forEach(colorId => {
@@ -285,25 +305,43 @@ window.AdminVariants = {
                     const colorInfo = getColorInfo(colorId);
                     const swatch = colorInfo.hex_code ? 'background-color: #' + colorInfo.hex_code.replace('#', '') + ';' : '';
 
-                    html += '<tr class="variant-row" data-size-id="' + sizeId + '" data-color-id="' + colorId + '">';
-                    html += '<td><input type="hidden" name="variants[' + index + '][size_id]" value="' + sizeId + '"><input type="hidden" name="variants[' + index + '][color_id]" value="' + colorId + '"></td>';
-                    html += '<td>' + sizeInfo + '</td>';
-                    html += '<td><div class="flex items-center gap-2">' +
-                        (colorInfo.hex_code ? '<span class="w-4 h-4 rounded-full" style="border: 1px solid #ccc; ' + swatch + '"></span>' : '') +
-                        colorInfo.name +
+                    totalStock += parseInt(existing.stock) || 0;
+
+                    html += '<tr class="variant-row" data-size-id="' + sizeId + '" data-color-id="' + colorId + '" data-index="' + index + '">';
+                    html += '<td class="sticky-col size-col"><input type="hidden" name="variants[' + index + '][size_id]" value="' + sizeId + '"><input type="hidden" name="variants[' + index + '][color_id]" value="' + colorId + '">' + sizeInfo + '</td>';
+                    html += '<td class="sticky-col color-col"><div class="flex items-center gap-2">' +
+                        (colorInfo.hex_code ? '<span class="w-6 h-6 rounded-full border border-outline-variant/30" style="' + swatch + '"></span>' : '<span class="w-6 h-6 rounded-full border border-outline-variant/30 bg-surface-container-low"></span>') +
+                        '<span class="font-medium">' + colorInfo.name + '</span>' +
                         '</div></td>';
-                    html += '<td><input type="text" name="variants[' + index + '][sku]" value="' + (existing.sku || '') + '" class="admin-form-input" style="width: 140px;" placeholder="Auto or manual"></td>';
-                    html += '<td><input type="number" name="variants[' + index + '][stock]" min="0" value="' + (existing.stock !== undefined ? existing.stock : 0) + '" class="admin-form-input" style="width: 100px;"></td>';
-                    html += '<td><input type="number" name="variants[' + index + '][price_override]" step="0.01" value="' + (existing.price_override || '') + '" class="admin-form-input" style="width: 120px;" placeholder="Optional"></td>';
-                    html += '<td><input type="number" name="variants[' + index + '][sale_price_override]" step="0.01" value="' + (existing.sale_price_override || '') + '" class="admin-form-input" style="width: 120px;" placeholder="Optional"></td>';
-                    html += '<td><input type="checkbox" name="variants[' + index + '][is_active]" value="1" ' + (existing.is_active !== false ? 'checked' : '') + ' class="admin-form-input" style="width: auto;"></td>';
+                    html += '<td><input type="text" name="variants[' + index + '][sku]" value="' + (existing.sku || '') + '" class="admin-form-input sku-input" placeholder="Auto-generated" title="Leave empty for auto-generation"></td>';
+                    html += '<td class="stock-col">' +
+                        '<div class="flex items-start gap-3">' +
+                            '<label class="unlimited-stock-label flex flex-col items-center cursor-pointer" style="min-width: 90px;">' +
+                                '<input type="checkbox" name="variants[' + index + '][unlimited_stock]" value="1" class="unlimited-stock-checkbox" ' + (existing.unlimited_stock ? 'checked' : '') + ' data-index="' + index + '" style="width: 20px; height: 20px; accent-color: var(--primary);">' +
+                                '<span class="text-xs font-medium text-on-surface mt-1">Unlimited</span>' +
+                            '</label>' +
+                            '<input type="number" name="variants[' + index + '][stock]" min="0" value="' + (existing.stock !== undefined ? existing.stock : 0) + '" class="admin-form-input stock-input" style="width: 80px;"' + (existing.unlimited_stock ? ' disabled' : '') + '>' +
+                        '</div>' +
+                    '</td>';
+                    html += '<td><input type="number" name="variants[' + index + '][price_override]" step="0.01" value="' + (existing.price_override || '') + '" class="admin-form-input price-input" placeholder="Base price" title="Override base price"></td>';
+                    html += '<td><input type="number" name="variants[' + index + '][sale_price_override]" step="0.01" value="' + (existing.sale_price_override || '') + '" class="admin-form-input sale-price-input" placeholder="Sale price" title="Override sale price"></td>';
                     html += '</tr>';
 
                     index++;
                 });
             });
 
+            // Summary row
+            html += '<tr class="matrix-summary">';
+            html += '<td colspan="2" class="sticky-col"><strong>Total</strong></td>';
+            html += '<td colspan="1">—</td>';
+            html += '<td class="stock-summary"><strong>' + totalStock + '</strong> units</td>';
+            html += '<td colspan="2">—</td>';
+            html += '</tr>';
+
             html += '</tbody></table>';
+            html += '</div>';
+
             matrixContainer.innerHTML = html;
             generateHiddenSelectedOptions();
         }
@@ -343,6 +381,23 @@ window.AdminVariants = {
         renderColorPanel();
         generateMatrix();
         generateHiddenSelectedOptions();
+
+        // Handle unlimited stock checkbox toggles
+        const matrixContainer = document.getElementById('variants-matrix');
+        if (matrixContainer) {
+            matrixContainer.addEventListener('change', function(e) {
+                if (e.target.classList.contains('unlimited-stock-checkbox')) {
+                    const index = e.target.dataset.index;
+                    const stockInput = matrixContainer.querySelector('input[name="variants[' + index + '][stock]"]');
+                    if (stockInput) {
+                        stockInput.disabled = e.target.checked;
+                        if (e.target.checked) {
+                            stockInput.value = '';
+                        }
+                    }
+                }
+            });
+        }
 
         // Update hidden inputs on form submit
         form.addEventListener('submit', function() {

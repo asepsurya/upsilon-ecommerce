@@ -13,6 +13,13 @@ class ProductImage extends Model
 
     protected $casts = ['is_primary' => 'boolean'];
 
+    protected $appends = ['url'];
+
+    public function getUrlAttribute(): string
+    {
+        return asset(str_starts_with($this->image, 'storage/') ? $this->image : 'storage/'.$this->image);
+    }
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

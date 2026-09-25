@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bundle;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Slider;
 use App\Services\CartService;
 use App\Services\InstagramService;
 
@@ -37,10 +38,12 @@ class HomepageController extends Controller
             ->take(3)
             ->get();
 
+        $sliders = Slider::active()->get();
+
         $articles = $instagramService->getFormattedPosts(3);
 
         return view('home.index', compact(
-            'categories', 'featuredProducts', 'products', 'newArrivals', 'bundles', 'articles'
+            'categories', 'featuredProducts', 'products', 'newArrivals', 'bundles', 'articles', 'sliders'
         ));
     }
 

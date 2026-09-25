@@ -23,7 +23,7 @@ Shopping Cart - {{ config('app.name', 'Upsilon') }}
                                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-6 border-b border-outline-variant/40 items-center">
                                         <div class="md:col-span-6 flex gap-4">
                                             <div class="w-20 h-24 bg-surface-container flex-shrink-0 overflow-hidden">
-                                                <img src="{{ asset($item->variant->product->images->first()?->image ?? 'https://placehold.co/100x120/stone-200/stone-500?text=No+Image') }}" alt="{{ $item->variant->product->name }}" class="w-full h-full object-cover">
+                                                <img src="{{ $item->variant->product->images->first()?->url ?? 'https://placehold.co/100x120/stone-200/stone-500?text=No+Image' }}" alt="{{ $item->variant->product->name }}" class="w-full h-full object-cover">
                                             </div>
                                             <div>
                                                 <h3 class="font-headline-md text-on-surface">{{ $item->variant->product->name }}</h3>

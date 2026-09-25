@@ -14,7 +14,7 @@
         <a href="{{ route('admin.categories.index') }}" class="admin-btn admin-btn-secondary admin-btn-sm">Back to Categories</a>
     </div>
     <div class="admin-card-body">
-        <form method="POST" action="{{ route('admin.categories.store') }}">
+        <form method="POST" action="{{ route('admin.categories.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="admin-form-group">
                 <label class="admin-form-label">Category Name</label>

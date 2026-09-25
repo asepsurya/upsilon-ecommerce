@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
@@ -54,6 +56,12 @@ Route::post('/login', [AccountController::class, 'login'])->middleware('throttle
 Route::get('/register', [AccountController::class, 'showRegister'])->name('register');
 Route::post('/register', [AccountController::class, 'register']);
 Route::post('/logout', [AccountController::class, 'logout'])->name('logout')->middleware('auth');
+
+// Password reset routes
+Route::get('/forgot-password', [PasswordResetController::class, 'showLinkRequest'])->name('password.request');
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email')->middleware('throttle:forgot-password');
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
 // Customer account routes
 Route::prefix('/account')->middleware('auth')->group(function () {
@@ -132,4 +140,22 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/bundles/{bundle}/edit', [AdminController::class, 'editBundle'])->name('admin.bundles.edit');
     Route::patch('/bundles/{bundle}', [AdminController::class, 'updateBundle'])->name('admin.bundles.update');
     Route::delete('/bundles/{bundle}', [AdminController::class, 'deleteBundle'])->name('admin.bundles.destroy');
+
+    // Announcements
+    Route::get('/announcements', [AnnouncementController::class, 'index'])->name('admin.announcements.index');
+    Route::get('/announcements/create', [AnnouncementController::class, 'create'])->name('admin.announcements.create');
+    Route::post('/announcements', [AnnouncementController::class, 'store'])->name('admin.announcements.store');
+    Route::get('/announcements/{announcement}/edit', [AnnouncementController::class, 'edit'])->name('admin.announcements.edit');
+    Route::put('/announcements/{announcement}', [AnnouncementController::class, 'update'])->name('admin.announcements.update');
+    Route::delete('/announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('admin.announcements.destroy');
+    Route::post('/announcements/{announcement}/toggle', [AnnouncementController::class, 'toggle'])->name('admin.announcements.toggle');
+
+    // Sliders
+    Route::get('/sliders', [AdminController::class, 'sliders'])->name('admin.sliders.index');
+    Route::get('/sliders/create', [AdminController::class, 'createSlider'])->name('admin.sliders.create');
+    Route::post('/sliders', [AdminController::class, 'storeSlider'])->name('admin.sliders.store');
+    Route::get('/sliders/{slider}/edit', [AdminController::class, 'editSlider'])->name('admin.sliders.edit');
+    Route::put('/sliders/{slider}', [AdminController::class, 'updateSlider'])->name('admin.sliders.update');
+    Route::delete('/sliders/{slider}', [AdminController::class, 'deleteSlider'])->name('admin.sliders.destroy');
+    Route::post('/sliders/{slider}/toggle', [AdminController::class, 'toggleSlider'])->name('admin.sliders.toggle');
 });

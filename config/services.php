@@ -37,12 +37,16 @@ return [
 
     'whatsapp' => [
         'number' => env('WHATSAPP_NUMBER', '6281234567890'),
-        'default_message' => env('WHATSAPP_DEFAULT_MESSAGE', 'Halo, saya tertarik dengan produk Anda.'),
+        'default_message' => env('WHATSAPP_DEFAULT_MESSAGE', 'Hello, I would like to inquire about your products.'),
     ],
 
     'instagram' => [
         'access_token' => env('INSTAGRAM_ACCESS_TOKEN'),
         'account_id' => env('INSTAGRAM_ACCOUNT_ID'),
+        'api_version' => env('INSTAGRAM_API_VERSION', 'v22.0'),
+        'api_base_url' => env('INSTAGRAM_API_BASE_URL', 'https://graph.facebook.com'),
+        'cache_ttl' => env('INSTAGRAM_CACHE_TTL', 3600),
+        'short_cache_ttl' => 300,
     ],
 
 ];

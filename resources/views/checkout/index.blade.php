@@ -102,7 +102,7 @@ Checkout - {{ config('app.name', 'Upsilon') }}
                                 @foreach($cart as $item)
                                     <div class="flex gap-4">
                                         <div class="w-16 h-20 bg-surface-container flex-shrink-0 overflow-hidden">
-                                            <img src="{{ asset($item->variant->product->images->first()?->image ?? 'https://placehold.co/100x120/stone-200/stone-500?text=No+Image') }}" alt="{{ $item->variant->product->name }}" class="w-full h-full object-cover">
+                                            <img src="{{ $item->variant->product->images->first()?->url ?? 'https://placehold.co/100x120/stone-200/stone-500?text=No+Image' }}" alt="{{ $item->variant->product->name }}" class="w-full h-full object-cover">
                                         </div>
                                         <div class="flex-1">
                                             <h4 class="text-sm font-medium">{{ $item->variant->product->name }}</h4>

@@ -25,7 +25,7 @@ Order #{{ $order->order_number }} - {{ config('app.name', 'Upsilon') }}
                                 @foreach($order->items as $item)
                                     <div class="px-8 py-6 flex gap-6">
                                         <div class="w-20 h-24 bg-surface-container flex-shrink-0 overflow-hidden">
-                                            <img src="{{ asset($item->variant->product->images->first()?->image ?? 'https://placehold.co/100x120/stone-200/stone-500?text=No+Image') }}" alt="{{ $item->variant->product->name }}" class="w-full h-full object-cover">
+                                            <img src="{{ $item->variant->product->images->first()?->url ?? 'https://placehold.co/100x120/stone-200/stone-500?text=No+Image' }}" alt="{{ $item->variant->product->name }}" class="w-full h-full object-cover">
                                         </div>
                                         <div class="flex-1">
                                             <h3 class="font-headline-md text-on-surface">{{ $item->variant->product->name }}</h3>

@@ -17,6 +17,7 @@ use App\Models\User;
 use App\Models\Voucher;
 use Buglinjo\LaravelWebp\Facades\Webp;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -191,7 +192,7 @@ class AdminController extends Controller
         return response()->json([
             'images' => $images->map(fn ($img) => [
                 'id' => $img->id,
-                'url' => asset($img->image),
+                'url' => $img->url,
                 'is_primary' => $img->is_primary,
             ]),
         ]);
@@ -211,7 +212,7 @@ class AdminController extends Controller
             $sortOrder++;
 
             foreach ($request->file('images') as $image) {
-                $path = $this->storeWebPImage($image, 'products');
+                $path = $this->storeWebPImage($image, 'storage/products');
 
                 $product->images()->create([
                     'image' => $path,
@@ -303,7 +304,7 @@ class AdminController extends Controller
             $sortOrder++;
 
             foreach ($request->file('images') as $image) {
-                $path = $this->storeWebPImage($image, 'products');
+                $path = $this->storeWebPImage($image, 'storage/products');
 
                 $product->images()->create([
                     'image' => $path,
@@ -415,12 +416,16 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:categories,slug',
             'description' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:2048',
             'sort_order' => 'integer|min:0',
             'is_active' => 'boolean',
         ]);
 
         $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'storage/categories');
+        }
 
         Category::create($validated);
 
@@ -433,12 +438,20 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:categories,slug,'.$category->id,
             'description' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:2048',
             'sort_order' => 'integer|min:0',
             'is_active' => 'boolean',
         ]);
 
         $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            if ($category->image && str_starts_with($category->image, 'storage/categories/')) {
+                Storage::disk('public')->delete($category->image);
+            }
+
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'storage/categories');
+        }
 
         $category->update($validated);
 
@@ -447,6 +460,10 @@ class AdminController extends Controller
 
     public function deleteCategory(Category $category)
     {
+        if ($category->image && str_starts_with($category->image, 'storage/categories/')) {
+            Storage::disk('public')->delete($category->image);
+        }
+
         $category->delete();
 
         return back()->with('success', 'Category deleted successfully');
@@ -686,7 +703,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:bundles,slug',
             'description' => 'nullable|string',
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,gif,webp|max:2048',
             'bundle_price' => 'nullable|numeric|min:0',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
@@ -708,22 +725,7 @@ class AdminController extends Controller
         }
 
         if ($request->hasFile('thumbnail')) {
-            // Store original image
-            $originalPath = $request->file('thumbnail')->store('bundles', 'public');
-            $fullOriginalPath = storage_path('app/public/'.$originalPath);
-
-            // Determine WebP path
-            $webpPath = preg_replace('/\.\w+$/', '.webp', $originalPath);
-            $fullWebpPath = storage_path('app/public/'.$webpPath);
-
-            // Convert to WebP
-            Webp::make($fullOriginalPath)->save($fullWebpPath);
-
-            // Delete original file
-            Storage::disk('public')->delete($originalPath);
-
-            // Save WebP path in validated data
-            $validated['thumbnail'] = $webpPath;
+            $validated['thumbnail'] = $this->storeWebPImage($request->file('thumbnail'), 'bundles');
         }
 
         $bundle = Bundle::create($validated);
@@ -747,7 +749,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:bundles,slug,'.$bundle->id,
             'description' => 'nullable|string',
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,gif,webp|max:2048',
             'bundle_price' => 'nullable|numeric|min:0',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
@@ -772,7 +774,8 @@ class AdminController extends Controller
             if ($bundle->thumbnail) {
                 Storage::disk('public')->delete($bundle->thumbnail);
             }
-            $validated['thumbnail'] = $request->file('thumbnail')->store('bundles', 'public');
+
+            $validated['thumbnail'] = $this->storeWebPImage($request->file('thumbnail'), 'bundles');
         }
 
         $bundle->update($validated);
@@ -807,5 +810,96 @@ class AdminController extends Controller
         $bundle->delete();
 
         return back()->with('success', 'Bundle deleted successfully');
+    }
+
+    public function sliders()
+    {
+        $sliders = Slider::sorted()->paginate(20);
+
+        return view('admin.sliders.index', compact('sliders'));
+    }
+
+    public function createSlider()
+    {
+        return view('admin.sliders.create');
+    }
+
+    public function storeSlider(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'nullable|string|max:255',
+            'heading' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'required|image|mimes:jpeg,png,gif,webp|max:5120',
+            'link' => 'nullable|url|max:255',
+            'link_text' => 'nullable|string|max:100',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+            'starts_at' => 'nullable|date',
+            'ends_at' => 'nullable|date|after_or_equal:starts_at',
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'storage/sliders');
+        }
+
+        Slider::create($validated);
+
+        return redirect()->route('admin.sliders.index')->with('success', 'Slider created successfully');
+    }
+
+    public function editSlider(Slider $slider)
+    {
+        return view('admin.sliders.edit', compact('slider'));
+    }
+
+    public function updateSlider(Request $request, Slider $slider)
+    {
+        $validated = $request->validate([
+            'title' => 'nullable|string|max:255',
+            'heading' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
+            'link' => 'nullable|url|max:255',
+            'link_text' => 'nullable|string|max:100',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+            'starts_at' => 'nullable|date',
+            'ends_at' => 'nullable|date|after_or_equal:starts_at',
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            if ($slider->image && str_starts_with($slider->image, 'storage/sliders/')) {
+                Storage::disk('public')->delete($slider->image);
+            }
+
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'storage/sliders');
+        }
+
+        $slider->update($validated);
+
+        return redirect()->route('admin.sliders.index')->with('success', 'Slider updated successfully');
+    }
+
+    public function deleteSlider(Slider $slider)
+    {
+        if ($slider->image && str_starts_with($slider->image, 'storage/sliders/')) {
+            Storage::disk('public')->delete($slider->image);
+        }
+
+        $slider->delete();
+
+        return back()->with('success', 'Slider deleted successfully');
+    }
+
+    public function toggleSlider(Slider $slider)
+    {
+        $slider->update(['is_active' => ! $slider->is_active]);
+
+        return back()->with('success', 'Slider status updated successfully');
     }
 }

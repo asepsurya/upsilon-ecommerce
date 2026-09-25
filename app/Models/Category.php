@@ -17,6 +17,15 @@ class Category extends Model
 
     protected $casts = ['is_active' => 'boolean'];
 
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute(): string
+    {
+        return $this->image
+            ? asset(str_starts_with($this->image, 'storage/') ? $this->image : 'storage/'.$this->image)
+            : 'https://placehold.co/60x60/stone-200/stone-500?text=No+Image';
+    }
+
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);

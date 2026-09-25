@@ -246,6 +246,123 @@
 
 @push('scripts')
 @vite(['resources/js/admin-variants.js', 'resources/js/admin-image-gallery.js'])
+<style>
+    /* Variant Matrix Styles */
+    .matrix-wrapper {
+        overflow-x: auto;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+    }
+    .matrix-table {
+        min-width: 800px;
+    }
+    .matrix-table th {
+        background: var(--surface-container-low);
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--on-surface-variant);
+        border-bottom: 2px solid var(--border);
+    }
+    .matrix-table th.stock-group {
+        text-align: center;
+    }
+    .matrix-table th.sticky-col {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        background: var(--surface-container);
+    }
+    .matrix-table th.color-col {
+        left: 120px;
+    }
+    .matrix-table th.status-col {
+        position: sticky;
+        right: 0;
+        z-index: 1;
+        background: var(--surface-container);
+    }
+    .matrix-table td {
+        padding: 12px 10px;
+        vertical-align: middle;
+    }
+    .matrix-table td.sticky-col {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        background: var(--surface-container);
+    }
+    .matrix-table td.color-col {
+        left: 120px;
+    }
+    .matrix-table .variant-row:hover td {
+        background: var(--surface-container-high);
+    }
+    .matrix-table .size-col {
+        min-width: 120px;
+        font-weight: 500;
+        font-size: 13px;
+    }
+    .matrix-table .color-col {
+        min-width: 140px;
+    }
+    .matrix-table .sku-input { width: 140px; }
+    .matrix-table .stock-input { width: 80px; text-align: center; }
+    .matrix-table .price-input { width: 120px; text-align: right; }
+    .matrix-table .sale-price-input { width: 120px; text-align: right; }
+    .matrix-table .stock-col {
+        min-width: 160px;
+    }
+    .matrix-table .unlimited-stock-label {
+        flex-shrink: 0;
+    }
+    .matrix-table .unlimited-stock-checkbox {
+        accent-color: var(--primary);
+        cursor: pointer;
+    }
+    .matrix-table .unlimited-stock-label span {
+        white-space: nowrap;
+    }
+    .matrix-table .matrix-summary {
+        background: var(--surface-container-low) !important;
+        border-top: 2px solid var(--border);
+        font-size: 13px;
+    }
+    .matrix-table .matrix-summary td {
+        font-weight: 500;
+    }
+    .matrix-table .stock-summary {
+        text-align: center;
+    }
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 24px;
+        text-align: center;
+        color: var(--on-surface-variant);
+    }
+    .empty-state .empty-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+        opacity: 0.5;
+    }
+    .empty-state.warning {
+        color: var(--warning);
+    }
+    .empty-state.warning .empty-icon {
+        color: var(--warning);
+    }
+    .empty-state p {
+        margin: 0;
+        font-size: 14px;
+    }
+    .empty-state strong {
+        color: var(--on-surface);
+    }
+</style>
 <script>
 (function() {
     const pollInit = setInterval(() => {

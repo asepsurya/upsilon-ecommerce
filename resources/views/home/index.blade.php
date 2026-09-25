@@ -26,7 +26,7 @@
                             class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full p-1 bg-gradient-to-b from-primary/30 to-transparent group-hover:from-primary transition-all duration-500 mb-space-sm overflow-hidden">
                             <div class="w-full h-full rounded-full overflow-hidden bg-surface-container-high relative">
                                 <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                    src="{{ asset($category->image) }}" alt="{{ $category->name }}">
+                                    src="{{ $category->image_url }}" alt="{{ $category->name }}">
                                 <div class="absolute inset-0 bg-surface/20 group-hover:bg-transparent transition-colors"></div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                         <div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-highest">
                             @if($primaryImage)
                                 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                    src="{{ asset($primaryImage->image) }}" alt="{{ $product->name }}">
+                                    src="{{ $primaryImage->url }}" alt="{{ $product->name }}">
                             @endif
                             @if($product->badge)
                                 <span
@@ -96,10 +96,11 @@
                             </button>
                             <div
                                 class="absolute inset-x-0 bottom-0 p-space-sm bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2">
-                                <button
-                                    class="w-full py-2.5 bg-primary text-on-primary font-label-caps text-[11px] tracking-widest uppercase hover:bg-secondary transition-colors font-semibold">
-                                    Quick Reserve
-                                </button>
+                                <a href="https://wa.me/{{ config('services.whatsapp.number') }}?text={{ urlencode('Buy Product: I would like to buy ' . $product->name . ' priced at $' . number_format($product->sale_price ?? $product->base_price, 2) . '. Please provide details.') }}"
+                                    class="flex-1 py-2.5 bg-primary text-on-primary font-label-caps text-[11px] tracking-widest uppercase hover:bg-primary/90 transition-colors font-semibold text-center"
+                                    target="_blank" rel="noopener">
+                                    Buy Product
+                                </a>
                             </div>
                         </div>
                         <div class="p-space-md flex flex-col gap-1.5">
@@ -110,7 +111,7 @@
                             </div>
                             <h3
                                 class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight">
-                                {{ $product->name }}
+                                <a href="{{ route('product.show', $product) }}">{{ $product->name }}</a>
                             </h3>
                             <p class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-1">
                                 {{ $product->material }}

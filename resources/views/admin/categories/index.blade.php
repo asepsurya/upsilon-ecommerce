@@ -29,7 +29,7 @@
                     <tr>
                         <td>
                             <div class="w-12 h-12 bg-white overflow-hidden border border-gray-200">
-                                <img src="{{ asset($category->image ?? 'https://placehold.co/60x60/stone-200/stone-500?text=No+Image') }}" alt="{{ $category->name }}" class="w-full h-full object-cover">
+                                <img src="{{ $category->image_url }}" alt="{{ $category->name }}" class="w-full h-full object-cover">
                             </div>
                         </td>
                         <td class="font-medium">{{ $category->name }}</td>

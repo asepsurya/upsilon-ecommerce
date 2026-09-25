@@ -27,7 +27,7 @@
                         <a href="{{ route('product.show', $product) }}" class="block w-full h-full">
                             @if($primaryImage)
                             <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                                src="{{ asset($primaryImage->image) }}" alt="{{ $product->name }}">
+                                src="{{ $primaryImage->url }}" alt="{{ $product->name }}">
                             @else
                                 <div class="w-full h-full flex items-center justify-center">
                                     <span class="text-outline-variant text-sm uppercase tracking-wider">No Image</span>
@@ -74,11 +74,11 @@
                             </div>
 
                             <a
-                                href="https://wa.me/{{ config('services.whatsapp.number') }}?text={{ urlencode('Quick Reserve: I would like to reserve ' . $product->name . ' priced at $' . number_format($product->sale_price ?? $product->base_price, 2) . '. Please confirm availability.') }}"
-                                class="w-full bg-navy hover:bg-navy/90 text-white font-headline-md text-body-sm font-semibold px-6 py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn"
+                                href="https://wa.me/{{ config('services.whatsapp.number') }}?text={{ urlencode('Buy Product: I would like to buy ' . $product->name . ' priced at $' . number_format($product->sale_price ?? $product->base_price, 2) . '. Please provide details.') }}"
+                                class="w-full bg-primary hover:bg-primary/90 text-on-primary font-headline-md text-body-sm font-semibold px-6 py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn"
                                 target="_blank" rel="noopener">
-                                <span class="material-symbols-outlined text-[18px]">chat</span>
-                                Quick Reserve
+                                <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+                                Buy Product
                             </a>
                         </div>
                     </div>

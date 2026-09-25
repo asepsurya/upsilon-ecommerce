@@ -854,6 +854,7 @@
     </div>
 
      @stack('scripts')
+     @include('components.whatsapp-chat')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const html = document.getElementById('html-document');

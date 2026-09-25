@@ -33,7 +33,7 @@
                     <tr>
                         <td>
                             <div class="d-flex align-items-center gap-3">
-                                <img src="{{ asset($item->variant->product->images->first()?->image ?? 'https://placehold.co/50x60/stone-200/stone-500?text=No+Image') }}" alt="" class="w-12 h-14 object-cover border border-gray-200">
+                                <img src="{{ $item->variant->product->images->first()?->url ?? 'https://placehold.co/50x60/stone-200/stone-500?text=No+Image' }}" alt="" class="w-12 h-14 object-cover border border-gray-200">
                                 <div>
                                     <p class="font-weight-bold">{{ $item->variant->product->name }}</p>
                                     <p class="text-muted text-sm">{{ $item->variant->color }} / {{ $item->variant->size }}</p>

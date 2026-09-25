@@ -6,7 +6,7 @@
 
         @if($primaryImage)
             <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                src="{{ asset($primaryImage->image) }}" alt="{{ $product->name }}">
+                src="{{ $primaryImage->url }}" alt="{{ $product->name }}">
         @else
             <div class="w-full h-full flex items-center justify-center">
                 <span class="text-outline-variant text-xs uppercase tracking-wider">No Image</span>
@@ -27,10 +27,10 @@
 
         <div
             class="absolute inset-x-0 bottom-0 p-space-sm bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2">
-            <a href="https://wa.me/{{ config('services.whatsapp.number') }}?text={{ urlencode('Quick Reserve: I would like to reserve ' . $product->name . ' priced at $' . number_format($product->sale_price ?? $product->base_price, 2) . '. Please confirm availability.') }}"
-                class="flex-1 py-2.5 bg-navy text-white font-label-caps text-[11px] tracking-widest uppercase hover:bg-navy/90 transition-colors font-semibold text-center"
+            <a href="https://wa.me/{{ config('services.whatsapp.number') }}?text={{ urlencode('Buy Product: I would like to buy ' . $product->name . ' priced at $' . number_format($product->sale_price ?? $product->base_price, 2) . '. Please provide details.') }}"
+                class="flex-1 py-2.5 bg-primary text-on-primary font-label-caps text-[11px] tracking-widest uppercase hover:bg-primary/90 transition-colors font-semibold text-center"
                 target="_blank" rel="noopener">
-                Quick Reserve
+                Buy Product
             </a>
         </div>
     </div>

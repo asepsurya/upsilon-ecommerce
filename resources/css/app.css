@@ -134,6 +134,18 @@
     .showcase-card:hover .showcase-card-image img {
         @apply scale-105;
     }
+
+    .section-header {
+        @apply text-center mb-space-xl;
+    }
+
+    .section-header .section-label {
+        @apply font-label-caps text-xs uppercase tracking-widest text-primary block mb-space-xs;
+    }
+
+    .section-header .section-title {
+        @apply font-headline-md text-headline-md text-on-surface uppercase tracking-tight;
+    }
 }
 
 @keyframes fadeIn {
@@ -175,11 +187,21 @@
 input:where([type=text]), input:where(:not([type])), input:where([type=email]), input:where([type=url]), input:where([type=password]), input:where([type=number]), input:where([type=date]), input:where([type=datetime-local]), input:where([type=month]), input:where([type=search]), input:where([type=tel]), input:where([type=time]), input:where([type=week]), select:where([multiple]), textarea, select {
     appearance: none;
     --tw-shadow: 0 0 #0000;
-    background-color: #fff;
+    background-color: var(--surface-container-low);
     border-width: 1px;
-    border-color: transparent;
-    border-radius: 0;
+    border-color: var(--outline-variant);
+    border-radius: var(--radius);
     padding: .5rem .75rem;
     font-size: 1rem;
     line-height: 1.5rem;
+    color: var(--on-surface);
+}
+
+input:where([type=text]):focus, input:where(:not([type])):focus, input:where([type=email]):focus, input:where([type=url]):focus, input:where([type=password]):focus, input:where([type=number]):focus, input:where([type=date]):focus, input:where([type=datetime-local]):focus, input:where([type=month]):focus, input:where([type=search]):focus, input:where([type=tel]):focus, input:where([type=time]):focus, input:where([type=week]):focus, select:where([multiple]):focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--ring);
+    ring-width: 2px;
+    --tw-ring-color: var(--ring);
+    --tw-ring-offset-width: 2px;
+    --tw-ring-offset-color: var(--surface);
 }

@@ -11,6 +11,7 @@ class ProductVariant extends Model
     protected $fillable = [
         'product_id', 'size_id', 'color_id', 'sku', 'stock',
         'price_override', 'sale_price_override', 'is_active',
+        'unlimited_stock',
     ];
 
     protected $casts = [
@@ -18,6 +19,7 @@ class ProductVariant extends Model
         'price_override' => 'decimal:2',
         'sale_price_override' => 'decimal:2',
         'is_active' => 'boolean',
+        'unlimited_stock' => 'boolean',
     ];
 
     public function product(): BelongsTo
@@ -57,7 +59,10 @@ class ProductVariant extends Model
 
     public function scopeInStock($query)
     {
-        return $query->where('stock', '>', 0);
+        return $query->where(function ($q) {
+            $q->where('unlimited_stock', true)
+                ->orWhere('stock', '>', 0);
+        });
     }
 
     public function getEffectivePriceAttribute()

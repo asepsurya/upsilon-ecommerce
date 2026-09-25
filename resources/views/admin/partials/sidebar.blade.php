@@ -51,6 +51,16 @@
                 <span class="nav-icon material-symbols-outlined text-lg">star</span>
                 Reviews
             </a>
+            <a href="{{ route('admin.announcements.index') }}"
+                class="admin-sidebar-nav-item {{ request()->routeIs('admin.announcements*') ? 'active' : '' }}">
+                <span class="nav-icon material-symbols-outlined text-lg">campaign</span>
+                Announcements
+            </a>
+            <a href="{{ route('admin.sliders.index') }}"
+                class="admin-sidebar-nav-item {{ request()->routeIs('admin.sliders*') ? 'active' : '' }}">
+                <span class="nav-icon material-symbols-outlined text-lg">image_slideshow</span>
+                Sliders
+            </a>
 
         </div>
     </nav>
