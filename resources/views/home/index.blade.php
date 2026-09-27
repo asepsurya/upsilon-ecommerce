@@ -1014,7 +1014,7 @@
             }
 
             /* =====================================================
-               3. MENU MOBILE
+               3. MOBILE MENU
                ===================================================== */
             var menuBtn = document.getElementById('mobile-menu-btn');
             var mobileMenu = document.getElementById('mobile-menu');
@@ -1027,7 +1027,7 @@
             }
 
             /* =====================================================
-               4. PENCARIAN MOBILE
+               4. MOBILE SEARCH
                ===================================================== */
             var searchBtn = document.getElementById('mobile-search-btn');
             var mobileSearch = document.getElementById('mobile-search');
@@ -1047,4 +1047,4 @@
 
 </body>
 
-</html
+</html>
