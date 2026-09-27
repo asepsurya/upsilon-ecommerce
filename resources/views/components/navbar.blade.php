@@ -87,10 +87,10 @@
             <a class="flex items-center gap-2.5" data-path="home" href="{{ route('home') }}">
                 @if($isHome)
                     <img alt="Vitalis Labs" class="h-9 w-auto object-contain brightness-200"
-                        src="{{ asset('storage/images/sample/logo.png') }}">
+                        src="{{ asset('storage/images/sample/logo-white.png') }}">
                 @else
                     <img alt="Vitalis Labs" class="h-9 w-auto object-contain"
-                        src="{{ asset('storage/images/sample/logo.png') }}">
+                        src="{{ asset('storage/images/sample/logo-black.png') }}">
                 @endif
             </a>
         </div>

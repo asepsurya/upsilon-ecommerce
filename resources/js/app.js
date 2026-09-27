@@ -60,15 +60,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hero slider
     const slides = document.querySelectorAll('.hero-slide');
+    const dotsContainer = document.getElementById('hero-dots');
+    const heroSection = document.querySelector('[data-purpose="hero-banner"]');
     let currentSlide = 0;
     let slideInterval;
+
+    const createDots = () => {
+        if (!dotsContainer || slides.length <= 1) return;
+        dotsContainer.innerHTML = '';
+        slides.forEach((_, index) => {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.dataset.dot = index;
+            dot.className = 'hero-dot w-2.5 h-2.5 rounded-full bg-white/30 hover:bg-white/60 transition-all duration-300';
+            if (index === 0) dot.classList.add('bg-white', 'w-6');
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
+        });
+    };
+
+    const updateDots = () => {
+        const dots = dotsContainer?.querySelectorAll('.hero-dot');
+        if (!dots) return;
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('bg-white', index === currentSlide);
+            dot.classList.toggle('w-6', index === currentSlide);
+            dot.classList.toggle('bg-white/30', index !== currentSlide);
+            dot.classList.toggle('w-2.5', index !== currentSlide);
+        });
+    };
 
     const showSlide = (index) => {
         slides.forEach((slide, i) => {
             slide.classList.toggle('opacity-100', i === index);
             slide.classList.toggle('opacity-0', i !== index);
+            slide.classList.toggle('scale-100', i === index);
+            slide.classList.toggle('scale-105', i !== index);
         });
         currentSlide = index;
+        updateDots();
     };
 
     const nextSlide = () => {
@@ -76,19 +106,42 @@ document.addEventListener('DOMContentLoaded', () => {
         showSlide(next);
     };
 
+    const prevSlide = () => {
+        const prev = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(prev);
+    };
+
+    const goToSlide = (index) => {
+        showSlide(index);
+        resetAutoSlide();
+    };
+
+    const resetAutoSlide = () => {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, 6000);
+    };
+
     const startAutoSlide = () => {
         slideInterval = setInterval(nextSlide, 6000);
     };
 
     if (slides.length > 0) {
+        createDots();
         showSlide(0);
         startAutoSlide();
 
-        const heroSection = document.getElementById('hero-slider')?.closest('section');
-        if (heroSection) {
-            heroSection.addEventListener('mouseenter', () => clearInterval(slideInterval));
-            heroSection.addEventListener('mouseleave', startAutoSlide);
-        }
+        document.getElementById('hero-prev')?.addEventListener('click', () => {
+            prevSlide();
+            resetAutoSlide();
+        });
+
+        document.getElementById('hero-next')?.addEventListener('click', () => {
+            nextSlide();
+            resetAutoSlide();
+        });
+
+        heroSection?.addEventListener('mouseenter', () => clearInterval(slideInterval));
+        heroSection?.addEventListener('mouseleave', startAutoSlide);
     }
 
     // Cart count update

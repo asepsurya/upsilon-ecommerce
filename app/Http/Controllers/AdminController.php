@@ -13,6 +13,7 @@ use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\Review;
 use App\Models\Size;
+use App\Models\Slider;
 use App\Models\User;
 use App\Models\Voucher;
 use Buglinjo\LaravelWebp\Facades\Webp;
@@ -212,7 +213,7 @@ class AdminController extends Controller
             $sortOrder++;
 
             foreach ($request->file('images') as $image) {
-                $path = $this->storeWebPImage($image, 'storage/products');
+                $path = $this->storeWebPImage($image, 'products');
 
                 $product->images()->create([
                     'image' => $path,
@@ -304,7 +305,7 @@ class AdminController extends Controller
             $sortOrder++;
 
             foreach ($request->file('images') as $image) {
-                $path = $this->storeWebPImage($image, 'storage/products');
+                $path = $this->storeWebPImage($image, 'products');
 
                 $product->images()->create([
                     'image' => $path,
@@ -424,7 +425,7 @@ class AdminController extends Controller
         $validated['is_active'] = $request->boolean('is_active', true);
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $this->storeWebPImage($request->file('image'), 'storage/categories');
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'categories');
         }
 
         Category::create($validated);
@@ -446,11 +447,11 @@ class AdminController extends Controller
         $validated['is_active'] = $request->boolean('is_active', true);
 
         if ($request->hasFile('image')) {
-            if ($category->image && str_starts_with($category->image, 'storage/categories/')) {
+            if ($category->image && str_starts_with($category->image, 'categories/')) {
                 Storage::disk('public')->delete($category->image);
             }
 
-            $validated['image'] = $this->storeWebPImage($request->file('image'), 'storage/categories');
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'categories');
         }
 
         $category->update($validated);
@@ -460,7 +461,7 @@ class AdminController extends Controller
 
     public function deleteCategory(Category $category)
     {
-        if ($category->image && str_starts_with($category->image, 'storage/categories/')) {
+        if ($category->image && str_starts_with($category->image, 'categories/')) {
             Storage::disk('public')->delete($category->image);
         }
 
@@ -842,7 +843,7 @@ class AdminController extends Controller
         $validated['is_active'] = $request->boolean('is_active', true);
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $this->storeWebPImage($request->file('image'), 'storage/sliders');
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'sliders');
         }
 
         Slider::create($validated);
@@ -873,11 +874,11 @@ class AdminController extends Controller
         $validated['is_active'] = $request->boolean('is_active', true);
 
         if ($request->hasFile('image')) {
-            if ($slider->image && str_starts_with($slider->image, 'storage/sliders/')) {
+            if ($slider->image && str_starts_with($slider->image, 'sliders/')) {
                 Storage::disk('public')->delete($slider->image);
             }
 
-            $validated['image'] = $this->storeWebPImage($request->file('image'), 'storage/sliders');
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'sliders');
         }
 
         $slider->update($validated);
@@ -887,7 +888,7 @@ class AdminController extends Controller
 
     public function deleteSlider(Slider $slider)
     {
-        if ($slider->image && str_starts_with($slider->image, 'storage/sliders/')) {
+        if ($slider->image && str_starts_with($slider->image, 'sliders/')) {
             Storage::disk('public')->delete($slider->image);
         }
 

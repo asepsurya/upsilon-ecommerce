@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>JD Sports Indonesia | King of Trainers</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Google Fonts: Inter & Oswald/Anton style fonts for sports look -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Inter:wght@400;500;600;700;800;900&amp;family=Oswald:wght@500;600;700&amp;display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        jd: {
+                            yellow: '#F5E400',
+                            orange: '#FF5000',
+                            darkorange: '#E04400',
+                            black: '#111111',
+                            dark: '#1A1A1A',
+                            cardbg: '#252525'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif'],
+                        impact: ['Anton', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style data-purpose="base-layout">
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #111111;
+            background-color: #FFFFFF;
+            overflow-x: hidden;
+        }
+
+        .font-condensed {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .font-impact {
+            font-family: 'Anton', sans-serif;
+        }
+    </style>
+    <style data-purpose="custom-decorations">
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .diagonal-text {
+            transform: skew(-5deg);
+        }
+
+        .jd-placeholder {
+            background-color: #e5e7eb;
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-black selection:text-white">
+    <!-- BEGIN: TopUtilityBar -->
+    <div class="bg-white border-b border-gray-200 text-[11px] font-medium text-gray-700 py-1.5 px-4 lg:px-8">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Utility Links Left -->
+            <div class="flex items-center space-x-6">
+                <a class="flex items-center gap-1.5 hover:text-black" href="#">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    Download Aplikasi JD Sports
+                </a>
+                <span class="text-gray-300">|</span>
+                <a class="hover:text-black" href="#">Help &amp; Contact Us</a>
+                <span class="text-gray-300">|</span>
+                <a class="hover:text-black" href="#">Track My Order</a>
+            </div>
+            <!-- Utility Links Right -->
+            <div class="flex items-center space-x-6">
+                <a class="hover:text-black" href="#">Find a Store</a>
+                <span class="text-gray-300">|</span>
+                <button class="flex items-center gap-1 hover:text-black">
+                    Deliver To...
+                    <svg class="w-3 h-3 ml-0.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </button>
+                <span class="text-gray-300">|</span>
+                <a class="font-semibold text-black hover:underline" href="{{ route('login') }}">Login</a>
+            </div>
+        </div>
+    </div>
+    <!-- END: TopUtilityBar -->
+    <!-- BEGIN: MainHeader -->
+    <header class="bg-white sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8 py-3.5">
+            <div class="flex items-center justify-between gap-8">
+                <!-- Logo JD Sports -->
+                <a class="flex-shrink-0" href="{{ route('home') }}">
+                    <img alt="Upsilon" class="h-8 lg:h-9 w-auto object-contain"
+                        src="{{ asset('storage/images/sample/logo.png') }}">
+                </a>
+                <!-- Search Form -->
+                <div class="flex-1 max-w-xl hidden md:block">
+                    <div class="relative">
+                        <form action="{{ route('shop') }}" method="GET" class="w-full">
+                            <input name="search"
+                                class="w-full bg-[#f4f4f4] border border-transparent rounded-full py-2 pl-4 pr-10 text-xs placeholder-gray-500 focus:outline-none focus:border-black focus:bg-white transition"
+                                placeholder="Cari produk, kategori atau merek" type="text">
+                            <button type="submit"
+                                class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-width="2"></path>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Right Quick Icons -->
+                <div class="flex items-center space-x-5">
+                    <!-- Mobile search icon -->
+                    <button class="md:hidden text-gray-800" id="mobile-search-btn">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                    </button>
+                    <!-- Wishlist -->
+                    <a class="text-gray-800 hover:text-black relative" href="{{ route('wishlist') }}" title="Wishlist">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+                        </svg>
+                        @if(isset($cartItemCount))
+                            <span
+                                class="absolute -top-1.5 -right-2 bg-black text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">{{ $cartItemCount }}</span>
+                        @endif
+                    </a>
+                    <!-- Bag / Cart -->
+                    <a class="text-gray-800 hover:text-black relative" href="{{ route('cart') }}"
+                        title="Keranjang Belanja">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="1.8"></path>
+                        </svg>
+                        <span
+                            class="absolute -top-1.5 -right-2 bg-black text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">0</span>
+                    </a>
+                    <!-- Notification Bell -->
+                    <a class="text-gray-800 hover:text-black" href="#" title="Notifikasi">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <!-- Navigation Categories -->
+            <nav
+                class="flex items-center justify-center space-x-8 pt-3 border-t border-gray-100 mt-2.5 text-xs font-bold tracking-wider uppercase text-black">
+                <a class="hover:text-jd-orange transition" href="{{ route('home') }}">Home</a>
+                <a class="hover:text-jd-orange transition" href="{{ route('shop') }}">Shop</a>
+                <a class="hover:text-jd-orange transition" href="{{ route('about') }}">About</a>
+                <a class="hover:text-jd-orange transition" href="{{ route('contact') }}">Contact</a>
+            </nav>
+        </div>
+    </header>
+    <!-- END: MainHeader -->
+    <!-- BEGIN: PromoNotificationBar -->
+    <div class="bg-jd-yellow text-black border-y border-yellow-400 font-bold uppercase text-[10px] tracking-tight">
+        <div
+            class="max-w-7xl mx-auto px-4 py-2 grid grid-cols-1 md:grid-cols-3 gap-2 text-center divide-y md:divide-y-0 md:divide-x divide-black/10">
+            <div>
+                <span class="block">FREE SHIPPING NATIONWIDE</span>
+                <span class="block text-[8px] font-medium">NEXT DAY &amp; STANDARD DELIVERY*</span>
+            </div>
+            <div>
+                <span class="block">ASICS GEL-CUMULUS</span>
+                <span class="block text-[8px] font-medium">WHERE COMFORT PURSUES US</span>
+            </div>
+            <div>
+                <span class="block">CLICK AND COLLECT</span>
+                <span class="block text-[8px] font-medium">AVAILABLE IN WEB &amp; APP</span>
+            </div>
+        </div>
+    </div>
+    <!-- END: PromoNotificationBar -->
+    <main>
+        <!-- BEGIN: HeroCarousel -->
+        <section class="relative bg-black w-full overflow-hidden" data-purpose="hero-banner">
+            <div class="relative w-full aspect-[21/9] min-h-[380px] max-h-[600px]">
+                @forelse($sliders as $slider)
+                    @php($isFirst = $slider->is($sliders->first()))
+                    <div class="hero-slide absolute inset-0 transition-all duration-1000 ease-in-out {{ $isFirst ? 'opacity-100 scale-100' : 'opacity-0 scale-105' }}"
+                        data-index="{{ $loop->index }}" style="opacity: {{ $isFirst ? '1' : '0' }};">
+                        <img alt="Hero Slide {{ $loop->iteration }}" class="w-full h-full object-cover object-center"
+                            src="{{ $slider->image_url }}">
+                    </div>
+                @empty
+                    <div class="absolute inset-0 opacity-100 scale-100">
+                        <img alt="Heat Check Hero Banner" class="w-full h-full object-cover object-center"
+                            src="{{ asset('storage/images/jd-sports/hero-banner.jpg') }}">
+                    </div>
+                @endforelse
+                <!-- Banner Slider Arrow Controls -->
+                <button id="hero-prev"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 flex items-center justify-center text-white transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        </path>
+                    </svg>
+                </button>
+                <button id="hero-next"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 flex items-center justify-center text-white transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </button>
+                <!-- CTA Action Buttons on Hero -->
+                <div class="absolute bottom-6 right-6 md:bottom-10 md:right-12 flex items-center gap-3">
+                    <a class="bg-white hover:bg-gray-100 text-black font-condensed px-6 py-2 text-xs md:text-sm font-bold tracking-wider shadow-md transition"
+                        href="{{ route('shop') }}">
+                        Shop Men's
+                    </a>
+                    <a class="bg-white hover:bg-gray-100 text-black font-condensed px-6 py-2 text-xs md:text-sm font-bold tracking-wider shadow-md transition"
+                        href="{{ route('shop') }}">
+                        Shop Women's
+                    </a>
+                    <a class="bg-white hover:bg-gray-100 text-black font-condensed px-6 py-2 text-xs md:text-sm font-bold tracking-wider shadow-md transition"
+                        href="{{ route('shop') }}">
+                        Shop Kids'
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- END: HeroCarousel -->
+        <!-- BEGIN: LimitedPairsCountdownSale -->
+        <section class="bg-[#2A2E33] py-8 text-white">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <!-- Header with Countdown -->
+                <div class="flex flex-wrap items-center justify-between mb-6 pb-2 border-b border-gray-700">
+                    <div class="flex items-center gap-4">
+                        <h2 class="text-2xl md:text-3xl font-condensed font-extrabold text-[#FF5000] tracking-wide">
+                            Limited Pairs Only
+                        </h2>
+                        <div class="flex items-center gap-2 text-xs font-semibold text-gray-300">
+                            <span class="text-gray-300">Berakhir dalam</span>
+                            <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded text-xs">20</span>
+                            <span class="text-gray-300">:</span>
+                            <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded text-xs">01</span>
+                            <span class="text-gray-300">:</span>
+                            <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded text-xs">41</span>
+                        </div>
+                    </div>
+                    <a class="text-xs font-semibold text-gray-300 hover:text-white underline" href="{{ route('shop') }}">
+                        Lihat semua
+                    </a>
+                </div>
+                <!-- Product Rail with FINAL CALL Banner -->
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
+                    <!-- Final Call Graphic Box -->
+                    <div
+                        class="col-span-2 md:col-span-1 bg-gradient-to-b from-[#2E3339] to-[#1E2125] p-4 flex flex-col justify-center items-center text-center border border-gray-700">
+                        <h3 class="font-impact text-3xl md:text-4xl text-white tracking-wider leading-none">
+                            FINAL<br><span class="text-gray-400">CALL</span>
+                        </h3>
+                        <p class="text-[10px] text-gray-400 uppercase mt-2 tracking-widest font-semibold">Special
+                            Pricing</p>
+                    </div>
+                    @forelse($featuredProducts->take(5) as $product)
+                        @php
+                            $primaryImage = $product->images->isNotEmpty() ? $product->images->first()->url : asset('storage/images/jd-sports/product-nike-airmax.jpg');
+                            $effectivePrice = $product->sale_price && $product->sale_price < $product->base_price ? $product->sale_price : $product->base_price;
+                            $discount = $product->getDiscountPercentAttribute();
+                            $brand = $product->subtitle ?? ($product->category->name ?? 'Brand');
+                        @endphp
+                        <div class="bg-white text-black p-3 flex flex-col justify-between rounded-sm shadow-sm group">
+                            <div class="w-full aspect-square overflow-hidden mb-2 rounded">
+                                <img alt="{{ $product->name }}"
+                                    class="w-full h-full object-cover transform group-hover:scale-105 transition"
+                                    src="{{ $primaryImage }}">
+                            </div>
+                            <div>
+                                <span class="text-[9px] text-gray-500 uppercase tracking-wider block">{{ $brand }}</span>
+                                <h4 class="text-xs font-bold truncate">{{ $product->name }}</h4>
+                                @if($product->sale_price && $product->sale_price < $product->base_price)
+                                    <p class="text-[10px] text-gray-400 line-through mt-1">${{ number_format($product->base_price, 0) }}</p>
+                                    <div class="flex items-center justify-between mt-0.5">
+                                        <span class="text-xs font-bold text-red-600">${{ number_format($product->sale_price, 0) }}</span>
+                                        <span class="text-[10px] font-bold text-red-600">Save {{ $discount }}%</span>
+                                    </div>
+                                @else
+                                    <div class="flex items-center justify-between mt-0.5">
+                                        <span class="text-xs font-bold text-red-600">${{ number_format($product->base_price, 0) }}</span>
+                                        <span class="text-[10px] font-bold text-red-600">Save 0%</span>
+                                    </div>
+                                @endif
+                                <span
+                                    class="text-[9px] text-green-700 bg-green-50 px-1.5 py-0.5 mt-2 inline-block font-medium">Tersedia</span>
+                            </div>
+                        </div>
+                    @empty
+                        @foreach([
+                            ['Nike Air Max AP','product-nike-airmax.jpg','Nike','1.909.000','1.336.000','30'],
+                            ['Nike Vomero 5 Women\'s','product-nike-vomero.jpg','Nike','2.489.000','1.742.000','30'],
+                            ['New Balance 1000','product-newbalance-1000.jpg','New Balance','2.599.000','1.559.000','40'],
+                            ['adidas Adizero Evo SL','product-adidas-adizero.jpg','adidas','2.500.000','1.750.000','30'],
+                            ['Cloudtilt Running','product-on-running.jpg','On','2.800.000','1.960.000','30'],
+                        ] as $p)
+                            <div class="bg-white text-black p-3 flex flex-col justify-between rounded-sm shadow-sm group">
+                                <div class="w-full aspect-square overflow-hidden mb-2 rounded">
+                                    <img alt="{{ $p[0] }}"
+                                        class="w-full h-full object-cover transform group-hover:scale-105 transition"
+                                        src="{{ asset('storage/images/jd-sports/'.$p[1]) }}">
+                                </div>
+                                <div>
+                                    <span class="text-[9px] text-gray-500 uppercase tracking-wider block">{{ $p[2] }}</span>
+                                    <h4 class="text-xs font-bold truncate">{{ $p[0] }}</h4>
+                                    <p class="text-[10px] text-gray-400 line-through mt-1">Rp {{ $p[3] }}</p>
+                                    <div class="flex items-center justify-between mt-0.5">
+                                        <span class="text-xs font-bold text-red-600">Rp {{ $p[4] }}</span>
+                                        <span class="text-[10px] font-bold text-red-600">Save {{ $p[5] }}%</span>
+                                    </div>
+                                    <span
+                                        class="text-[9px] text-green-700 bg-green-50 px-1.5 py-0.5 mt-2 inline-block font-medium">Tersedia</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endforelse
+                </div>
+            </div>
+        </section>
+        <!-- END: LimitedPairsCountdownSale -->
+        <!-- BEGIN: ShopTheOffers -->
+        <section class="bg-[#F25C19] py-8 text-white" data-purpose="brand-promotions">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl md:text-3xl font-condensed font-black tracking-wide">
+                        Shop The Offers
+                    </h2>
+                    <a class="text-xs font-bold uppercase tracking-wider hover:underline" href="#">
+                        Shop All
+                    </a>
+                </div>
+                <!-- 4 Brand Discount Tiles -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <!-- Nike 50% Tile -->
+                    <div
+                        class="bg-[#3b434a] border border-gray-600 aspect-[4/3] p-4 flex flex-col justify-center items-center text-center rounded-sm hover:scale-[1.02] transition cursor-pointer">
+                        <span class="font-impact text-3xl md:text-4xl text-orange-500 tracking-wider">NIKE</span>
+                        <span class="font-impact text-2xl md:text-3xl text-white tracking-wide leading-none mt-1">UP TO
+                            50% OFF</span>
+                    </div>
+                    <!-- Adidas 50% Tile -->
+                    <div
+                        class="bg-[#3b434a] border border-gray-600 aspect-[4/3] p-4 flex flex-col justify-center items-center text-center rounded-sm hover:scale-[1.02] transition cursor-pointer">
+                        <span class="font-impact text-3xl md:text-4xl text-orange-500 tracking-wider">ADIDAS</span>
+                        <span class="font-impact text-2xl md:text-3xl text-white tracking-wide leading-none mt-1">UP TO
+                            50% OFF</span>
+                    </div>
+                    <!-- New Balance 50% Tile -->
+                    <div
+                        class="bg-[#3b434a] border border-gray-600 aspect-[4/3] p-4 flex flex-col justify-center items-center text-center rounded-sm hover:scale-[1.02] transition cursor-pointer">
+                        <span class="font-impact text-2xl md:text-3xl text-orange-500 tracking-wider">NEW BALANCE</span>
+                        <span class="font-impact text-2xl md:text-3xl text-white tracking-wide leading-none mt-1">UP TO
+                            50% OFF</span>
+                    </div>
+                    <!-- Puma 50% Tile -->
+                    <div
+                        class="bg-[#3b434a] border border-gray-600 aspect-[4/3] p-4 flex flex-col justify-center items-center text-center rounded-sm hover:scale-[1.02] transition cursor-pointer">
+                        <span class="font-impact text-3xl md:text-4xl text-orange-500 tracking-wider">PUMA</span>
+                        <span class="font-impact text-2xl md:text-3xl text-white tracking-wide leading-none mt-1">UP TO
+                            50% OFF</span>
+                    </div>
+                </div>
+                <!-- Horizontal New Balance 530 Promo Banner -->
+                <div class="relative bg-white text-black p-4 flex items-center justify-between rounded overflow-hidden">
+                    <div class="flex items-center space-x-6 z-10">
+                        <span class="font-impact text-xl tracking-wider text-black">BALANCE</span>
+                        <h3 class="font-impact text-2xl md:text-3xl tracking-tight">NEW BALANCE 530</h3>
+                    </div>
+                    <div class="flex items-center gap-4 z-10">
+                        <a class="bg-black text-white text-xs font-condensed font-bold px-6 py-2 hover:bg-gray-800 transition"
+                            href="#">
+                            Shop Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END: ShopTheOffers -->
+        <!-- BEGIN: ShopByCategory -->
+        <section class="bg-[#F25C19] pb-12 pt-4 text-white" data-purpose="category-pillars">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <h2 class="text-2xl md:text-3xl font-condensed font-black tracking-wide mb-6">
+                    Shop by Category
+                </h2>
+                <!-- Category Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    @forelse($categories as $category)
+                        <div class="relative flex flex-col">
+                            <div class="relative aspect-[3/4] w-full overflow-hidden rounded shadow-lg">
+                                <img alt="Shop {{ $category->name }}" class="w-full h-full object-cover object-center"
+                                    src="{{ $category->image_url }}">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end justify-center pb-8">
+                                    <h3
+                                        class="font-impact text-3xl md:text-4xl text-white tracking-wider">SHOP {{ strtoupper($category->name) }}</h3>
+                                </div>
+                            </div>
+                            <!-- Sub-buttons -->
+                            <div class="mt-3 space-y-2">
+                                <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
+                                    href="{{ route('shop.category', $category->slug) }}">
+                                    {{ $category->product_count }} {{ $category->count_label ?? 'Products' }}
+                                </a>
+                                <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
+                                    href="{{ route('shop.category', $category->slug) }}">
+                                    Shop All {{ $category->name }}
+                                </a>
+                                <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
+                                    href="{{ route('shop') }}">
+                                    New Arrivals
+                                </a>
+                            </div>
+                        </div>
+                    @empty
+                        @foreach([
+                            ['Men','Footwear','category-mens.jpg'],
+                            ["Women","Footwear",'category-womens.jpg'],
+                            ["Kids","Footwear",'category-kids.jpg'],
+                        ] as $c)
+                            <div class="relative flex flex-col">
+                                <div class="relative aspect-[3/4] w-full overflow-hidden rounded shadow-lg">
+                                    <img alt="Shop {{ $c[0] }} Fashion &amp; Shoes" class="w-full h-full object-cover object-center"
+                                        src="{{ asset('storage/images/jd-sports/'.$c[2]) }}">
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end justify-center pb-8">
+                                        <h3 class="font-impact text-3xl md:text-4xl text-white tracking-wider">SHOP {{ $c[0] }}'S</h3>
+                                    </div>
+                                </div>
+                                <div class="mt-3 space-y-2">
+                                    <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
+                                        href="#">
+                                        {{ $c[0] }} Footwear
+                                    </a>
+                                    <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
+                                        href="#">
+                                        {{ $c[0] }} Clothing
+                                    </a>
+                                    <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
+                                        href="#">
+                                        {{ $c[0] }} Accessories
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endforelse
+                </div>
+            </div>
+        </section>
+        <!-- END: ShopByCategory -->
+        <!-- BEGIN: TopPicks -->
+        <section class="bg-[#F25C19] pb-10 text-white" data-purpose="our-top-picks">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <h2 class="text-2xl md:text-3xl font-condensed font-black tracking-wide mb-4">
+                    Our Top Picks
+                </h2>
+                <!-- Filter Tabs -->
+                <div class="flex items-center space-x-2 mb-6">
+                    <button class="bg-black text-white text-xs font-bold px-4 py-2 rounded-sm">
+                        Shop Men's
+                    </button>
+                    <button
+                        class="bg-transparent border border-white/50 text-white text-xs font-bold px-4 py-2 rounded-sm hover:bg-white/10">
+                        Shop Women's
+                    </button>
+                    <button
+                        class="bg-transparent border border-white/50 text-white text-xs font-bold px-4 py-2 rounded-sm hover:bg-white/10">
+                        Shop Kids'
+                    </button>
+                </div>
+                <!-- Top Picks Product Row -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    @forelse($featuredProducts->skip(5)->take(4) as $product)
+                        @php
+                            $primaryImage = $product->images->isNotEmpty() ? $product->images->first()->url : asset('storage/images/jd-sports/product-nike-airmax.jpg');
+                        @endphp
+                        <div class="bg-white text-black p-3 rounded flex flex-col justify-between shadow">
+                            <div class="w-full aspect-square overflow-hidden mb-3 rounded">
+                                <img alt="{{ $product->name }}" class="max-h-36 object-contain"
+                                    src="{{ $primaryImage }}">
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold truncate">
+                                    <a href="{{ route('product.show', $product) }}"
+                                        class="hover:text-jd-orange transition">{{ $product->name }}</a>
+                                </h4>
+                                <p class="text-xs font-extrabold text-black mt-1">${{ number_format($product->sale_price ?? $product->base_price, 0) }}</p>
+                            </div>
+                        </div>
+                    @empty
+                        @foreach([
+                            ['Nike Mind 001 Slides','product-nike-mind-slides.jpg','Rp 1.199.000'],
+                            ['adidas Originals Essentials T-Shirt','product-adidas-tshirt.jpg','Rp 550.000'],
+                            ['Nike Mind 001 Slides','product-nike-mind-blue.jpg','Rp 1.199.000'],
+                            ['Nike Heritage Backpack','product-nike-backpack.jpg','Rp 499.000'],
+                        ] as $p)
+                            <div class="bg-white text-black p-3 rounded flex flex-col justify-between shadow">
+                                <div class="w-full aspect-square overflow-hidden mb-3 rounded">
+                                    <img alt="{{ $p[0] }}" class="max-h-36 object-contain"
+                                        src="{{ asset('storage/images/jd-sports/'.$p[1]) }}">
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold truncate">{{ $p[0] }}</h4>
+                                    <p class="text-xs font-extrabold text-black mt-1">{{ $p[2] }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endforelse
+                </div>
+            </div>
+        </section>
+        <!-- END: TopPicks -->
+        <!-- BEGIN: SeasonalSpotlightBanners -->
+        <section class="bg-black py-4">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8 space-y-4">
+                <!-- Complimentary Adidas Bag Banner -->
+                <div class="bg-[#1C3545] p-4 flex flex-wrap items-center justify-between text-white rounded">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2 text-2xl font-bold">
+                            <span class="text-white">///</span>
+                            <span class="text-white">JD</span>
+                        </div>
+                        <h4 class="font-condensed text-lg md:text-xl font-bold tracking-wider">
+                            COMPLIMENTARY ADIDAS ADICOLOR CLASSIC BAG
+                        </h4>
+                    </div>
+                    <a class="bg-white text-black font-condensed px-6 py-1.5 text-xs font-bold tracking-wider hover:bg-gray-100 transition"
+                        href="#">
+                        Shop Now
+                    </a>
+                </div>
+                <!-- Salomon Urban Expeditions Banner -->
+                <div class="relative w-full rounded overflow-hidden">
+                    <img alt="Salomon For Urban Expeditions" class="w-full h-auto object-cover"
+                        src="{{ asset('storage/images/jd-sports/banner-salomon.jpg') }}">
+                </div>
+                <!-- Twin Feature Promo: Asics Kayano 14 & adidas by JENNIE -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Asics Gel-Kayano 14 -->
+                    <div class="group relative overflow-hidden rounded bg-gray-900">
+                        <img alt="Asics Gel-Kayano 14"
+                            class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition duration-500"
+                            src="{{ asset('storage/images/jd-sports/product-asics-kayano.jpg') }}">
+                        <div class="p-3 bg-black text-white flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider">Asics Gel-Kayano 14</span>
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- adidas Originals by JENNIE -->
+                    <div class="group relative overflow-hidden rounded bg-gray-900">
+                        <img alt="adidas Originals by JENNIE"
+                            class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition duration-500"
+                            src="{{ asset('storage/images/jd-sports/product-adidas-jennie.jpg') }}">
+                        <div class="p-3 bg-black text-white flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider">adidas Originals by JENNIE</span>
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END: SeasonalSpotlightBanners -->
+        <!-- BEGIN: TheBrandsYouLove -->
+        <section class="bg-[#F25C19] py-8 text-white" data-purpose="popular-brands">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl md:text-3xl font-condensed font-black tracking-wide">
+                        The Brands You Love
+                    </h2>
+                    <a class="text-xs font-bold uppercase tracking-wider hover:underline" href="#">
+                        View All
+                    </a>
+                </div>
+                <!-- 4 Grid Brand Tiles -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Nike -->
+                    <div class="group cursor-pointer">
+                        <div class="relative aspect-square w-full rounded overflow-hidden shadow">
+                            <img alt="Nike Collection"
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                src="{{ asset('storage/images/jd-sports/brand-nike.jpg') }}">
+                            <div
+                                class="absolute bottom-3 left-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-black">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <h4 class="mt-2 text-xs font-bold uppercase tracking-wider">Nike</h4>
+                    </div>
+                    <!-- adidas -->
+                    <div class="group cursor-pointer">
+                        <div class="relative aspect-square w-full rounded overflow-hidden shadow">
+                            <img alt="adidas Collection"
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                src="{{ asset('storage/images/jd-sports/brand-adidas.jpg') }}">
+                            <div
+                                class="absolute bottom-3 left-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-black">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <h4 class="mt-2 text-xs font-bold uppercase tracking-wider">adidas</h4>
+                    </div>
+                    <!-- On Running -->
+                    <div class="group cursor-pointer">
+                        <div class="relative aspect-square w-full rounded overflow-hidden shadow">
+                            <img alt="On Running"
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                src="{{ asset('storage/images/jd-sports/brand-on.jpg') }}">
+                            <div
+                                class="absolute bottom-3 left-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-black">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <h4 class="mt-2 text-xs font-bold uppercase tracking-wider">On</h4>
+                    </div>
+                    <!-- New Balance -->
+                    <div class="group cursor-pointer">
+                        <div class="relative aspect-square w-full rounded overflow-hidden shadow">
+                            <img alt="New Balance Collection"
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                src="{{ asset('storage/images/jd-sports/brand-newbalance.jpg') }}">
+                            <div
+                                class="absolute bottom-3 left-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-black">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <h4 class="mt-2 text-xs font-bold uppercase tracking-wider">New Balance</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END: TheBrandsYouLove -->
+        <!-- BEGIN: DiscoverJDStyleEditorial -->
+        <section class="bg-[#F25C19] pb-12 text-white" data-purpose="editorial-blogs">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl md:text-3xl font-condensed font-black tracking-wide">
+                        Discover JD Style
+                    </h2>
+                    <a class="text-xs font-bold uppercase tracking-wider hover:underline" href="#">
+                        View All
+                    </a>
+                </div>
+                <!-- Editorial Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    @forelse($articles as $article)
+                        <div class="bg-white text-black rounded overflow-hidden flex flex-col justify-between shadow">
+                            <div>
+                                <div class="aspect-square w-full overflow-hidden">
+                                    <img alt="{{ $article['title'] }}"
+                                        class="w-full h-full object-cover hover:scale-105 transition duration-300"
+                                        src="{{ $article['image'] ?: asset('storage/images/jd-sports/article-1.jpg') }}">
+                                </div>
+                                <div class="p-3">
+                                    <h4 class="font-bold text-xs leading-snug line-clamp-2">
+                                        {{ $article['title'] }}
+                                    </h4>
+                                    <p class="text-[11px] text-gray-600 mt-1.5 line-clamp-3 leading-relaxed">
+                                        {{ $article['excerpt'] }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="p-3 pt-0">
+                                <a class="text-[11px] font-bold uppercase flex items-center gap-1 hover:underline"
+                                    href="{{ $article['permalink'] }}" target="_blank" rel="noopener">
+                                    Read More <span class="text-black">→</span>
+                                </a>
+                            </div>
+                        </div>
+                    @empty
+                        @foreach([
+                            1 => ['adidas Originals JENNIE: The Collection Every JENNIE Fan Needs to See', 'Kolaborasi perdana JENNIE bersama adidas Originals akhirnya hadir! Dari Superstar dengan sentuhan balet hingga apparel yang effortless.', 'article-1.jpg'],
+                            2 => ['New Drop, Instant Crush: adidas Originals ANFU', 'Mood baru, sneakers baru! adidas Originals ANFU hadir dengan sentuhan retro Mary Jane yang versatile dan stylish untuk OOTD harianmu.', 'article-2.jpg'],
+                            3 => ['Cute Meets Classic: Kenalan dengan PUMA Tacklette', 'Meet your new sneaker crush, Puma Tacklette! Perpaduan gaya terrace klasik dengan sentuhan Mary Jane-inspired yang playful dan chic.', 'article-3.jpg'],
+                        ] as $a)
+                            <div class="bg-white text-black rounded overflow-hidden flex flex-col justify-between shadow">
+                                <div>
+                                    <div class="aspect-square w-full overflow-hidden">
+                                        <img alt="{{ $a[0] }}"
+                                            class="w-full h-full object-cover hover:scale-105 transition duration-300"
+                                            src="{{ asset('storage/images/jd-sports/'.$a[2]) }}">
+                                    </div>
+                                    <div class="p-3">
+                                        <h4 class="font-bold text-xs leading-snug line-clamp-2">
+                                            {{ $a[0] }}
+                                        </h4>
+                                        <p class="text-[11px] text-gray-600 mt-1.5 line-clamp-3 leading-relaxed">
+                                            {{ $a[1] }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="p-3 pt-0">
+                                    <a class="text-[11px] font-bold uppercase flex items-center gap-1 hover:underline"
+                                        href="#">
+                                        Read More <span class="text-black">→</span>
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
+                        <!-- Article 4: Final Piala Dunia (gradient box) -->
+                        <div class="bg-white text-black rounded overflow-hidden flex flex-col justify-between shadow">
+                            <div>
+                                <div
+                                    class="aspect-square w-full bg-gradient-to-br from-red-600 to-indigo-900 flex items-center justify-center p-4 text-center">
+                                    <div class="text-white">
+                                        <span class="block font-impact text-lg">FINAL WORLD CUP</span>
+                                        <span class="block text-2xl font-black mt-2">2026</span>
+                                        <p class="text-[10px] mt-1 text-gray-200">Spanyol vs Argentina</p>
+                                    </div>
+                                </div>
+                                <div class="p-3">
+                                    <h4 class="font-bold text-xs leading-snug line-clamp-2">
+                                        Final Piala Dunia 2026: Spanyol vs Argentina, Duel Generasi Barcelona
+                                    </h4>
+                                    <p class="text-[11px] text-gray-600 mt-1.5 line-clamp-3 leading-relaxed">
+                                        Siap menyambut Final Piala Dunia 2026? Saksikan duel seru jersey resmi Spanyol
+                                        maupun Argentina yang bisa kamu dapatkan di JD Sports.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="p-3 pt-0">
+                                <a class="text-[11px] font-bold uppercase flex items-center gap-1 hover:underline"
+                                    href="#">
+                                    Read More <span class="text-black">→</span>
+                                </a>
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </section>
+        <!-- END: DiscoverJDStyleEditorial -->
+        <!-- BEGIN: ProductBundles -->
+        @if($bundles->isNotEmpty())
+            <section class="bg-[#2A2E33] py-8 text-white" data-purpose="product-bundles">
+                <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl md:text-3xl font-condensed font-black tracking-wide">
+                            Complete Your Kit
+                        </h2>
+                        <a class="text-xs font-bold uppercase tracking-wider hover:underline text-gray-300" href="{{ route('shop') }}">
+                            View All Bundles
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        @foreach($bundles as $bundle)
+                            <div
+                                class="group relative bg-[#1E2125] text-black rounded-xl overflow-hidden border border-gray-700 transition-colors duration-300">
+                                <div class="aspect-square bg-gray-800 relative overflow-hidden">
+                                    @if($bundle->thumbnail)
+                                        <img src="{{ asset('storage/' . $bundle->thumbnail) }}" alt="{{ $bundle->name }}"
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                    @else
+                                        <img src="https://placehold.co/600x600/1E2125/FFFFFF?text={{ urlencode($bundle->name) }}"
+                                            alt="{{ $bundle->name }}"
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                    @endif
+                                    @if($bundle->discount_percent > 0)
+                                        <div
+                                            class="absolute top-4 left-4 bg-jd-yellow text-black px-3 py-1 font-condensed text-[10px] uppercase tracking-wider rounded">
+                                            Save {{ $bundle->discount_percent }}%
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="p-5 flex flex-col gap-3">
+                                    <h3 class="font-condensed text-sm text-white uppercase tracking-widest">
+                                        {{ $bundle->name }}
+                                    </h3>
+                                    <p class="font-body-sm text-xs text-gray-300 font-light">
+                                        {{ $bundle->items->count() }} products
+                                    </p>
+                                    <div class="flex items-center gap-3">
+                                        @if($bundle->bundle_price)
+                                            <span class="font-condensed text-xl text-white font-black">
+                                                ${{ number_format($bundle->bundle_price, 0) }}
+                                            </span>
+                                            @if($bundle->original_price > 0)
+                                                <span class="font-body-sm text-xs text-gray-400 line-through">
+                                                    ${{ number_format($bundle->original_price, 0) }}
+                                                </span>
+                                            @endif
+                                        @endif
+                                    </div>
+                                    <a href="https://wa.me/{{ config('services.whatsapp.number') }}?text={{ urlencode('Hello, I am interested in ' . $bundle->name . ' bundle.') }}"
+                                        class="w-full bg-jd-yellow text-black font-condensed text-xs font-bold px-6 py-2.5 rounded-sm hover:bg-yellow-300 transition flex items-center justify-center gap-2"
+                                        target="_blank" rel="noopener">
+                                        <span>Order Bundle</span>
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </section>
+        @endif
+        <!-- END: ProductBundles -->
+        <!-- BEGIN: NewsletterAndAppSection -->
+        <section class="bg-gray-100 py-10" data-purpose="newsletter-and-app-download">
+            <div class="max-w-3xl mx-auto px-4 text-center space-y-8">
+                <!-- Newsletter Box -->
+                <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-lg md:text-xl font-bold text-black mb-1">
+                        Baru bergabung dengan JD?
+                    </h3>
+                    <p class="text-xs text-gray-600 mb-4">
+                        Dapatkan rekomendasi produk kami dan miliki produk favoritmu.
+                    </p>
+                    <form action="{{ route('newsletter.subscribe') }}" method="POST"
+                        class="max-w-md mx-auto flex items-center bg-[#EAEAEA] rounded-md overflow-hidden p-1 border border-gray-300">
+                        @csrf
+                        <input name="email"
+                            class="bg-transparent text-xs w-full py-2 px-3 border-none focus:outline-none focus:ring-0 placeholder-gray-500"
+                            placeholder="Masukkan email Anda" required type="email">
+                        <button type="submit"
+                            class="bg-black text-white px-4 py-2 text-xs font-bold rounded hover:bg-gray-800 transition">
+                            →
+                        </button>
+                    </form>
+                </div>
+                <!-- App Download Box -->
+                <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-lg md:text-xl font-bold text-black mb-1">
+                        Promo Eksklusif Hanya di JD Sports App
+                    </h3>
+                    <p class="text-xs text-gray-600 mb-5">
+                        Dapatkan promo menarik, penawaran eksklusif, hingga update produk terbaru hanya di aplikasi JD
+                        Sports.
+                    </p>
+                    <div class="inline-flex bg-black text-white px-6 py-3 rounded-lg flex-col items-center">
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-gray-400">Download
+                            Sekarang</span>
+                        <div class="flex items-center gap-4 mt-2">
+                            <span class="flex items-center text-xs font-semibold gap-1">
+                                <span class="text-lg">🍎</span> App Store
+                            </span>
+                            <span class="text-gray-600">|</span>
+                            <span class="flex items-center text-xs font-semibold gap-1">
+                                <span class="text-lg">▶</span> Google Play
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END: NewsletterAndAppSection -->
+        <!-- BEGIN: StoreAndLoyaltyBanners -->
+        <section class="bg-black py-6">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Find a Store Banner -->
+                <div
+                    class="bg-[#181818] border border-gray-800 p-6 flex items-center justify-between rounded text-white">
+                    <div>
+                        <h4 class="font-condensed text-xl font-bold uppercase tracking-wider">JD Store Locator</h4>
+                        <p class="text-xs text-gray-400 mt-1">Pick up your latest fits at all stores near you</p>
+                    </div>
+                    <a class="border border-white text-white font-condensed text-xs font-bold px-4 py-2 hover:bg-white hover:text-black transition"
+                        href="#">
+                        See Stores Near Me
+                    </a>
+                </div>
+                <!-- Loyalty Banner -->
+                <div
+                    class="bg-[#181818] border border-gray-800 p-6 flex items-center justify-between rounded text-white">
+                    <div>
+                        <span class="text-xs font-semibold text-sky-400">My eraspace</span>
+                        <h4 class="font-condensed text-xl font-bold uppercase tracking-wider">Earn 10% Off on your first
+                            purchase*</h4>
+                        <p class="text-xs text-yellow-400 font-mono mt-0.5">USE CODE: JDSQUAD10</p>
+                    </div>
+                    <div class="flex items-center space-x-2 text-[10px]">
+                        <span class="bg-white/10 px-2 py-1 rounded">App Store</span>
+                        <span class="bg-white/10 px-2 py-1 rounded">Google Play</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END: StoreAndLoyaltyBanners -->
+    </main>
+    <!-- BEGIN: Footer -->
+    <footer class="bg-[#B9BCC0] text-[#222222] text-xs pt-12 pb-8 border-t border-gray-300">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <!-- Footer Columns -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 pb-10 border-b border-gray-400/50">
+                <!-- Column 1: Hubungi Kami -->
+                <div class="col-span-2 md:col-span-1 space-y-3">
+                    <h4 class="font-bold text-black uppercase tracking-wider text-[11px]">Hubungi Kami</h4>
+                    <div class="text-[11px] leading-relaxed text-gray-800">
+                        <p class="font-semibold text-black">Jam Operasional:</p>
+                        <p class="">Senin - Minggu: Jam 9.00 - 18.00 WIB<br>(Termasuk hari libur nasional)</p>
+                    </div>
+                    <div class="text-[11px] leading-relaxed text-gray-800 pt-2">
+                        <p class="font-semibold text-black">Layanan Pengaduan Konsumen:</p>
+                        <p class="">PT Era Gaya Aktif / www.jdsports.id</p>
+                        <p class="">Call Center : 1500372</p>
+                        <p class="">WhatsApp : 0812 9077 7722</p>
+                        <p class="">Email : cs@jdsports.id</p>
+                    </div>
+                    <div class="text-[10px] text-gray-600 pt-1">
+                        <p class="">Direktorit Jenderal Perlindungan Konsumen dan Tertib Niaga</p>
+                        <p class="">Kementerian Perdagangan RI</p>
+                        <p class="">WhatsApp: 082852 1111 1010</p>
+                    </div>
+                </div>
+                <!-- Column 2: Shopping With JD -->
+                <div class="space-y-2">
+                    <h4 class="font-bold text-black uppercase tracking-wider text-[11px]">Shopping With JD</h4>
+                    <ul class="space-y-1.5 text-[11px] text-gray-800">
+                        <li class="text-black hover:underline"><a href="#">Size Guide</a></li>
+                        <li class="text-black hover:underline"><a href="#">Find a Store</a></li>
+                    </ul>
+                </div>
+                <!-- Column 3: Customer Care -->
+                <div class="space-y-2">
+                    <h4 class="font-bold text-black uppercase tracking-wider text-[11px]">Customer Care</h4>
+                    <ul class="space-y-1.5 text-[11px] text-gray-800">
+                        <li class="text-black hover:underline"><a href="#">Delivery &amp; Returns</a></li>
+                        <li class="text-black hover:underline"><a href="#">Payment Information</a></li>
+                        <li class="text-black hover:underline"><a href="#">Help &amp; Contact Us</a></li>
+                        <li class="text-black hover:underline"><a href="#">Track My Order</a></li>
+                        <li class="text-black hover:underline"><a href="#">FAQ</a></li>
+                        <li class="text-black hover:underline"><a href="#">Beware of Scams</a></li>
+                    </ul>
+                </div>
+                <!-- Column 4: Information -->
+                <div class="space-y-2">
+                    <h4 class="font-bold text-black uppercase tracking-wider text-[11px]">Information</h4>
+                    <ul class="space-y-1.5 text-[11px] text-gray-800">
+                        <li class="text-black hover:underline"><a href="#">Career</a></li>
+                        <li class="text-black hover:underline"><a href="#">About Us</a></li>
+                        <li class="text-black hover:underline"><a href="#">JD Sports Fashion Plc</a></li>
+                    </ul>
+                </div>
+                <!-- Column 5: Legal -->
+                <div class="space-y-2">
+                    <h4 class="font-bold text-black uppercase tracking-wider text-[11px]">Legal</h4>
+                    <ul class="space-y-1.5 text-[11px] text-gray-800">
+                        <li class="text-black hover:underline"><a href="#">Terms &amp; Conditions</a></li>
+                        <li class="text-black hover:underline"><a href="#">Privacy &amp; Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Footer Bottom Copyright & Payment Methods -->
+            <div class="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] text-gray-700">
+                <div>
+                    <p class="">Visit our corporate website at www.jdplc.com</p>
+                    <p class="mt-0.5">Copyright © 2022 JD Sports All rights reserved.</p>
+                </div>
+                <!-- Payment Badges Representation -->
+                <div class="flex flex-col md:items-end">
+                    <span class="text-[9px] uppercase font-bold text-gray-700 mb-1">Metode pembayaran yang
+                        tersedia</span>
+                    <div class="flex flex-wrap gap-1.5 text-[10px] font-bold text-gray-800">
+                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">BCA</span>
+                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">Mandiri</span>
+                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">BNI</span>
+                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">BRI</span>
+                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">QRIS</span>
+                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">GoPay</span>
+                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">OVO</span>
+                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">ShopeePay</span>
+                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">VISA</span>
+                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">Mastercard</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- END: Footer -->
+    <!-- BEGIN: FloatingDiscountBadge -->
+    <!-- Pop up promo voucher widget floating at the bottom right/center -->
+    <div class="fixed bottom-6 right-6 z-50 shadow-2xl transition transform hover:scale-105"
+        data-purpose="floating-promo">
+        <div class="relative bg-jd-yellow text-black p-4 rounded-lg border-2 border-black w-64 shadow-xl">
+            <!-- JD Round Logo -->
+            <div
+                class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center font-black text-xs mb-1">
+                JD
+            </div>
+            <!-- Headline -->
+            <h5 class="font-impact text-2xl leading-tight tracking-tight uppercase">
+                GET 10% OFF
+            </h5>
+            <p class="font-condensed text-sm font-bold uppercase tracking-wider mb-2">
+                ON YOUR FIRST ORDER
+            </p>
+            <div class="bg-black/10 p-1.5 rounded text-[8px] flex items-center justify-between mb-3 font-semibold">
+                <span class="text-black">FREE DELIVERY</span>
+                <span class="text-black">•</span>
+                <span class="text-black">NEXT DAY AVAILABLE</span>
+            </div>
+            <a class="block w-full bg-black text-white text-center font-condensed font-bold py-2 text-xs uppercase tracking-wider hover:bg-gray-900 transition flex items-center justify-center gap-1"
+                href="#">
+                CLAIM NOW <span class="text-white">→</span>
+            </a>
+        </div>
+    </div>
+    <!-- END: FloatingDiscountBadge -->
+    <!-- Cookie Consent Banner -->
+    <div class="bg-neutral-900 text-white text-[10px] py-1 px-4 text-center border-t border-neutral-800">
+        <span class="">We use cookies to ensure we give you the best experience of our website, to accept click on any
+            link or continue to browse. To find out more about the cookies we use <a class="underline text-gray-300"
+                href="#">click here</a>.</span>
+    </div>
+
+    <!-- Hero Carousel Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var slides = document.querySelectorAll('.hero-slide');
+            var prevBtn = document.getElementById('hero-prev');
+            var nextBtn = document.getElementById('hero-next');
+            if (slides.length <= 1) return;
+
+            var dots = [];
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function () {
+                    showSlide((currentIndex - 1 + slides.length) % slides.length);
+                    resetTimer();
+                });
+            }
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function () {
+                    showSlide((currentIndex + 1) % slides.length);
+                    resetTimer();
+                });
+            }
+
+            slides.forEach(function (slide, i) {
+                slide.style.opacity = i === 0 ? '1' : '0';
+                slide.style.transform = i === 0 ? 'scale(1)' : 'scale(1.05)';
+            });
+
+            var currentIndex = 0;
+            var timer;
+
+            function showSlide(index) {
+                slides.forEach(function (slide, i) {
+                    slide.style.opacity = i === index ? '1' : '0';
+                    slide.style.transform = i === index ? 'scale(1)' : 'scale(1.05)';
+                });
+                currentIndex = index;
+            }
+
+            function nextSlide() {
+                showSlide((currentIndex + 1) % slides.length);
+            }
+
+            function resetTimer() {
+                clearInterval(timer);
+                timer = setInterval(nextSlide, 5000);
+            }
+
+            timer = setInterval(nextSlide, 5000);
+        });
+    </script>
+</body>
+
+</html>

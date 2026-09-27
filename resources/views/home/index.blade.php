@@ -1,676 +1,1050 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('content')
-    @include('components.hero')
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- 2. Category Circles Showcase -->
-    <section class="w-full bg-surface-container-low py-space-xl border-y border-outline-variant/20">
-        <div class="max-w-[1600px] mx-auto px-4 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-space-lg">
-                <div>
-                    <span
-                        class="font-label-caps text-label-caps uppercase tracking-widest text-primary block mb-space-xs">Archival
-                        Categorization</span>
-                    <h2 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">Curated Universes
-                    </h2>
-                </div>
-                <p class="font-body-sm text-body-sm text-outline max-w-sm mt-2 md:mt-0">
-                    Tailored structures, fluid evening drapery, and fine leather crafted with mathematical equilibrium.
-                </p>
-            </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-space-md">
-                @foreach($categories as $category)
-                    <a class="group flex flex-col items-center text-center"
-                        href="{{ route('shop.category', $category->slug) }}">
-                        <div
-                            class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full p-1 bg-gradient-to-b from-primary/30 to-transparent group-hover:from-primary transition-all duration-500 mb-space-sm overflow-hidden">
-                            <div class="w-full h-full rounded-full overflow-hidden bg-surface-container-high relative">
-                                <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                    src="{{ $category->image_url }}" alt="{{ $category->name }}">
-                                <div class="absolute inset-0 bg-surface/20 group-hover:bg-transparent transition-colors"></div>
-                            </div>
-                        </div>
-                        <span
-                            class="font-headline-sm text-base text-on-surface group-hover:text-primary transition-colors uppercase tracking-tight">{{ $category->name }}</span>
-                        <span
-                            class="font-label-caps text-[10px] uppercase tracking-widest text-outline">{{ $category->product_count }}
-                            {{ $category->count_label }}</span>
-                    </a>
-                @endforeach
-            </div>
-        </div>
-    </section>
+    {{-- SEO --}}
+    <title>JD Sports | King of Trainers</title>
+    <meta name="description"
+        content="Sneakers, clothing, and accessories from Nike, adidas, New Balance, Puma, and more. Free shipping nationwide.">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- 3. Curated Atelier Pieces / Garment Grid -->
-    <section class="w-full bg-surface py-space-xl" id="curated-collection">
-        <div class="max-w-[1600px] mx-auto px-4 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between pb-space-lg">
-                <div>
-                    <span
-                        class="font-label-caps text-label-caps uppercase tracking-widest text-primary block mb-space-xs">Seasonal
-                        Archival Release</span>
-                    <h2 class="font-headline-lg text-headline-lg text-on-surface uppercase tracking-tight">Curated Atelier
-                        Pieces</h2>
-                </div>
-                <div class="flex items-center gap-2 overflow-x-auto pt-4 md:pt-0 scrollbar-hide" id="collection-filters">
-                    <button
-                        class="filter-pill active px-4 py-2 bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-widest transition-all">All
-                        Pieces</button>
-                    <button
-                        class="filter-pill px-4 py-2 bg-surface-container-high text-on-surface-variant hover:text-primary hover:bg-surface-variant border border-outline-variant/40 font-label-caps text-label-caps uppercase tracking-widest transition-all">Tailored
-                        Suits</button>
-                    <button
-                        class="filter-pill px-4 py-2 bg-surface-container-high text-on-surface-variant hover:text-primary hover:bg-surface-variant border border-outline-variant/40 font-label-caps text-label-caps uppercase tracking-widest transition-all">Silk
-                        Gowns</button>
-                    <button
-                        class="filter-pill px-4 py-2 bg-surface-container-high text-on-surface-variant hover:text-primary hover:bg-surface-variant border border-outline-variant/40 font-label-caps text-label-caps uppercase tracking-widest transition-all">Cashmere
-                        Knitwear</button>
-                    <button
-                        class="filter-pill px-4 py-2 bg-surface-container-high text-on-surface-variant hover:text-primary hover:bg-surface-variant border border-outline-variant/40 font-label-caps text-label-caps uppercase tracking-widest transition-all">Outerwear</button>
-                    <button
-                        class="filter-pill px-4 py-2 bg-surface-container-high text-on-surface-variant hover:text-primary hover:bg-surface-variant border border-outline-variant/40 font-label-caps text-label-caps uppercase tracking-widest transition-all">Fine
-                        Leather</button>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
-                @foreach($featuredProducts as $product)
-                    @php
-                        $primaryImage = $product->images->firstWhere('is_primary', true) ?? $product->images->first();
-                    @endphp
-                    <div
-                        class="group relative bg-surface-container flex flex-col justify-between border border-outline-variant/30 hover:border-primary/50 transition-all duration-500 shadow-md">
-                        <div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-highest">
-                            @if($primaryImage)
-                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                    src="{{ $primaryImage->url }}" alt="{{ $product->name }}">
-                            @endif
-                            @if($product->badge)
-                                <span
-                                    class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 text-primary border border-primary/20 font-label-caps text-[10px] uppercase tracking-widest">
-                                    {{ $product->badge }}
-                                </span>
-                            @endif
-                            <button aria-label="Add to wishlist"
-                                class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors">
-                                <span class="material-symbols-outlined text-[18px]">favorite</span>
-                            </button>
-                            <div
-                                class="absolute inset-x-0 bottom-0 p-space-sm bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2">
-                                <a href="https://wa.me/{{ config('services.whatsapp.number') }}?text={{ urlencode('Buy Product: I would like to buy ' . $product->name . ' priced at $' . number_format($product->sale_price ?? $product->base_price, 2) . '. Please provide details.') }}"
-                                    class="flex-1 py-2.5 bg-primary text-on-primary font-label-caps text-[11px] tracking-widest uppercase hover:bg-primary/90 transition-colors font-semibold text-center"
-                                    target="_blank" rel="noopener">
-                                    Buy Product
-                                </a>
-                            </div>
-                        </div>
-                        <div class="p-space-md flex flex-col gap-1.5">
-                            <div class="flex items-center justify-between text-outline text-[11px]">
-                                <span
-                                    class="font-label-caps tracking-widest uppercase text-primary">{{ $product->subtitle ?? ($product->category->name ?? 'Atelier') }}</span>
-                                <span class="font-body-sm">{{ $product->edition ?? '' }}</span>
-                            </div>
-                            <h3
-                                class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight">
-                                <a href="{{ route('product.show', $product) }}">{{ $product->name }}</a>
-                            </h3>
-                            <p class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-1">
-                                {{ $product->material }}
-                            </p>
-                            <div class="flex items-center justify-between pt-space-xs border-t border-outline-variant/20 mt-1">
-                                <div class="flex flex-col">
-                                    @if($product->sale_price && $product->sale_price < $product->base_price)
-                                        <span class="font-label-sm text-base text-primary font-semibold">${{ number_format($product->sale_price, 0) }}</span>
-                                        <span class="text-xs text-on-surface-variant line-through">${{ number_format($product->base_price, 0) }}</span>
-                                    @else
-                                        <span class="font-label-sm text-base text-on-surface font-semibold">${{ number_format($product->base_price, 0) }}</span>
-                                    @endif
-                                </div>
-                                <span
-                                    class="font-label-caps text-[10px] {{ $product->bottom_label == 'Immediate Dispatch' ? 'text-tertiary' : 'text-primary' }} tracking-widest uppercase">
-                                    {{ $product->bottom_label ?? 'Includes Fitting' }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-            <div class="w-full flex justify-center pt-space-xl">
-                <button
-                    class="px-10 py-3.5 bg-transparent border border-outline hover:border-primary text-on-surface hover:text-primary font-label-caps text-label-caps uppercase tracking-widest transition-all">
-                    Explore All 142 Runway Artefacts
-                </button>
-            </div>
-        </div>
-    </section>
+    {{-- Open Graph --}}
+    <meta property="og:title" content="JD Sports | King of Trainers">
+    <meta property="og:description" content="Sneakers & streetwear. Free shipping nationwide.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ asset('storage/images/jd-sports/hero-banner.jpg') }}">
 
-    <!-- 4. Featured Editorial Duet / Dual Promotional Banners -->
-    <section class="w-full bg-surface-container-lowest py-space-xl">
-        <div class="max-w-[1600px] mx-auto px-4 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
-                <div
-                    class="relative min-h-[500px] lg:min-h-[560px] flex flex-col justify-end p-space-lg lg:p-space-xl overflow-hidden group border border-outline-variant/30">
-                    <div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-1000"
-                        style="background-image: url('{{ asset('storage/images/sample/banner-bespoke.jpg') }}')">
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/70 to-transparent">
-                    </div>
-                    <div class="relative z-10 flex flex-col gap-space-sm max-w-md">
-                        <span class="font-label-caps text-label-caps uppercase tracking-widest text-primary">Made-to-Measure
-                            Guild</span>
-                        <h3 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">Bespoke
-                            Tailoring Services</h3>
-                        <p class="font-body-md text-body-md text-tertiary font-light">
-                            Individual measurements taken in private salon suites. Cut, constructed, and hand-canvassed by
-                            three generations of Milanese artisans.
-                        </p>
-                        <div class="pt-space-xs">
-                            <a class="inline-flex items-center gap-2 text-primary font-label-caps text-label-caps uppercase tracking-widest group-hover:translate-x-1 transition-transform"
-                                href="#">
-                                <span>Explore Made-to-Measure</span>
-                                <span class="material-symbols-outlined text-base">arrow_forward</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="relative min-h-[500px] lg:min-h-[560px] flex flex-col justify-end p-space-lg lg:p-space-xl overflow-hidden group border border-outline-variant/30">
-                    <div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-1000"
-                        style="background-image: url('{{ asset('storage/images/sample/banner-evening.jpg') }}')">
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/70 to-transparent">
-                    </div>
-                    <div class="relative z-10 flex flex-col gap-space-sm max-w-md">
-                        <span class="font-label-caps text-label-caps uppercase tracking-widest text-primary">Nocturne
-                            Series</span>
-                        <h3 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">The Evening
-                            Capsule</h3>
-                        <p class="font-body-md text-body-md text-tertiary font-light">
-                            Architectural draping and hand-embroidered Czech glass beads. Silhouettes engineered for
-                            majestic nocturnal presence and absolute stillness.
-                        </p>
-                        <div class="pt-space-xs">
-                            <a class="inline-flex items-center gap-2 text-primary font-label-caps text-label-caps uppercase tracking-widest group-hover:translate-x-1 transition-transform"
-                                href="#">
-                                <span>Shop Eveningwear Capsule</span>
-                                <span class="material-symbols-outlined text-base">arrow_forward</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
 
-    <!-- 5. Editorial Story & Craftsmanship Feature -->
-    <section class="w-full bg-surface-container py-space-xl lg:py-24 border-y border-outline-variant/20">
-        <div class="max-w-[1600px] mx-auto px-4 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center">
-                <div class="lg:col-span-6 relative">
-                    <div
-                        class="relative z-10 w-full aspect-[4/5] bg-surface-container-highest overflow-hidden border border-outline-variant/40 shadow-2xl">
-                        <img class="w-full h-full object-cover"
-                            src="{{ asset('storage/images/sample/editorial-craft.jpg') }}" alt="Craftsmanship">
-                    </div>
-                    <div
-                        class="hidden sm:block absolute -bottom-8 -right-8 z-20 w-64 bg-surface-container-lowest/95 backdrop-blur-xl p-space-md border border-primary/30 shadow-2xl">
-                        <div class="flex items-center gap-2 text-primary mb-1">
-                            <span class="material-symbols-outlined text-lg">verified</span>
-                            <span class="font-label-caps text-[10px] uppercase tracking-widest">Guaranteed Provenance</span>
-                        </div>
-                        <p class="font-body-sm text-xs text-on-surface-variant font-light">
-                            Every garment carries an engraved serial hallmark and encrypted NFC passport.
-                        </p>
-                    </div>
-                </div>
-                <div class="lg:col-span-6 flex flex-col gap-space-md">
-                    <span class="font-label-caps text-label-caps uppercase tracking-widest text-primary">The Atelier
-                        Philosophy</span>
-                    <h2 class="font-headline-lg text-headline-lg text-on-surface uppercase tracking-tight leading-tight">
-                        Monolithic Permanence<br>
-                        <span class="font-display-hero italic font-normal text-secondary">Over Obsolescence</span>
-                    </h2>
-                    <blockquote
-                        class="border-l-2 border-primary pl-space-md my-space-xs font-title-editorial text-title-editorial text-on-surface italic font-normal">
-                        "Elegance is not about being noticed, it is about being remembered."
-                        <footer
-                            class="font-label-caps text-label-caps uppercase tracking-widest text-primary not-italic mt-2 block">
-                            — Alessandro DeLuca, Master Head of Atelier
-                        </footer>
-                    </blockquote>
-                    <p class="font-body-md text-body-md text-on-surface-variant font-light leading-relaxed">
-                        In an era of disposable velocity, Atelier Noir operates under the discipline of permanence. We
-                        reject seasonal trends in favor of structural authority. Our garments are engineered in Biella and
-                        Lyon using zero synthetics, harvested ethically with full regenerative certification.
-                    </p>
-                    <div class="grid grid-cols-3 gap-space-md pt-space-md border-t border-outline-variant/30">
-                        <div>
-                            <span
-                                class="font-headline-lg text-headline-md lg:text-headline-lg text-primary block leading-none">38</span>
-                            <span
-                                class="font-label-caps text-[10px] uppercase tracking-widest text-outline mt-1 block">Hand-Stitched
-                                Hours Per Suit</span>
-                        </div>
-                        <div>
-                            <span
-                                class="font-headline-lg text-headline-md lg:text-headline-lg text-primary block leading-none">100%</span>
-                            <span
-                                class="font-label-caps text-[10px] uppercase tracking-widest text-outline mt-1 block">Organic
-                                Silk & Cashmere</span>
-                        </div>
-                        <div>
-                            <span
-                                class="font-headline-lg text-headline-md lg:text-headline-lg text-primary block leading-none">0%</span>
-                            <span
-                                class="font-label-caps text-[10px] uppercase tracking-widest text-outline mt-1 block">Synthetic
-                                Blends</span>
-                        </div>
-                    </div>
-                    <div class="pt-space-sm">
-                        <button
-                            class="px-8 py-3.5 bg-primary-container hover:bg-primary text-on-primary-container font-label-caps text-label-caps uppercase tracking-widest transition-colors">
-                            Read The Manifesto
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- How to Order Section -->
-    <section
-        class="w-full bg-surface-container-lowest py-20 lg:py-32 border-b border-outline-variant/20 relative overflow-hidden">
-        <div class="max-w-[1600px] mx-auto px-6 lg:px-12 " style="margin-top:50px;margin-bottom:50px">
+    {{-- Tailwind CSS --}}
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
-            <!-- Section Header -->
-            <div class="text-center mb-20" style="margin-bottom: 100px">
-                <div class="flex items-center justify-center gap-3 mb-4">
-                    <span class="block w-8 h-px bg-primary/40"></span>
-                    <span class="font-label-caps text-xs tracking-[0.3em] uppercase text-primary font-medium">Ordering
-                        Guide</span>
-                    <span class="block w-8 h-px bg-primary/40"></span>
-                </div>
-                <h2 class="font-headline-md text-3xl md:text-4xl text-on-surface uppercase tracking-tight mb-4">How to Order
-                </h2>
-                <p class="font-body-sm text-base text-outline max-w-md mx-auto font-light">
-                    Secure your desired pieces effortlessly via WhatsApp in three seamless steps.
-                </p>
-            </div>
+    {{-- Google Fonts --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap"
+        rel="stylesheet">
 
-            <!-- Steps Container -->
-            <div class="relative max-w-5xl mx-auto">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        jd: {
+                            yellow: '#F5E400',
+                            orange: '#FF5000',
+                            darkorange: '#E04400',
+                            black: '#111111',
+                            dark: '#1A1A1A',
+                            cardbg: '#252525'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif'],
+                        impact: ['Anton', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
 
-                <!-- Connecting Line (Hanya tampil di Desktop) -->
-                <div
-                    class="hidden md:block absolute top-[2.5rem] left-[15%] right-[15%] h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent z-0">
-                </div>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #111111;
+            background-color: #FFFFFF;
+            overflow-x: hidden;
+        }
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative z-10">
+        html {
+            scroll-behavior: smooth;
+        }
 
-                    <!-- Step 1 -->
-                    <div class="text-center group cursor-default">
-                        <div
-                            class="relative w-20 h-20 mx-auto mb-8 rounded-full bg-surface border border-outline-variant/30 flex items-center justify-center group-hover:border-primary/50 group-hover:shadow-2xl group-hover:shadow-primary/10 transition-all duration-500 z-10">
-                            <span
-                                class="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-primary transition-colors duration-500">search</span>
-                            <!-- Step Indicator Badge -->
+        .font-condensed {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
 
-                        </div>
-                        <h3 class="font-headline-sm text-lg text-on-surface mb-3 tracking-wide">Choose Your Product</h3>
-                        <p class="font-body-sm text-sm text-on-surface-variant/80 font-light leading-relaxed px-4">
-                            Explore our curated collection and select the pieces that define your style.
-                        </p>
-                    </div>
+        .font-impact {
+            font-family: 'Anton', sans-serif;
+        }
 
-                    <!-- Step 2 -->
-                    <div class="text-center group cursor-default">
-                        <div
-                            class="relative w-20 h-20 mx-auto mb-8 rounded-full bg-surface border border-outline-variant/30 flex items-center justify-center group-hover:border-primary/50 group-hover:shadow-2xl group-hover:shadow-primary/10 transition-all duration-500 z-10">
-                            <span
-                                class="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-primary transition-colors duration-500">chat</span>
-                            <!-- Step Indicator Badge -->
+        @keyframes promo-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
 
-                        </div>
-                        <h3 class="font-headline-sm text-lg text-on-surface mb-3 tracking-wide">Connect via WhatsApp</h3>
-                        <p class="font-body-sm text-sm text-on-surface-variant/80 font-light leading-relaxed px-4">
-                            Click the inquiry button on your chosen product to connect with our atelier.
-                        </p>
-                    </div>
+        .animate-promo-scroll {
+            animation: promo-scroll 35s linear infinite;
+        }
 
-                    <!-- Step 3 -->
-                    <div class="text-center group cursor-default">
-                        <div
-                            class="relative w-20 h-20 mx-auto mb-8 rounded-full bg-surface border border-outline-variant/30 flex items-center justify-center group-hover:border-primary/50 group-hover:shadow-2xl group-hover:shadow-primary/10 transition-all duration-500 z-10">
-                            <span
-                                class="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-primary transition-colors duration-500">check_circle</span>
+        .animate-promo-scroll:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
 
-                        </div>
-                        <h3 class="font-headline-sm text-lg text-on-surface mb-3 tracking-wide">Confirm Order</h3>
-                        <p class="font-body-sm text-sm text-on-surface-variant/80 font-light leading-relaxed px-4">
-                            Finalize your measurements and details directly with our style advisors.
-                        </p>
-                    </div>
+<body class="antialiased selection:bg-black selection:text-white">
 
-                </div>
-            </div>
+    @php
+        /* ============================================================================
+           PERSIAPAN DATA HALAMAN
+           ----------------------------------------------------------------------------
+            Preparing data + fallback so the page always looks clean even
+            when the database is empty. For production, the take/slice logic
+            should ideally be moved to HomeController (see example at the
+            bottom of this document).
+           ============================================================================ */
 
-            <!-- Action Button -->
-            <div class="text-center" style="margin-top:50px">
-                <a href="https://wa.me/{{ config('services.whatsapp.number') }}?text={{ urlencode('Hello, I would like to inquire about your products.') }}"
-                    class="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-primary text-on-primary font-label-caps text-xs tracking-[0.2em] uppercase overflow-hidden shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300"
-                    target="_blank" rel="noopener">
-                    <span class="relative z-10 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[18px]">forum</span>
-                        Contact Our Atelier
-                    </span>
+        // --- 0. Fallback helper harga (hapus bila helpers.php sudah terdaftar) ---
+        if (!function_exists('currency')) {
+            function currency($amount)
+            {
+                return '$' . number_format((float) $amount, 2, '.', ',');
+            }
+        }
+
+        // --- 1. Produk unggulan dibagi per section ---
+        $limitedPairs = $featuredProducts->take(5);           // section "Limited Pairs Only"
+        $topPicks = $featuredProducts->slice(5)->take(4); // section "Our Top Picks"
+
+        // --- 2. Fallback products (dummy) when database is empty ---
+        $fallbackProducts = collect([
+            ['name' => 'Nike Air Max AP', 'image' => 'product-nike-airmax.jpg', 'brand' => 'Nike', 'base_price' => 1909000, 'sale_price' => 1336000],
+            ['name' => "Nike Vomero 5 Women's", 'image' => 'product-nike-vomero.jpg', 'brand' => 'Nike', 'base_price' => 2489000, 'sale_price' => 1742000],
+            ['name' => 'New Balance 1000', 'image' => 'product-newbalance-1000.jpg', 'brand' => 'New Balance', 'base_price' => 2599000, 'sale_price' => 1559000],
+            ['name' => 'adidas Adizero Evo SL', 'image' => 'product-adidas-adizero.jpg', 'brand' => 'adidas', 'base_price' => 2500000, 'sale_price' => 1750000],
+            ['name' => 'On Cloudtilt', 'image' => 'product-on-running.jpg', 'brand' => 'On', 'base_price' => 2800000, 'sale_price' => 1960000],
+            ['name' => 'Nike Mind 001 Slides', 'image' => 'product-nike-mind-slides.jpg', 'brand' => 'Nike', 'base_price' => 1199000, 'sale_price' => null],
+            ['name' => 'adidas Essentials T-Shirt', 'image' => 'product-adidas-tshirt.jpg', 'brand' => 'adidas', 'base_price' => 550000, 'sale_price' => null],
+            ['name' => 'Nike Mind 001 Slides', 'image' => 'product-nike-mind-blue.jpg', 'brand' => 'Nike', 'base_price' => 1199000, 'sale_price' => null],
+            ['name' => 'Nike Heritage Backpack', 'image' => 'product-nike-backpack.jpg', 'brand' => 'Nike', 'base_price' => 499000, 'sale_price' => null],
+        ])->map(function ($p) {
+            return (object) array_merge($p, [
+                'image_url' => asset('storage/images/jd-sports/' . $p['image']),
+                'permalink' => route('shop'),
+            ]);
+        });
+
+        $limitedPairsList = $limitedPairs->isNotEmpty() ? $limitedPairs : $fallbackProducts->take(5);
+        $topPicksList = $topPicks->isNotEmpty() ? $topPicks : $fallbackProducts->slice(5)->take(4);
+
+        // --- 3. Kategori fallback ---
+        $fallbackCategories = collect([
+            ['name' => 'Men', 'image' => 'category-mens.jpg'],
+            ['name' => 'Women', 'image' => 'category-womens.jpg'],
+            ['name' => 'Kids', 'image' => 'category-kids.jpg'],
+        ])->map(function ($c) {
+            return (object) [
+                'name' => $c['name'],
+                'image_url' => asset('storage/images/jd-sports/' . $c['image']),
+                'product_count' => 0,
+            ];
+        });
+
+        $categoriesList = $categories->isNotEmpty() ? $categories : $fallbackCategories;
+
+        // --- 4. Slider fallback ---
+        $sliderList = $sliders->isNotEmpty() ? $sliders : collect([
+            (object) ['image_url' => asset('storage/images/jd-sports/hero-banner.jpg')],
+        ]);
+
+        // --- 5. Artikel fallback (editorial) ---
+        $fallbackArticles = collect([
+            [
+                'title' => 'adidas Originals x JENNIE: A Collection Every Fan Must See',
+                'excerpt' => 'JENNIE\'s first collaboration with adidas Originals is finally here! From Superstar with a ballet twist to effortless apparel.',
+                'image' => 'article-1.jpg'
+            ],
+            [
+                'title' => 'New Drop, Instant Crush: adidas Originals ANFU',
+                'excerpt' => 'New mood, new kicks! adidas Originals ANFU brings a versatile retro Mary Jane touch for your daily OOTD.',
+                'image' => 'article-2.jpg'
+            ],
+            [
+                'title' => 'Cute Meets Classic: Meet the PUMA Tacklette',
+                'excerpt' => 'Meet your new sneaker crush, PUMA Tacklette! Classic terrace style meets playful Mary Jane touches, chic and stylish.',
+                'image' => 'article-3.jpg'
+            ],
+        ])->map(function ($a) {
+            return (object) [
+                'title' => $a['title'],
+                'excerpt' => $a['excerpt'],
+                'image_url' => asset('storage/images/jd-sports/' . $a['image']),
+                'permalink' => '#',
+            ];
+        });
+
+        // Normalisasi artikel: dukung Model Eloquent maupun array asosiatif
+        $articlesList = collect($articles ?? [])->map(function ($a) {
+            if (is_object($a) && method_exists($a, 'toArray')) {
+                $a = $a->toArray();
+            }
+            return (object) (array) $a;
+        });
+
+        if ($articlesList->isEmpty()) {
+            $articlesList = $fallbackArticles;
+        }
+
+        // --- 6. Data section statis ---
+        $brandOffers = [
+            ['brand' => 'NIKE', 'slug' => 'nike', 'discount' => 50],
+            ['brand' => 'ADIDAS', 'slug' => 'adidas', 'discount' => 50],
+            ['brand' => 'NEW BALANCE', 'slug' => 'new-balance', 'discount' => 50],
+            ['brand' => 'PUMA', 'slug' => 'puma', 'discount' => 50],
+        ];
+
+        $featuredBrands = [
+            ['name' => 'Nike', 'slug' => 'nike', 'image' => 'brand-nike.jpg'],
+            ['name' => 'adidas', 'slug' => 'adidas', 'image' => 'brand-adidas.jpg'],
+            ['name' => 'On', 'slug' => 'on', 'image' => 'brand-on.jpg'],
+            ['name' => 'New Balance', 'slug' => 'new-balance', 'image' => 'brand-newbalance.jpg'],
+        ];
+    @endphp
+
+    {{-- Skip link untuk aksesibilitas --}}
+    <a href="#main-content"
+        class="sr-only focus:not-sr-only focus:absolute focus:z-[60] focus:bg-black focus:px-4 focus:py-2 focus:text-white">
+        Skip to main content
+    </a>
+
+    {{-- ============================================================
+    1. TOP UTILITY BAR
+    ============================================================ --}}
+    <div class="border-b border-gray-200 bg-white px-4 py-1.5 text-[11px] font-medium text-gray-700 lg:px-8">
+        <div class="mx-auto flex max-w-7xl items-center justify-between">
+            <div class="hidden items-center gap-4 md:flex">
+                <a href="#" class="flex items-center gap-1.5 hover:text-black">
+                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                    </svg>
+                    Download the App
                 </a>
+                <span class="text-gray-300" aria-hidden="true">|</span>
+                <a href="#" class="hover:text-black">Help &amp; Contact</a>
+                <span class="text-gray-300" aria-hidden="true">|</span>
+                <a href="#" class="hover:text-black">Track Order</a>
             </div>
 
-        </div>
-    </section>
-
-    <!-- Product Bundling Section -->
-    <section class="w-full bg-surface py-space-xl border-t border-outline-variant/20">
-        <div class="max-w-[1600px] mx-auto px-4 lg:px-8">
-            <div class="text-center mb-space-lg">
-                <span class="font-label-caps text-label-caps uppercase tracking-widest text-primary block mb-space-xs">Exclusive Offers</span>
-                <h2 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">Product Bundles</h2>
-                <p class="font-body-sm text-body-sm text-outline max-w-md mx-auto mt-2">Complete your wardrobe with our curated bundles at exceptional value</p>
-            </div>
-
-            @if($bundles->isNotEmpty())
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    @foreach($bundles as $bundle)
-                        <div class="group bg-surface-container border border-outline-variant/30 hover:border-primary/40 transition-all duration-300 rounded-2xl overflow-hidden relative">
-                            <div class="aspect-square bg-surface-container-high relative overflow-hidden">
-                                @if($bundle->thumbnail)
-                                    <img src="{{ asset('storage/' . $bundle->thumbnail) }}" alt="{{ $bundle->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                                @else
-                                    <img src="https://placehold.co/600x600/0B1F3A/FFFFFF?text={{ urlencode($bundle->name) }}" alt="{{ $bundle->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                                @endif
-                                @if($bundle->discount_percent > 0)
-                                    <div class="absolute top-4 left-4 bg-primary text-on-primary px-3 py-1 font-label-caps text-[10px] uppercase tracking-widest">Save {{ $bundle->discount_percent }}%</div>
-                                @endif
-                            </div>
-                            <div class="p-6">
-                                <h3 class="font-headline-sm text-base text-on-surface mb-2">{{ $bundle->name }}</h3>
-                                <p class="font-body-sm text-sm text-on-surface-variant mb-4">{{ $bundle->items_count }} products</p>
-                                
-                                @if($bundle->items->isNotEmpty())
-                                    <div class="mb-4 space-y-2 max-h-32 overflow-y-auto">
-                                        @foreach($bundle->items->take(5) as $item)
-                                            <div class="flex items-center justify-between text-sm">
-                                                <span class="font-body-sm text-on-surface-variant">{{ $item->product->name ?? 'Product' }} × {{ $item->quantity }}</span>
-                                                <span class="font-body-sm text-on-surface">${{ number_format(($item->product->base_price ?? 0) * $item->quantity, 0) }}</span>
-                                            </div>
-                                        @endforeach
-                                        @if($bundle->items->count() > 5)
-                                            <div class="text-xs text-muted">+{{ $bundle->items->count() - 5 }} more items</div>
-                                        @endif
-                                    </div>
-                                @endif
-                                
-                                <div class="flex items-center gap-3 mb-4">
-                                    @if($bundle->bundle_price)
-                                        <span class="font-label-price text-xl text-primary">${{ number_format($bundle->bundle_price, 0) }}</span>
-                                        @if($bundle->original_price > 0)
-                                            <span class="font-body-sm text-sm text-on-surface-variant line-through">${{ number_format($bundle->original_price, 0) }}</span>
-                                        @endif
-                                    @endif
-                                </div>
-                                <a href="https://wa.me/{{ config('services.whatsapp.number') }}?text={{ urlencode('Hello, I am interested in ' . $bundle->name . ' bundle.') }}"
-                                    class="w-full bg-primary-container hover:bg-primary-fixed text-on-primary-container font-headline-md text-body-sm font-semibold px-6 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
-                                    target="_blank" rel="noopener">
-                                    <span class="material-symbols-outlined text-[18px]">chat</span>
-                                    Order Bundle
-                                </a>
-                            </div>
-                            @if($bundle->description)
-                                <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/95 via-surface-container-lowest/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6 pointer-events-none">
-                                    <div class="w-full bg-surface-container-lowest/90 backdrop-blur-md rounded-xl p-4 text-sm text-on-surface font-light leading-relaxed border border-outline-variant/20 max-h-[200px] overflow-y-auto">
-                                        {{ $bundle->description }}
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
-                </div>
-            @else
-                <p class="text-center text-muted">No bundles available at the moment.</p>
-            @endif
-        </div>
-    </section>
-
-    <!-- 6. VIP Client Reviews & Press Accolades -->
-    <section class="w-full bg-surface-container-lowest py-space-xl">
-        <div class="max-w-[1600px] mx-auto px-4 lg:px-8">
-            <div class="text-center max-w-xl mx-auto mb-space-xl">
-                <span
-                    class="font-label-caps text-label-caps uppercase tracking-widest text-primary block mb-space-xs">Critical
-                    Acclaim & Patronage</span>
-                <h2 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">The Discourse of
-                    Prestige</h2>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg pt-space-xl">
-                <div class="bg-surface-container p-space-lg border border-outline-variant/30 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center gap-1 text-primary mb-space-sm">
-                            <span class="material-symbols-outlined text-base">star</span>
-                            <span class="material-symbols-outlined text-base">star</span>
-                            <span class="material-symbols-outlined text-base">star</span>
-                            <span class="material-symbols-outlined text-base">star</span>
-                            <span class="material-symbols-outlined text-base">star</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-tertiary font-light leading-relaxed mb-space-md">
-                            "The double-breasted wool blazer fits with the surgical balance of Savile Row, but possesses a
-                            dark silhouette found nowhere else. The tactile sensation of the Loro Piana weave is
-                            breathtaking."
-                        </p>
-                    </div>
-                    <div class="border-t border-outline-variant/20 pt-space-sm flex items-center justify-between">
-                        <div>
-                            <span
-                                class="font-label-caps text-label-caps text-on-surface uppercase tracking-wider block">Lady
-                                Genevieve M.</span>
-                            <span class="font-body-sm text-[11px] text-outline">London • Private Client since 2021</span>
-                        </div>
-                        <span class="material-symbols-outlined text-primary text-lg">verified</span>
-                    </div>
-                </div>
-                <div class="bg-surface-container p-space-lg border border-outline-variant/30 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center gap-1 text-primary mb-space-sm">
-                            <span class="material-symbols-outlined text-base">star</span>
-                            <span class="material-symbols-outlined text-base">star</span>
-                            <span class="material-symbols-outlined text-base">star</span>
-                            <span class="material-symbols-outlined text-base">star</span>
-                            <span class="material-symbols-outlined text-base">star</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-tertiary font-light leading-relaxed mb-space-md">
-                            "The private salon appointment at Place Vendôme was utterly discreet and peerless. The silk
-                            georgette gown moves like liquid obsidian under ballroom lights. An irreplaceable piece."
-                        </p>
-                    </div>
-                    <div class="border-t border-outline-variant/20 pt-space-sm flex items-center justify-between">
-                        <div>
-                            <span
-                                class="font-label-caps text-label-caps text-on-surface uppercase tracking-wider block">Arthur
-                                Vance</span>
-                            <span class="font-body-sm text-[11px] text-outline">Paris • Guild Collector</span>
-                        </div>
-                        <span class="material-symbols-outlined text-primary text-lg">verified</span>
-                    </div>
-                </div>
-                <div class="bg-surface-container p-space-lg border border-outline-variant/30 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center gap-1 text-primary mb-space-sm">
-                            <span class="material-symbols-outlined text-base">star</span>
-                            <span class="material-symbols-outlined text-base">star</span>
-                            <span class="material-symbols-outlined text-base">star</span>
-                            <span class="material-symbols-outlined text-base">star</span>
-                            <span class="material-symbols-outlined text-base">star</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-tertiary font-light leading-relaxed mb-space-md">
-                            "I ordered the Florentine nappa overcoat bespoke. The white-glove courier delivery arrived in a
-                            temperature-controlled cedar trunk. The level of uncompromising craft is deeply inspiring."
-                        </p>
-                    </div>
-                    <div class="border-t border-outline-variant/20 pt-space-sm flex items-center justify-between">
-                        <div>
-                            <span
-                                class="font-label-caps text-label-caps text-on-surface uppercase tracking-wider block">Kenji
-                                Takahashi</span>
-                            <span class="font-body-sm text-[11px] text-outline">Tokyo • Bespoke Patron</span>
-                        </div>
-                        <span class="material-symbols-outlined text-primary text-lg">verified</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 7. Runway Journal & Style Insights -->
-    <section class="w-full bg-surface py-space-xl border-t border-outline-variant/20">
-        <div class="max-w-[1600px] mx-auto px-4 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-space-lg">
-                <div>
-                    <span
-                        class="font-label-caps text-label-caps uppercase tracking-widest text-primary block mb-space-xs">The
-                        Noir Gazette</span>
-                    <h2 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">Runway Journal &
-                        Insights</h2>
-                </div>
-                <a class="inline-flex items-center gap-2 text-primary font-label-caps text-label-caps uppercase tracking-widest hover:underline mt-2 md:mt-0"
-                    href="https://instagram.com/ateliernoir" target="_blank" rel="noopener">
-                    <span>View Our Instagram</span>
-                    <span class="material-symbols-outlined text-base">north_east</span>
-                </a>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
-                @foreach($articles as $article)
-                    <article
-                        class="group bg-surface-container flex flex-col border border-outline-variant/30 hover:border-primary/40 transition-colors">
-                        <div class="relative aspect-[16/10] overflow-hidden bg-surface-container-highest">
-                            @if($article['image'])
-                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                    src="{{ $article['image'] }}" alt="{{ $article['title'] }}">
-                            @endif
-                            <span
-                                class="absolute top-3 left-3 bg-surface-container-lowest/90 px-2.5 py-1 text-primary font-label-caps text-[10px] uppercase tracking-widest">{{ $article['category'] }}</span>
-                        </div>
-                        <div class="p-space-md flex flex-col justify-between flex-1">
-                            <div>
-                                <div class="flex items-center gap-space-sm text-outline text-[11px] mb-space-xs">
-                                    <span>{{ $article['date'] }}</span>
-                                    <span>•</span>
-                                    <span>{{ $article['reading_time'] }} min reading</span>
-                                </div>
-                                <h3
-                                    class="font-title-editorial text-title-editorial text-on-surface group-hover:text-primary transition-colors leading-tight mb-space-xs">
-                                    {{ $article['title'] }}
-                                </h3>
-                                <p class="font-body-sm text-body-sm text-on-surface-variant font-light line-clamp-2">
-                                    {{ $article['excerpt'] }}
-                                </p>
-                            </div>
-                            <div
-                                class="pt-space-sm mt-space-sm border-t border-outline-variant/20 flex items-center justify-between text-primary font-label-caps text-[11px] tracking-widest uppercase">
-                                <a href="{{ $article['permalink'] }}" target="_blank" rel="noopener">Read Chronicle</a>
-                                <span
-                                    class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                            </div>
-                        </div>
-                    </article>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-
-
-    <!-- 8. Private Fitting Booking Modal -->
-    <div class="hidden fixed inset-0 z-50 flex items-center justify-center p-space-md bg-surface-container-lowest/90 backdrop-blur-xl"
-        id="booking-modal">
-        <div class="relative w-full max-w-lg bg-surface-container p-space-lg border border-primary/40 shadow-2xl">
-            <div class="flex items-center justify-between pb-space-sm border-b border-outline-variant/30 mb-space-md">
-                <div>
-                    <span class="font-label-caps text-[10px] uppercase tracking-widest text-primary block">Maison
-                        Privée</span>
-                    <h3 class="font-headline-sm text-headline-sm uppercase text-on-surface">Book Atelier Fitting</h3>
-                </div>
-                <button class="text-outline hover:text-on-surface transition-colors p-1"
-                    onclick="document.getElementById('booking-modal').classList.add('hidden')">
-                    <span class="material-symbols-outlined text-2xl">close</span>
+            <div class="ml-auto flex items-center gap-4">
+                <a href="#" class="hidden hover:text-black sm:inline">Store Locator</a>
+                <span class="hidden text-gray-300 sm:inline" aria-hidden="true">|</span>
+                <button type="button" class="flex items-center gap-1 hover:text-black">
+                    Deliver To...
+                    <svg class="ml-0.5 h-3 w-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        aria-hidden="true">
+                        <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                    </svg>
                 </button>
+                <span class="text-gray-300" aria-hidden="true">|</span>
+                <a href="{{ route('login') }}" class="font-semibold text-black hover:underline">Login</a>
             </div>
-            <form class="flex flex-col gap-space-sm"
-                onsubmit="event.preventDefault(); alert('Appointment request transmitted to your private concierge.'); document.getElementById('booking-modal').classList.add('hidden');">
-                <div>
-                    <label
-                        class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">Full
-                        Name</label>
-                    <input
-                        class="w-full bg-surface-container-low border border-outline-variant p-2.5 text-on-surface font-body-sm focus:border-primary focus:outline-none"
-                        placeholder="e.g. Eleanor Vance" required type="text">
-                </div>
-                <div>
-                    <label
-                        class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">Direct
-                        Contact / Concierge Email</label>
-                    <input
-                        class="w-full bg-surface-container-low border border-outline-variant p-2.5 text-on-surface font-body-sm focus:border-primary focus:outline-none"
-                        placeholder="e.g. client@private.com" required type="email">
-                </div>
-                <div>
-                    <label
-                        class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">Salon
-                        Location</label>
-                    <select
-                        class="w-full bg-surface-container-low border border-outline-variant p-2.5 text-on-surface font-body-sm focus:border-primary focus:outline-none">
-                        <option>Paris • Place Vendôme Salon Privé</option>
-                        <option>Milan • Via Montenapoleone Atelier</option>
-                        <option>London • Mayfair Guild Suite</option>
-                        <option>New York • Madison Avenue Salon</option>
-                        <option>Tokyo • Ginza Private Residence</option>
-                    </select>
-                </div>
-                <div>
-                    <label
-                        class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">Sartorial
-                        Interest</label>
-                    <select
-                        class="w-full bg-surface-container-low border border-outline-variant p-2.5 text-on-surface font-body-sm focus:border-primary focus:outline-none">
-                        <option>Bespoke Suiting & Tailoring</option>
-                        <option>Haute Couture Eveningwear</option>
-                        <option>Custom Nappa Leather Outwear</option>
-                        <option>Bridal & Gala Commission</option>
-                    </select>
-                </div>
-                <div class="pt-space-sm">
-                    <button
-                        class="w-full py-3.5 bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-widest hover:bg-secondary transition-colors font-semibold"
-                        type="submit">
-                        Confirm Fitting Request
-                    </button>
-                </div>
-                <p class="font-body-sm text-[10px] text-outline text-center mt-1">
-                    A dedicated private atelier valet will contact your office within two hours.
-                </p>
-            </form>
         </div>
     </div>
 
+    {{-- ============================================================
+    2. HEADER UTAMA
+    ============================================================ --}}
+    <header class="sticky top-0 z-40 bg-white shadow-sm">
+        <div class="mx-auto max-w-7xl px-4 py-3.5 lg:px-8">
+            <div class="flex items-center justify-between gap-4">
+
+                {{-- Hamburger (mobile) --}}
+                <button type="button" id="mobile-menu-btn" class="text-gray-800 md:hidden"
+                    aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+
+                {{-- Logo --}}
+                <a href="{{ route('home') }}" class="shrink-0" aria-label="JD Sports — Home">
+                    <img src="{{ asset('storage/images/sample/logo-black.png') }}" alt="JD Sports"
+                        class="h-8 w-auto object-contain lg:h-9">
+                </a>
+
+                {{-- Search (desktop) --}}
+                <div class="hidden max-w-xl flex-1 md:block">
+                    <form action="{{ route('shop') }}" method="GET" class="relative w-full" role="search">
+                        <label for="desktop-search" class="sr-only">Search products</label>
+                        <input id="desktop-search" type="text" name="search"
+                            class="w-full rounded-full border border-transparent bg-[#f4f4f4] py-2 pl-4 pr-10 text-xs placeholder-gray-500 transition focus:border-black focus:bg-white focus:outline-none"
+                            placeholder="Search products, categories, or brands">
+                        <button type="submit"
+                            class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
+                            aria-label="Search">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+
+                {{-- Ikon cepat --}}
+                <div class="flex items-center gap-5">
+                    {{-- Mobile search --}}
+                    <button type="button" id="mobile-search-btn" class="text-gray-800 md:hidden"
+                        aria-label="Open search">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2" />
+                        </svg>
+                    </button>
+
+                    {{-- Wishlist --}}
+                    <a href="{{ route('wishlist') }}" class="relative text-gray-800 hover:text-black"
+                        aria-label="Wishlist ({{ $wishlistItemCount ?? 0 }} item)">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+                        </svg>
+                        @if (($wishlistItemCount ?? 0) > 0)
+                            <span
+                                class="absolute -top-1.5 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[9px] font-bold text-white">{{ $wishlistItemCount }}</span>
+                        @endif
+                    </a>
+
+                    {{-- Cart --}}
+                    <a href="{{ route('cart') }}" class="relative text-gray-800 hover:text-black"
+                        aria-label="Shopping cart ({{ $cartItemCount ?? 0 }} item)">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="1.8" />
+                        </svg>
+                        @if (($cartItemCount ?? 0) > 0)
+                            <span
+                                class="absolute -top-1.5 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[9px] font-bold text-white">{{ $cartItemCount }}</span>
+                        @endif
+                    </a>
+
+                    {{-- Notifications --}}
+                    <a href="#" class="hidden text-gray-800 hover:text-black sm:block" aria-label="Notifications">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            {{-- Mobile search --}}
+            <div id="mobile-search" class="hidden border-t border-gray-100 pt-3 md:hidden">
+                <form action="{{ route('shop') }}" method="GET" class="relative w-full" role="search">
+                    <label for="mobile-search-input" class="sr-only">Search products</label>
+                    <input id="mobile-search-input" type="text" name="search"
+                        class="w-full rounded-full border border-transparent bg-[#f4f4f4] py-2 pl-4 pr-10 text-xs placeholder-gray-500 focus:border-black focus:bg-white focus:outline-none"
+                        placeholder="Search products, categories, or brands">
+                    <button type="submit"
+                        class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
+                        aria-label="Search">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            {{-- Main navigation (desktop) --}}
+            <nav class="mt-2.5 hidden items-center justify-center gap-8 border-t border-gray-100 pt-3 text-xs font-bold uppercase tracking-wider text-black md:flex"
+                aria-label="Main navigation">
+                <a href="{{ route('home') }}" class="transition hover:text-jd-orange">Home</a>
+                <a href="{{ route('shop') }}" class="transition hover:text-jd-orange">Shop</a>
+                <a href="{{ route('about') }}" class="transition hover:text-jd-orange">About</a>
+                <a href="{{ route('contact') }}" class="transition hover:text-jd-orange">Contact</a>
+            </nav>
+
+            {{-- Menu mobile --}}
+            <div id="mobile-menu" class="hidden border-t border-gray-100 pb-2 pt-3 md:hidden">
+                <nav class="flex flex-col gap-1 text-sm font-semibold" aria-label="Mobile navigation">
+                    <a href="{{ route('home') }}" class="rounded px-3 py-2.5 hover:bg-gray-50">Home</a>
+                    <a href="{{ route('shop') }}" class="rounded px-3 py-2.5 hover:bg-gray-50">Shop</a>
+                    <a href="{{ route('about') }}" class="rounded px-3 py-2.5 hover:bg-gray-50">About</a>
+                    <a href="{{ route('contact') }}" class="rounded px-3 py-2.5 hover:bg-gray-50">Contact</a>
+                    <a href="{{ route('login') }}"
+                        class="mt-1 rounded bg-black px-3 py-2.5 text-center text-white">Login</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    {{-- ============================================================
+    3. PROMO BAR (SCROLLER)
+    ============================================================ --}}
+    @php
+        $promoBarItems = [
+            ['FREE SHIPPING NATIONWIDE', 'Next day & standard delivery*'],
+            ['ASICS GEL-CUMULUS', 'Where comfort pursues us'],
+            ['CLICK AND COLLECT', 'Available in web & app'],
+            ['NEW ARRIVALS', 'Just landed — fresh picks'],
+            ['FLASH SALE', 'Up to 70% off — today only'],
+            ['EXCLUSIVE PERKS', 'Early access — join now'],
+        ];
+    @endphp
+
+    <div class="border-y border-yellow-400 bg-jd-yellow font-bold uppercase tracking-tight text-black overflow-hidden"
+        role="region" aria-label="Promo berjalan">
+        <div class="mx-auto max-w-7xl px-4 py-2 lg:px-8">
+            <div class="flex items-center gap-x-4 whitespace-nowrap text-[10px] animate-promo-scroll">
+                @foreach ($promoBarItems as $promo)
+                    <span class="flex items-center gap-1.5 shrink-0">
+                        <span>{{ $promo[0] }}</span>
+                        <span class="text-[8px] font-medium">—</span>
+                        <span>{{ $promo[1] }}</span>
+                    </span>
+                    <span class="text-gray-500 shrink-0" aria-hidden="true">|</span>
+                @endforeach
+                @foreach ($promoBarItems as $promo)
+                    <span class="flex items-center gap-1.5 shrink-0">
+                        <span>{{ $promo[0] }}</span>
+                        <span class="text-[8px] font-medium">—</span>
+                        <span>{{ $promo[1] }}</span>
+                    </span>
+                    <span class="text-gray-500 shrink-0" aria-hidden="true">|</span>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    <main id="main-content">
+
+        {{-- ============================================================
+        4. HERO CAROUSEL
+        ============================================================ --}}
+        <section class="relative w-full overflow-hidden bg-black" aria-label="Main banner">
+            <div id="hero-slider" class="relative aspect-[21/9] max-h-[700px] min-h-[440px] w-full">
+
+                @foreach ($sliderList as $index => $slider)
+                    <div class="hero-slide absolute inset-0 h-full w-full transition-all duration-1000 ease-in-out {{ $index === 0 ? 'z-10 opacity-100 scale-100' : 'opacity-0 scale-105' }}"
+                        data-index="{{ $index }}" aria-hidden="{{ $index === 0 ? 'false' : 'true' }}">
+                        <img src="{{ $slider->image_url }}" alt="{{ $slider->title ?? 'Featured promotion' }}"
+                            class="h-full w-full object-cover object-center">
+                    </div>
+                @endforeach
+
+                {{-- Panah --}}
+                <button type="button" id="hero-prev"
+                    class="absolute left-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white transition hover:bg-black/70"
+                    aria-label="Previous slide">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                    </svg>
+                </button>
+                <button type="button" id="hero-next"
+                    class="absolute right-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white transition hover:bg-black/70"
+                    aria-label="Next slide">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                    </svg>
+                </button>
+
+                {{-- Dot indicators (generated by JavaScript) --}}
+                <div id="hero-dots"
+                    class="absolute bottom-20 left-0 right-0 z-20 flex items-center justify-center gap-2 md:bottom-10">
+                </div>
+
+                {{-- CTA buttons --}}
+                <div
+                    class="absolute bottom-6 right-6 z-20 flex flex-wrap items-center justify-end gap-3 md:bottom-10 md:right-12">
+                    {{-- Adjust 'gender' parameter to match your controller filter --}}
+                    <a href="{{ route('shop', ['gender' => 'men']) }}"
+                        class="bg-white px-6 py-2 font-condensed text-xs font-bold tracking-wider text-black shadow-md transition hover:bg-gray-100 md:text-sm">Shop
+                        Men's</a>
+                    <a href="{{ route('shop', ['gender' => 'women']) }}"
+                        class="bg-white px-6 py-2 font-condensed text-xs font-bold tracking-wider text-black shadow-md transition hover:bg-gray-100 md:text-sm">Shop
+                        Women's</a>
+                    <a href="{{ route('shop', ['gender' => 'kids']) }}"
+                        class="bg-white px-6 py-2 font-condensed text-xs font-bold tracking-wider text-black shadow-md transition hover:bg-gray-100 md:text-sm">Shop
+                        Kids'</a>
+                </div>
+            </div>
+        </section>
+
+        {{-- ============================================================
+        5. LIMITED PAIRS + COUNTDOWN
+        ============================================================ --}}
+        <section class="bg-[#2A2E33] py-8 text-white" aria-labelledby="limited-heading">
+            <div class="mx-auto max-w-7xl px-4 lg:px-8">
+
+                {{-- Header + countdown --}}
+                <div class="mb-6 flex flex-wrap items-center justify-between gap-2 border-b border-gray-700 pb-2">
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        <h2 id="limited-heading"
+                            class="text-2xl font-condensed font-extrabold tracking-wide text-[#FF5000] md:text-3xl">
+                            Limited Pairs Only
+                        </h2>
+                        <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-300" data-countdown
+                            role="timer" aria-label="Time remaining">
+                            <span>Ends in</span>
+                            <span class="rounded bg-red-600 px-2 py-0.5 font-bold text-white tabular-nums"
+                                data-h>20</span>
+                            <span aria-hidden="true">:</span>
+                            <span class="rounded bg-red-600 px-2 py-0.5 font-bold text-white tabular-nums"
+                                data-m>01</span>
+                            <span aria-hidden="true">:</span>
+                            <span class="rounded bg-red-600 px-2 py-0.5 font-bold text-white tabular-nums"
+                                data-s>41</span>
+                        </div>
+                    </div>
+                    <a href="{{ route('shop') }}"
+                        class="text-xs font-semibold text-gray-300 underline hover:text-white">View all</a>
+                </div>
+
+                {{-- Produk + banner FINAL CALL --}}
+                <div class="grid grid-cols-2 gap-3 md:grid-cols-6">
+                    <div
+                        class="col-span-2 flex flex-col items-center justify-center border border-gray-700 bg-gradient-to-b from-[#2E3339] to-[#1E2125] p-4 text-center md:col-span-1">
+                        <h3 class="font-impact text-3xl leading-none tracking-wider text-white md:text-4xl">
+                            FINAL<br><span class="text-gray-400">CALL</span>
+                        </h3>
+                        <p class="mt-2 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Special
+                            Pricing</p>
+                    </div>
+
+                    @foreach ($limitedPairsList as $product)
+                        <x-product-card :product="$product" show-stock />
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        {{-- ============================================================
+        6. SHOP THE OFFERS
+        ============================================================ --}}
+        <section class="bg-[#F25C19] py-8 text-white" aria-labelledby="offers-heading">
+            <div class="mx-auto max-w-7xl px-4 lg:px-8">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 id="offers-heading" class="text-2xl font-condensed font-black tracking-wide md:text-3xl">Shop
+                        The Offers</h2>
+                    <a href="{{ route('shop') }}"
+                        class="text-xs font-bold uppercase tracking-wider hover:underline">Shop All</a>
+                </div>
+
+                {{-- Tile diskon per merek --}}
+                <div class="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+                    @foreach ($brandOffers as $offer)
+                        {{-- Adjust 'brand' parameter to match your controller filter --}}
+                        <a href="{{ route('shop', ['brand' => $offer['slug']]) }}"
+                            class="flex aspect-[4/3] items-center justify-center rounded-sm border border-gray-600 bg-[#3b434a] p-4 text-center transition hover:scale-[1.02]">
+                            <span>
+                                <span
+                                    class="block font-impact text-2xl tracking-wider text-orange-500 md:text-4xl">{{ $offer['brand'] }}</span>
+                                <span
+                                    class="mt-1 block font-impact text-2xl leading-none tracking-wide text-white md:text-3xl">
+                                    UP TO {{ $offer['discount'] }}% OFF
+                                </span>
+                            </span>
+                        </a>
+                    @endforeach
+                </div>
+
+                {{-- Banner New Balance 530 --}}
+                <div class="flex flex-wrap items-center justify-between gap-4 rounded bg-white p-4 text-black">
+                    <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+                        <span class="font-impact text-xl tracking-wider">JD EXCLUSIVE</span>
+                        <h3 class="font-impact text-2xl tracking-tight md:text-3xl">NEW BALANCE 530</h3>
+                    </div>
+                    <a href="{{ route('shop') }}"
+                        class="bg-black px-6 py-2 font-condensed text-xs font-bold tracking-wider text-white transition hover:bg-gray-800">
+                        Shop Now
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        {{-- ============================================================
+        7. SHOP BY CATEGORY
+        ============================================================ --}}
+        <section class="bg-[#F25C19] pb-12 pt-4 text-white" aria-labelledby="categories-heading">
+            <div class="mx-auto max-w-7xl px-4 lg:px-8">
+                <h2 id="categories-heading" class="mb-6 text-2xl font-condensed font-black tracking-wide md:text-3xl">
+                    Shop by Category
+                </h2>
+
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                    @foreach ($categoriesList as $category)
+                        @php
+                            $categoryUrl = isset($category->id)
+                                ? route('shop.category', $category->slug)
+                                : route('shop');
+                        @endphp
+                        <div class="flex flex-col">
+                            <a href="{{ $categoryUrl }}" class="group block">
+                                <div class="relative aspect-[3/4] w-full overflow-hidden rounded shadow-lg">
+                                    <img src="{{ $category->image_url }}" alt="Category {{ $category->name }}" loading="lazy"
+                                        class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105">
+                                    <div
+                                        class="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/80 via-transparent to-transparent pb-8">
+                                        <h3 class="font-impact text-3xl tracking-wider text-white md:text-4xl">
+                                            SHOP {{ strtoupper($category->name) }}
+                                        </h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        {{-- ============================================================
+        8. OUR TOP PICKS
+        ============================================================ --}}
+        <section class="bg-[#F25C19] pb-10 text-white" aria-labelledby="top-picks-heading">
+            <div class="mx-auto max-w-7xl px-4 lg:px-8">
+                <h2 id="top-picks-heading" class="mb-4 text-2xl font-condensed font-black tracking-wide md:text-3xl">
+                    Our Top Picks
+                </h2>
+
+                {{-- Category tabs (functional links, adjust the parameters) --}}
+                <div class="mb-6 flex flex-wrap items-center gap-2">
+                    <a href="{{ route('shop', ['gender' => 'men']) }}"
+                        class="rounded-sm bg-black px-4 py-2 text-xs font-bold text-white transition hover:bg-gray-900">Shop
+                        Men's</a>
+                    <a href="{{ route('shop', ['gender' => 'women']) }}"
+                        class="rounded-sm border border-white/50 px-4 py-2 text-xs font-bold text-white transition hover:bg-white/10">Shop
+                        Women's</a>
+                    <a href="{{ route('shop', ['gender' => 'kids']) }}"
+                        class="rounded-sm border border-white/50 px-4 py-2 text-xs font-bold text-white transition hover:bg-white/10">Shop
+                        Kids'</a>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+                    @foreach ($topPicksList as $product)
+                        <x-product-card :product="$product" />
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        {{-- ============================================================
+        9. SEASONAL SPOTLIGHT BANNERS
+        ============================================================ --}}
+        <section class="bg-black py-4" aria-label="Seasonal promotions">
+            <div class="mx-auto max-w-7xl space-y-4 px-4 lg:px-8">
+
+                {{-- Promo tas adidas --}}
+                <div class="flex flex-wrap items-center justify-between gap-4 rounded bg-[#1C3545] p-4 text-white">
+                    <div class="flex items-center gap-4">
+                        <span class="text-2xl font-bold leading-none"><span class="text-white/70">///</span> JD</span>
+                        <h3 class="font-condensed text-lg font-bold tracking-wider md:text-xl">
+                            Complimentary adidas Adicolor Classic Bag
+                        </h3>
+                    </div>
+                    <a href="{{ route('shop') }}"
+                        class="bg-white px-6 py-1.5 font-condensed text-xs font-bold tracking-wider text-black transition hover:bg-gray-100">
+                        Shop Now
+                    </a>
+                </div>
+
+                {{-- Banner Salomon --}}
+                <a href="{{ route('shop') }}" class="block overflow-hidden rounded">
+                    <img src="{{ asset('storage/images/jd-sports/banner-salomon.jpg') }}"
+                        alt="Salomon for urban expeditions" loading="lazy"
+                        class="h-auto w-full object-cover transition duration-500 hover:scale-[1.02]">
+                </a>
+
+                {{-- Dua promo produk --}}
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    @foreach ([
+                            ['title' => 'Asics Gel-Kayano 14', 'image' => 'product-asics-kayano.jpg'],
+                            ['title' => 'adidas Originals by JENNIE', 'image' => 'product-adidas-jennie.jpg'],
+                        ] as $promo)
+                        <a href="{{ route('shop') }}" class="group overflow-hidden rounded bg-gray-900">
+                            <img src="{{ asset('storage/images/jd-sports/' . $promo['image']) }}"
+                                alt="{{ $promo['title'] }}" loading="lazy"
+                                class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105">
+                            <div class="flex items-center justify-between bg-black p-3 text-white">
+                                <span class="text-xs font-bold uppercase tracking-wider">{{ $promo['title'] }}</span>
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" />
+                                </svg>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        {{-- ============================================================
+        10. THE BRANDS YOU LOVE
+        ============================================================ --}}
+        <section class="bg-[#F25C19] py-8 text-white" aria-labelledby="brands-heading">
+            <div class="mx-auto max-w-7xl px-4 lg:px-8">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 id="brands-heading" class="text-2xl font-condensed font-black tracking-wide md:text-3xl">
+                        The Brands You Love
+                    </h2>
+                    <a href="{{ route('shop') }}"
+                        class="text-xs font-bold uppercase tracking-wider hover:underline">View All</a>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+                    @foreach ($featuredBrands as $brand)
+                        {{-- Adjust 'brand' parameter to match your controller filter --}}
+                        <a href="{{ route('shop', ['brand' => $brand['slug']]) }}" class="group block">
+                            <div class="relative aspect-square w-full overflow-hidden rounded shadow">
+                                <img src="{{ asset('storage/images/jd-sports/' . $brand['image']) }}"
+                                    alt="{{ $brand['name'] }} Collection" loading="lazy"
+                                    class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
+                                <div
+                                    class="absolute bottom-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-sm">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        aria-hidden="true">
+                                        <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3 class="mt-2 text-xs font-bold uppercase tracking-wider">{{ $brand['name'] }}</h3>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        {{-- ============================================================
+        11. DISCOVER JD STYLE (EDITORIAL)
+        ============================================================ --}}
+        <section class="bg-[#F25C19] pb-12 text-white" aria-labelledby="editorial-heading">
+            <div class="mx-auto max-w-7xl px-4 lg:px-8">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 id="editorial-heading" class="text-2xl font-condensed font-black tracking-wide md:text-3xl">
+                        Discover JD Style
+                    </h2>
+                    <a href="#" class="text-xs font-bold uppercase tracking-wider hover:underline">View All</a>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+                    @foreach ($articlesList as $article)
+                        @php
+                            // Adjust attribute names (image/permalink) to match your data structure
+                            $articleImage = $article->image_url
+                                ?? ($article->image ?: null)
+                                ?? asset('storage/images/jd-sports/article-1.jpg');
+                            $articleUrl = $article->permalink ?? '#';
+                        @endphp
+                        <article class="flex flex-col justify-between overflow-hidden rounded bg-white text-black shadow">
+                            <a href="{{ $articleUrl }}" class="block aspect-square w-full overflow-hidden">
+                                <img src="{{ $articleImage }}" alt="{{ $article->title }}" loading="lazy"
+                                    class="h-full w-full object-cover transition duration-300 hover:scale-105">
+                            </a>
+                            <div class="p-3">
+                                <h3 class="text-xs font-bold leading-snug line-clamp-2">{{ $article->title }}</h3>
+                                <p class="mt-1.5 text-[11px] leading-relaxed text-gray-600 line-clamp-3">
+                                    {{ $article->excerpt }}</p>
+                                <a href="{{ $articleUrl }}"
+                                    class="mt-2 inline-flex items-center gap-1 text-[11px] font-bold uppercase hover:underline">
+                                    Read More <span aria-hidden="true">&rarr;</span>
+                                </a>
+                            </div>
+                        </article>
+                    @endforeach
+
+                    {{-- Kartu spesial (gradient) melengkapi grid bila artikel < 4 --}} @if ($articlesList->count() < 4)
+                        <a href="#"
+                            class="flex aspect-square items-center justify-center rounded bg-gradient-to-br from-red-600 to-indigo-900 p-4 text-center shadow transition hover:scale-[1.02]">
+                            <div class="text-white">
+                                <span class="block font-impact text-xl tracking-wider md:text-2xl">SPECIAL</span>
+                                <span class="mt-1 block font-impact text-2xl tracking-wide md:text-3xl">WORLD CUP FINAL
+                                    </span>
+                                <span
+                                    class="mt-3 block text-[11px] font-semibold uppercase tracking-widest text-white/80">
+                                    Read Full Editorial &rarr;
+                                </span>
+                            </div>
+                        </a>
+                    @endif
+                </div>
+            </div>
+        </section>
+
+        {{-- ============================================================
+        12. NEWSLETTER
+        ============================================================ --}}
+        <section class="bg-black py-12 text-white" aria-labelledby="newsletter-heading">
+            <div class="mx-auto max-w-7xl px-4 lg:px-8">
+                <div class="flex flex-col items-center text-center">
+                    <h2 id="newsletter-heading" class="text-2xl font-condensed font-black tracking-wide md:text-3xl">
+                        Get Release Info &amp; Exclusive Promos
+                    </h2>
+                    <p class="mt-2 max-w-xl text-sm text-gray-400">
+                        Sign up for the JD Sports newsletter and be the first to know about the latest sneakers,
+                        collaborations, and big sales.
+                    </p>
+
+                    {{-- Replace action with your newsletter route, e.g., route('newsletter.subscribe') --}}
+                    <form action="#" method="POST" class="mt-6 flex w-full max-w-md gap-2">
+                        @csrf
+                        <label for="newsletter-email" class="sr-only">Email address</label>
+                        <input id="newsletter-email" type="email" name="email" required
+                            class="flex-1 rounded-full border border-white/20 bg-white/10 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-jd-yellow focus:outline-none"
+                            placeholder="Your email address">
+                        <button type="submit"
+                            class="rounded-full bg-jd-yellow px-6 py-2.5 font-condensed text-xs font-bold tracking-wider text-black transition hover:bg-yellow-300">
+                            Sign Up
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    {{-- ============================================================
+    13. FOOTER
+    ============================================================ --}}
+    <footer class="bg-jd-dark text-gray-300">
+        <div class="mx-auto max-w-7xl px-4 py-12 lg:px-8">
+            <div class="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
+
+                {{-- Brand --}}
+                <div class="col-span-2 md:col-span-1 lg:col-span-2">
+                    <a href="{{ route('home') }}" class="inline-block" aria-label="JD Sports — Home">
+                        {{-- Adjust to match your white logo version --}}
+                        <img src="{{ asset('storage/images/sample/logo-white.png') }}" alt="JD Sports"
+                            class="h-8 w-auto" onerror="this.style.display='none'">
+                    </a>
+                    <p class="mt-4 max-w-xs text-xs leading-relaxed text-gray-400">
+                        JD Sports — your premier destination for original sneakers and streetwear
+                        from the world's biggest brands.
+                    </p>
+
+                    {{-- Social media --}}
+                    <div class="mt-4 flex items-center gap-3">
+                        <a href="#" class="text-gray-400 transition hover:text-white" aria-label="Instagram">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <rect x="3" y="3" width="18" height="18" rx="5" stroke-width="2" />
+                                <circle cx="12" cy="12" r="4" stroke-width="2" />
+                                <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 transition hover:text-white" aria-label="Facebook">
+                            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M14 8h2.5V5H14a4 4 0 00-4 4v2H7.5v3H10v7h3v-7h2.5l.5-3H13V9a1 1 0 011-1z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 transition hover:text-white" aria-label="X">
+                            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L2.8 2h6.4l4.4 5.9L18.9 2z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 transition hover:text-white" aria-label="YouTube">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <rect x="2" y="5" width="20" height="14" rx="4" stroke-width="2" />
+                                <path d="M10 9l6 3-6 3V9z" fill="currentColor" stroke="none" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Help --}}
+                <nav aria-label="Help">
+                    <h3 class="font-condensed text-xs font-bold uppercase tracking-wider text-white">Help</h3>
+                    <ul class="mt-3 space-y-2 text-xs">
+                        <li><a href="#" class="hover:text-white">Track Order</a></li>
+                        <li><a href="#" class="hover:text-white">Delivery</a></li>
+                        <li><a href="#" class="hover:text-white">Returns &amp; Refund</a></li>
+                        <li><a href="#" class="hover:text-white">Size Guide</a></li>
+                        <li><a href="{{ route('contact') }}" class="hover:text-white">Contact Us</a></li>
+                    </ul>
+                </nav>
+
+                {{-- About --}}
+                <nav aria-label="About JD">
+                    <h3 class="font-condensed text-xs font-bold uppercase tracking-wider text-white">About JD</h3>
+                    <ul class="mt-3 space-y-2 text-xs">
+                        <li><a href="{{ route('about') }}" class="hover:text-white">About Us</a></li>
+                        <li><a href="#" class="hover:text-white">Careers</a></li>
+                        <li><a href="#" class="hover:text-white">Store Locator</a></li>
+                        <li><a href="#" class="hover:text-white">Loyalty Program</a></li>
+                    </ul>
+                </nav>
+
+                {{-- Shop --}}
+                <nav aria-label="Shop">
+                    <h3 class="font-condensed text-xs font-bold uppercase tracking-wider text-white">Shop</h3>
+                    <ul class="mt-3 space-y-2 text-xs">
+                        <li><a href="{{ route('shop', ['gender' => 'men']) }}" class="hover:text-white">Men</a></li>
+                        <li><a href="{{ route('shop', ['gender' => 'women']) }}" class="hover:text-white">Women</a>
+                        </li>
+                        <li><a href="{{ route('shop', ['gender' => 'kids']) }}" class="hover:text-white">Kids</a></li>
+                        <li><a href="{{ route('shop') }}" class="hover:text-white">All Products</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            {{-- Payment methods --}}
+            <div class="mt-10 flex flex-wrap items-center gap-2 border-t border-white/10 pt-6">
+                <span class="mr-2 text-[10px] font-semibold uppercase tracking-wider text-gray-500">Payment
+                    Methods</span>
+                @foreach (['Visa', 'Mastercard', 'Apple Pay', 'Google Pay', 'PayPal', 'American Express'] as $payment)
+                    <span
+                        class="rounded border border-white/10 px-2.5 py-1 text-[10px] font-semibold text-gray-400">{{ $payment }}</span>
+                @endforeach
+            </div>
+
+            {{-- Bottom bar --}}
+            <div
+                class="mt-6 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-[11px] text-gray-500 sm:flex-row">
+                <p>&copy; {{ date('Y') }} JD Sports. All rights reserved.</p>
+                <div class="flex items-center gap-4">
+                    <a href="#" class="hover:text-gray-300">Terms &amp; Conditions</a>
+                    <a href="#" class="hover:text-gray-300">Privacy Policy</a>
+                </div>
+            </div>
+            </div>
+        </div>
+    </footer>
+
+    {{-- ============================================================
+    14. JAVASCRIPT
+    ============================================================ --}}
     <script>
-        document.querySelectorAll('#collection-filters .filter-pill').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('#collection-filters .filter-pill').forEach(b => {
-                    b.classList.remove('bg-primary', 'text-on-primary', 'active');
-                    b.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+        document.addEventListener('DOMContentLoaded', function () {
+
+            /* =====================================================
+               1. HERO SLIDER
+               ===================================================== */
+            var slides = Array.prototype.slice.call(document.querySelectorAll('.hero-slide'));
+            var dotsBox = document.getElementById('hero-dots');
+            var prevBtn = document.getElementById('hero-prev');
+            var nextBtn = document.getElementById('hero-next');
+
+            if (slides.length > 0 && dotsBox) {
+                var current = 0;
+                var timer = null;
+                var dots = [];
+
+                // Create dot indicators
+                slides.forEach(function (_, i) {
+                    var dot = document.createElement('button');
+                    dot.type = 'button';
+                    dot.className = 'h-2.5 w-2.5 rounded-full bg-white/40 transition-all duration-300';
+                    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+                    dot.addEventListener('click', function () { goTo(i); });
+                    dotsBox.appendChild(dot);
+                    dots.push(dot);
                 });
-                btn.classList.add('bg-primary', 'text-on-primary', 'active');
-                btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
-            });
+
+                function goTo(index) {
+                    // Non-aktifkan slide & titik saat ini
+                    slides[current].classList.remove('opacity-100', 'scale-100', 'z-10');
+                    slides[current].classList.add('opacity-0', 'scale-105');
+                    dots[current].classList.remove('bg-white', 'w-5');
+                    dots[current].classList.add('bg-white/40', 'w-2.5');
+
+                    current = (index + slides.length) % slides.length;
+
+                    // Aktifkan slide & titik baru
+                    slides[current].classList.remove('opacity-0', 'scale-105');
+                    slides[current].classList.add('opacity-100', 'scale-100', 'z-10');
+                    dots[current].classList.remove('bg-white/40', 'w-2.5');
+                    dots[current].classList.add('bg-white', 'w-5');
+
+                    restartAutoplay();
+                }
+
+                function restartAutoplay() {
+                    clearInterval(timer);
+                    if (slides.length > 1) {
+                        timer = setInterval(function () { goTo(current + 1); }, 6000);
+                    }
+                }
+
+                if (slides.length > 1) {
+                    if (prevBtn) prevBtn.addEventListener('click', function () { goTo(current - 1); });
+                    if (nextBtn) nextBtn.addEventListener('click', function () { goTo(current + 1); });
+                    goTo(0);
+                } else {
+                    // Sembunyikan kontrol bila hanya ada 1 slide
+                    if (prevBtn) prevBtn.classList.add('hidden');
+                    if (nextBtn) nextBtn.classList.add('hidden');
+                }
+            }
+
+            /* =====================================================
+               2. COUNTDOWN "LIMITED PAIRS ONLY"
+               ===================================================== */
+            var countdown = document.querySelector('[data-countdown]');
+
+            if (countdown) {
+                // Deadline dalam detik. Idealnya dikirim dari controller
+                // sebagai $flashSaleDeadline agar sinkron dengan server.
+                var remaining = {{ (int) ($flashSaleDeadline ?? 72101) }}; // 20:01:41
+
+                var elH = countdown.querySelector('[data-h]');
+                var elM = countdown.querySelector('[data-m]');
+                var elS = countdown.querySelector('[data-s]');
+
+                function renderCountdown() {
+                    var h = String(Math.floor(remaining / 3600)).padStart(2, '0');
+                    var m = String(Math.floor((remaining % 3600) / 60)).padStart(2, '0');
+                    var s = String(remaining % 60).padStart(2, '0');
+                    if (elH) elH.textContent = h;
+                    if (elM) elM.textContent = m;
+                    if (elS) elS.textContent = s;
+                }
+
+                renderCountdown();
+                setInterval(function () {
+                    if (remaining > 0) {
+                        remaining -= 1;
+                        renderCountdown();
+                    }
+                }, 1000);
+            }
+
+            /* =====================================================
+               3. MENU MOBILE
+               ===================================================== */
+            var menuBtn = document.getElementById('mobile-menu-btn');
+            var mobileMenu = document.getElementById('mobile-menu');
+
+            if (menuBtn && mobileMenu) {
+                menuBtn.addEventListener('click', function () {
+                    var isHidden = mobileMenu.classList.toggle('hidden');
+                    menuBtn.setAttribute('aria-expanded', String(!isHidden));
+                });
+            }
+
+            /* =====================================================
+               4. PENCARIAN MOBILE
+               ===================================================== */
+            var searchBtn = document.getElementById('mobile-search-btn');
+            var mobileSearch = document.getElementById('mobile-search');
+
+            if (searchBtn && mobileSearch) {
+                searchBtn.addEventListener('click', function () {
+                    var isHidden = mobileSearch.classList.toggle('hidden');
+                    searchBtn.setAttribute('aria-expanded', String(!isHidden));
+                    if (!isHidden) {
+                        var input = mobileSearch.querySelector('input');
+                        if (input) input.focus();
+                    }
+                });
+            }
         });
     </script>
-@endsection
+
+</body>
+
+</html
