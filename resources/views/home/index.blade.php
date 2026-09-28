@@ -310,7 +310,7 @@
                         data-index="{{ $index }}" aria-hidden="{{ $index === 0 ? 'false' : 'true' }}"
                         data-link="{{ $slider->link ?? '#' }}" data-link-text="{{ $slider->link_text ?? 'Shop Now' }}">
                         <picture>
-                            <source media="(max-width: 768px)" srcset="{{ $slider->image_mobile_url }}">
+                            <source media="(max-width: 768px)" src="{{ $slider->image_mobile_url }}">
                             <img src="{{ $slider->image_url }}" alt="{{ $slider->title ?? 'Featured promotion' }}"
                                 class="h-full w-full object-cover object-center">
                         </picture>
@@ -371,7 +371,6 @@
         ============================================================ --}}
         <section class="bg-[#2A2E33] py-8 text-white" aria-labelledby="limited-heading">
             <div class="mx-auto max-w-7xl px-4 lg:px-8">
-
                 {{-- Header + countdown --}}
                 <div class="mb-6 flex flex-wrap items-center justify-between gap-2 border-b border-gray-700 pb-2">
                     <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -401,16 +400,16 @@
                     <a href="{{ route('shop') }}"
                         class="text-xs font-semibold text-gray-300 underline hover:text-white">View all</a>
                 </div>
+            </div>
 
-                {{-- Produk + banner FINAL CALL --}}
-                <div class="flash-sale-scroll-wrapper">
-                    <div class="flash-sale-scroll flex gap-3 overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-6 md:overflow-x-visible">
-                        @foreach ($limitedPairsList as $product)
-                            <div class="flash-sale-scroll-item shrink-0 w-[55%] snap-start md:w-auto">
-                                <x-product-card :product="$product" />
-                            </div>
-                        @endforeach
-                    </div>
+            {{-- Produk + banner FINAL CALL --}}
+            <div class="flash-sale-scroll-wrapper px-4 md:px-8 lg:px-8">
+                <div class="flash-sale-scroll flex gap-3 overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-6 md:overflow-x-visible">
+                    @foreach ($limitedPairsList as $product)
+                        <div class="flash-sale-scroll-item shrink-0 w-[55%] snap-start md:w-auto">
+                            <x-product-card :product="$product" />
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </section>
@@ -766,7 +765,7 @@
                 if (slides.length > 1) {
                     if (prevBtn) prevBtn.addEventListener('click', function () { goTo(current - 1); });
                     if (nextBtn) nextBtn.addEventListener('click', function () { goTo(current + 1); });
-                    goTo(0);
+                    updateCta();
                 } else {
                     // Sembunyikan kontrol bila hanya ada 1 slide
                     if (prevBtn) prevBtn.classList.add('hidden');

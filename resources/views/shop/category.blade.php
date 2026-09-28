@@ -1,10 +1,17 @@
-@extends("layouts.app")
+@extends("layouts.home")
 
 @section("title")
 {{ $category->name }} - {{ config('app.name', 'Upsilon') }}
 @endsection
 
+@section("description")
+{{ $category->name }} collection at Upsilon Store. Browse products in the {{ $category->name }} category.
+@endsection
+
 @section("content")
+    @include('components.site-header')
+
+    <main id="main-content">
 <section class="py-12 px-6 md:px-12 lg:px-24 bg-surface border-b border-outline-variant/40">
             <div class="max-w-7xl mx-auto">
                 <nav class="text-sm text-on-surface-variant mb-4">
@@ -44,4 +51,5 @@
                 </div>
             </div>
         </section>
+    </main>
 @endsection

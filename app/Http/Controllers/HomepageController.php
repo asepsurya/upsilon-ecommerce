@@ -62,7 +62,7 @@ class HomepageController extends Controller
 
         $limitedPairsList = $flashSaleProducts->isNotEmpty()
             ? $flashSaleProducts
-            : $featuredProducts->take(5);
+            : $featuredProducts->take(6);
 
         $topPicksList = $newArrivals->isNotEmpty()
             ? $newArrivals->take(8)
