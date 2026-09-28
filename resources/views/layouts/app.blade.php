@@ -5,18 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? 'Upsilon' }}</title>
-    <meta name="description" content="{{ $description ?? 'Upsilon - Modern fashion e-commerce' }}">
-    <meta name="robots" content="{{ $robots ?? 'index, follow' }}">
+    <title>@yield('title', 'Upsilon')</title>
+    <meta name="description" content="@yield('description', 'Upsilon - Modern fashion e-commerce')">
+    <meta name="robots" content="@yield('robots', 'index, follow')">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="{{ $title ?? 'Upsilon' }}">
-    <meta property="og:description" content="{{ $description ?? 'Upsilon - Modern fashion e-commerce' }}">
-    <meta property="og:type" content="{{ $ogType ?? 'website' }}">
-    <meta property="og:url" content="{{ $ogUrl ?? url()->current() }}">
+    <meta property="og:title" content="@yield('title', 'Upsilon')">
+    <meta property="og:description" content="@yield('description', 'Upsilon - Modern fashion e-commerce')">
+    <meta property="og:type" content="@yield('ogType', 'website')">
+    <meta property="og:url" content="@yield('ogUrl', url()->current())">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <style>
         .border-t {
             border-top: 1px solid #383838
@@ -76,7 +76,7 @@
     @stack('meta')
 </head>
 
-<body class="min-h-full bg-surface text-tertiary font-body-md antialiased">
+<body class="@yield('bodyClass', 'min-h-full bg-surface text-tertiary font-body-md antialiased')">
     <!-- Skip to content -->
     <a href="#main-content"
         class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-surface-container-lowest focus:text-tertiary focus:rounded-md focus:outline-none">
@@ -103,7 +103,7 @@
         </svg>
     </button>
 
-    @include('components.whatsapp-chat')
+  
 
     @stack('scripts')
 </body>

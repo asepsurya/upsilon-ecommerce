@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductView;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 
@@ -23,29 +24,26 @@ class ProductController extends Controller
             'variants.size',
             'variants.color',
             'reviews' => function ($q) {
-                $q->approved()->with(['user', 'images'])->latest();
+                $q->approved()->with(['user', 'images', 'replies.user'])->latest();
             },
+            'labels',
         ]);
 
         $related = Product::active()
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->with(['images' => function ($q) {
-                $q->orderBy('sort_order')->limit(1);
+                $q->orderBy('sort_order');
             }])
             ->limit(4)
             ->get();
 
+        $this->recordProductView($product);
+
         $recentlyViewed = $this->getRecentlyViewed($product);
 
-        $reviewStats = [
-            'average' => $product->reviews->avg('rating'),
-            'count' => $product->reviews->count(),
-            'distribution' => $product->reviews->groupBy('rating')->map->count(),
-        ];
-
         return view('product.show', compact(
-            'product', 'related', 'recentlyViewed', 'reviewStats'
+            'product', 'related', 'recentlyViewed'
         ));
     }
 
@@ -89,9 +87,20 @@ class ProductController extends Controller
             ->whereIn('id', $ids)
             ->where('id', '!=', $current->id)
             ->with(['images' => function ($q) {
-                $q->orderBy('sort_order')->limit(1);
+                $q->orderBy('sort_order');
             }])
             ->limit(4)
             ->get();
+    }
+
+    public function recordProductView(Product $product): void
+    {
+        ProductView::create([
+            'product_id' => $product->id,
+            'user_id' => auth()->id(),
+            'session_id' => session()->getId(),
+            'ip_address' => request()->ip(),
+            'viewed_at' => now(),
+        ]);
     }
 }

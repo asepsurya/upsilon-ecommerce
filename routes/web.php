@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\FlashSaleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\Auth\PasswordResetController;
@@ -17,6 +18,8 @@ use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomepageController::class, 'index'])->name('home');
+
+Route::get('/bundles', [HomepageController::class, 'bundles'])->name('bundles');
 
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/shop/{category:slug}', [ShopController::class, 'category'])->name('shop.category');
@@ -44,6 +47,7 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/about', [HomepageController::class, 'about'])->name('about');
+Route::get('/discover-upsilon-style', [HomepageController::class, 'discoverUpsilonStyle'])->name('discover-upsilon-style');
 
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
@@ -132,6 +136,8 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/reviews', [AdminController::class, 'reviews'])->name('admin.reviews.index');
     Route::patch('/reviews/{review}', [AdminController::class, 'updateReview'])->name('admin.reviews.update');
     Route::delete('/reviews/{review}', [AdminController::class, 'deleteReview'])->name('admin.reviews.destroy');
+    Route::post('/reviews/{review}/replies', [AdminController::class, 'storeReviewReply'])->name('admin.reviews.replies.store');
+    Route::delete('/reviews/{review}/replies/{reply}', [AdminController::class, 'destroyReviewReply'])->name('admin.reviews.replies.destroy');
 
     // Bundles
     Route::get('/bundles', [AdminController::class, 'bundles'])->name('admin.bundles.index');
@@ -158,4 +164,34 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::put('/sliders/{slider}', [AdminController::class, 'updateSlider'])->name('admin.sliders.update');
     Route::delete('/sliders/{slider}', [AdminController::class, 'deleteSlider'])->name('admin.sliders.destroy');
     Route::post('/sliders/{slider}/toggle', [AdminController::class, 'toggleSlider'])->name('admin.sliders.toggle');
+
+    // Labels
+    Route::get('/labels', [AdminController::class, 'labels'])->name('admin.labels.index');
+    Route::get('/labels/create', [AdminController::class, 'createLabel'])->name('admin.labels.create');
+    Route::post('/labels', [AdminController::class, 'storeLabel'])->name('admin.labels.store');
+    Route::get('/labels/{label}/edit', [AdminController::class, 'editLabel'])->name('admin.labels.edit');
+    Route::put('/labels/{label}', [AdminController::class, 'updateLabel'])->name('admin.labels.update');
+    Route::delete('/labels/{label}', [AdminController::class, 'deleteLabel'])->name('admin.labels.destroy');
+    Route::post('/labels/{label}/toggle', [AdminController::class, 'toggleLabel'])->name('admin.labels.toggle');
+
+    // Promo Banners
+    Route::get('/promo-banners', [AdminController::class, 'promoBanners'])->name('admin.promo-banners.index');
+    Route::get('/promo-banners/create', [AdminController::class, 'createPromoBanner'])->name('admin.promo-banners.create');
+    Route::post('/promo-banners', [AdminController::class, 'storePromoBanner'])->name('admin.promo-banners.store');
+    Route::get('/promo-banners/{promoBanner}/edit', [AdminController::class, 'editPromoBanner'])->name('admin.promo-banners.edit');
+    Route::put('/promo-banners/{promoBanner}', [AdminController::class, 'updatePromoBanner'])->name('admin.promo-banners.update');
+    Route::delete('/promo-banners/{promoBanner}', [AdminController::class, 'deletePromoBanner'])->name('admin.promo-banners.destroy');
+    Route::post('/promo-banners/{promoBanner}/toggle', [AdminController::class, 'togglePromoBanner'])->name('admin.promo-banners.toggle');
+
+    // Flash Sales
+    Route::get('/flash-sales', [FlashSaleController::class, 'index'])->name('admin.flash-sales.index');
+    Route::get('/flash-sales/create', [FlashSaleController::class, 'create'])->name('admin.flash-sales.create');
+    Route::post('/flash-sales', [FlashSaleController::class, 'store'])->name('admin.flash-sales.store');
+    Route::get('/flash-sales/{flashSale}/edit', [FlashSaleController::class, 'edit'])->name('admin.flash-sales.edit');
+    Route::put('/flash-sales/{flashSale}', [FlashSaleController::class, 'update'])->name('admin.flash-sales.update');
+    Route::delete('/flash-sales/{flashSale}', [FlashSaleController::class, 'destroy'])->name('admin.flash-sales.destroy');
+
+    // Settings
+    Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings.index');
+    Route::post('/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
 });

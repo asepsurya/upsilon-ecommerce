@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Products - Admin')
+@section('title', 'Products | Upsilon')
 
 @section('page-title', 'Products')
 

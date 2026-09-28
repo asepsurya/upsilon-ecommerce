@@ -14,6 +14,13 @@ export default {
             colors: {
                 border: 'hsl(var(--border))',
                 foreground: 'hsl(var(--foreground))',
+                brand: {
+                    yellow: '#ffe500',
+                    red: '#e52d2d',
+                    dark: '#121212',
+                    greybg: '#f8f8f8',
+                    border: '#e2e2e2',
+                },
                 card: {
                     DEFAULT: 'hsl(var(--card))',
                     foreground: 'hsl(var(--card-foreground))',

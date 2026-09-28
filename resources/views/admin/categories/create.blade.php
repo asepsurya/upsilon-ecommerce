@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Create Category - Admin')
+@section('title', 'Create Category | Upsilon')
 
 @section('page-title', 'Create Category')
 

@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Admin')</title>
+    <title>@yield('title', 'Upsilon | Admin')</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
@@ -173,6 +174,11 @@
             flex: 1;
             overflow-y: auto;
             padding: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .admin-sidebar-nav::-webkit-scrollbar {
+            display: none;
         }
         .admin-sidebar-nav-group {
             margin-bottom: 16px;
@@ -355,6 +361,24 @@
         }
         .admin-stat-change.negative {
             color: #dc2626;
+        }
+        .dark-card {
+            background: #0a0a0a;
+            color: #fafafa;
+            border-color: #0a0a0a;
+        }
+        .dark-card .admin-stat-icon {
+            background: #262626 !important;
+            color: #fafafa !important;
+        }
+        .dark-card .admin-stat-label {
+            color: #a3a3a3;
+        }
+        .dark-card .admin-stat-value {
+            color: #fafafa;
+        }
+        .dark-card .admin-stat-change.positive {
+            color: #4ade80;
         }
 
         .admin-table {
@@ -731,21 +755,6 @@
                     </div>
                 </div>
                 <div class="admin-header-right" style="gap: 8px;">
-                    <button id="theme-toggle" class="admin-btn admin-btn-secondary" style="padding: 8px; width: 40px;" aria-label="Toggle dark mode">
-                        <span class="material-symbols-outlined text-lg" id="theme-icon">light_mode</span>
-                    </button>
-
-                    <div class="admin-dropdown">
-                        <button type="button" id="lang-toggle" class="admin-btn admin-btn-secondary" style="padding: 8px; width: 40px;" aria-label="Language">
-                            <span class="material-symbols-outlined text-lg">language</span>
-                        </button>
-                        <div id="lang-dropdown" class="admin-dropdown-menu hidden">
-                            <a href="#" class="admin-dropdown-item active">English</a>
-                            <a href="#" class="admin-dropdown-item">Bahasa Indonesia</a>
-                            <a href="#" class="admin-dropdown-item">Français</a>
-                        </div>
-                    </div>
-
                     @php
                         $user = auth()->user();
                         $initials = '';
@@ -854,30 +863,10 @@
     </div>
 
      @stack('scripts')
-     @include('components.whatsapp-chat')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const html = document.getElementById('html-document');
-            const themeIcon = document.getElementById('theme-icon');
-            const themeToggle = document.getElementById('theme-toggle');
-            const currentTheme = localStorage.getItem('theme');
-            if (currentTheme === 'light') {
-                html.classList.remove('dark');
-                themeIcon.textContent = 'dark_mode';
-            } else {
-                html.classList.add('dark');
-                themeIcon.textContent = 'light_mode';
-            }
-            themeToggle.addEventListener('click', function() {
-                html.classList.toggle('dark');
-                if (html.classList.contains('dark')) {
-                    localStorage.setItem('theme', 'dark');
-                    themeIcon.textContent = 'light_mode';
-                } else {
-                    localStorage.setItem('theme', 'light');
-                    themeIcon.textContent = 'dark_mode';
-                }
-            });
+            html.classList.add('dark');
 
             function setupDropdown(toggleId, dropdownId) {
                 const toggle = document.getElementById(toggleId);
@@ -893,7 +882,6 @@
                     }
                 });
             }
-            setupDropdown('lang-toggle', 'lang-dropdown');
             setupDropdown('user-toggle', 'user-dropdown');
 
             // Auto-generate slug for all forms that have a slug field

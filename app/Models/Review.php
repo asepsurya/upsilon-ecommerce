@@ -43,6 +43,16 @@ class Review extends Model
         return $this->hasMany(ReviewImage::class);
     }
 
+    public function replies(): HasMany
+    {
+        return $this->hasMany(ReviewReply::class);
+    }
+
+    public function latestReply(): HasMany
+    {
+        return $this->hasOne(ReviewReply::class)->latest();
+    }
+
     public function scopeApproved(Builder $query): Builder
     {
         return $query->where('is_approved', true);
@@ -60,8 +70,13 @@ class Review extends Model
 
     public function getAverageRatingAttribute(): float
     {
-        return (float) $this->product()
-            ->reviews()
+        $product = $this->product()->getResults();
+
+        if (! $product) {
+            return 0.0;
+        }
+
+        return (float) $product->reviews()
             ->approved()
             ->avg('rating');
     }

@@ -22,6 +22,20 @@ class ReviewController extends Controller
         $review->is_verified_purchase = false;
         $review->save();
 
+        $this->updateProductRating($product);
+
         return back()->with('success', 'Thank you for your review! It will be published after moderation.');
+    }
+
+    protected function updateProductRating(Product $product): void
+    {
+        $stats = $product->reviews()
+            ->selectRaw('AVG(rating) as average_rating, COUNT(*) as review_count')
+            ->first();
+
+        $product->update([
+            'average_rating' => (float) ($stats->average_rating ?? 0),
+            'review_count' => (int) ($stats->review_count ?? 0),
+        ]);
     }
 }

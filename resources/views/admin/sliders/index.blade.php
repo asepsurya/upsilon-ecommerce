@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Sliders - Admin')
+@section('title', 'Sliders | Upsilon')
 
 @section('page-title', 'Sliders')
 
@@ -26,7 +26,8 @@
             <thead>
                 <tr>
                     <th style="width: 60px;">#</th>
-                    <th>Image Preview</th>
+                    <th>Desktop Image</th>
+                    <th>Mobile Image</th>
                     <th>Heading</th>
                     <th>Title</th>
                     <th>Link</th>
@@ -40,12 +41,29 @@
                     <tr>
                         <td>{{ $slider->sort_order }}</td>
                         <td>
-                            @if($slider->image)
-                                <img src="{{ $slider->image_url }}" alt="{{ $slider->heading ?? 'Slider' }}"
-                                    class="w-16 h-10 object-cover rounded border border-outline">
-                            @else
-                                <span class="text-muted">No image</span>
-                            @endif
+                            <div class="flex flex-col gap-2">
+                                <div>
+                                    <span class="text-[10px] font-semibold text-muted uppercase">Desktop</span>
+                                    @if($slider->image)
+                                        <img src="{{ $slider->image_url }}" alt="{{ $slider->heading ?? 'Slider' }}"
+                                            class="w-24 h-14 object-cover rounded border border-outline mt-1">
+                                    @else
+                                        <span class="text-muted text-xs">No image</span>
+                                    @endif
+                                </div>
+                              
+                            </div>
+                        </td>
+                        <td>
+                              <div>
+                                    <span class="text-[10px] font-semibold text-muted uppercase">Mobile</span>
+                                    @if($slider->image_mobile)
+                                        <img src="{{ $slider->image_mobile_url }}" alt="{{ $slider->heading ?? 'Slider Mobile' }}"
+                                            class="w-16 h-10 object-cover rounded border border-outline mt-1">
+                                    @else
+                                        <span class="text-muted text-xs">Same as desktop</span>
+                                    @endif
+                                </div>
                         </td>
                         <td class="font-medium">{{ $slider->heading ?? '&mdash;' }}</td>
                         <td class="max-w-xs truncate">{{ $slider->title ?? '&mdash;' }}</td>
@@ -92,7 +110,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="text-center text-muted py-8">No sliders found.</td>
+                        <td colspan="9" class="text-center text-muted py-8">No sliders found.</td>
                     </tr>
                 @endforelse
             </tbody>

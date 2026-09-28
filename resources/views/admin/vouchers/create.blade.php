@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Create Voucher - Admin')
+@section('title', 'Create Voucher | Upsilon')
 
 @section('page-title', 'Create Voucher')
 

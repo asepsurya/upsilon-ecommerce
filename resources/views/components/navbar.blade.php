@@ -2,7 +2,7 @@
     class="fixed top-0 left-0 w-full z-50  backdrop-blur-xl border-b border-[#383838] shadow-[0_4px_20px_rgba(0,0,0,0.5)] ">
     @php
         $categories = \App\Models\Category::active()->sorted()->get();
-        $isHome = true;
+        $isHome = request()->routeIs('home');
     @endphp
 
     <!-- Top Bar -->
@@ -223,94 +223,133 @@
 
     @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const announcementBar = document.getElementById('announcement-bar');
-            if (!announcementBar) return;
-
-            const items = announcementBar.querySelectorAll('.announcement-item');
-            if (items.length <= 1) return;
-
-            let currentIndex = 0;
-            let intervalId = null;
-            let isAnimating = false;
-
-            function typeWriter(element, text, speed = 30) {
-                return new Promise(resolve => {
-                    element.textContent = '';
-                    let i = 0;
-                    (function type() {
-                        if (i < text.length) {
-                            element.textContent += text.charAt(i++);
-                            setTimeout(type, speed);
-                        } else {
-                            resolve();
-                        }
-                    })();
-                });
-            }
-
-            function slideUp(current, next) {
-                return new Promise(resolve => {
-                    current.style.transition = 'transform 0.5s ease-out, opacity 0.5s ease-out';
-                    current.style.transform = 'translateY(-100%)';
-                    current.style.opacity = '0';
-                    next.style.transition = 'transform 0.5s ease-out, opacity 0.5s ease-out';
-                    next.style.transform = 'translateY(0)';
-                    next.style.opacity = '1';
-                    setTimeout(resolve, 500);
-                });
-            }
-
-            async function showNext() {
-                if (isAnimating) return;
-                isAnimating = true;
-
-                const current = items[currentIndex];
-                const nextIndex = (currentIndex + 1) % items.length;
-                const next = items[nextIndex];
-                const animation = current.dataset.animation || 'slide';
-                const duration = parseInt(current.dataset.duration) || 5000;
-
-                if (animation === 'typewriter') {
-                    const textEl = next.querySelector('.announcement-text');
-                    if (textEl && textEl.dataset.fullText) {
-                        await typeWriter(textEl, textEl.dataset.fullText, 30);
-                    }
-                    current.style.transition = 'opacity 0.3s ease-out';
-                    current.style.opacity = '0';
-                    next.style.transition = 'opacity 0.3s ease-out';
-                    next.style.opacity = '1';
+        (function () {
+            function runWhenReady(fn) {
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', fn);
                 } else {
-                    await slideUp(current, next);
+                    fn();
                 }
-
-                currentIndex = nextIndex;
-                isAnimating = false;
-                intervalId = setTimeout(showNext, duration);
             }
 
-            // Cache text for typewriter animation
-            items.forEach(item => {
-                const textEl = item.querySelector('.announcement-text');
-                if (textEl) {
-                    textEl.dataset.fullText = textEl.textContent.trim();
-                    if (item.dataset.animation === 'typewriter') textEl.textContent = '';
+            runWhenReady(function () {
+                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                const mobileMenu = document.getElementById('mobile-menu');
+
+                if (mobileMenuBtn && mobileMenu) {
+                    mobileMenuBtn.addEventListener('click', function () {
+                        const isHidden = mobileMenu.classList.contains('hidden');
+                        if (isHidden) {
+                            mobileMenu.classList.remove('hidden');
+                        } else {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    });
                 }
-            });
 
-            // Ensure first item visible
-            items[0].style.opacity = '1';
-            items[0].style.transform = 'translateY(0)';
+                const categoryDropdownBtn = document.getElementById('category-dropdown-btn');
+                const categoryDropdown = document.getElementById('category-dropdown');
 
-            intervalId = setTimeout(showNext, parseInt(items[0].dataset.duration) || 5000);
+                if (categoryDropdownBtn && categoryDropdown) {
+                    categoryDropdownBtn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        categoryDropdown.classList.toggle('hidden');
+                    });
 
-            announcementBar.addEventListener('mouseenter', () => clearTimeout(intervalId));
-            announcementBar.addEventListener('mouseleave', () => {
-                if (!isAnimating) {
-                    intervalId = setTimeout(showNext, parseInt(items[currentIndex].dataset.duration) || 5000);
+                    document.addEventListener('click', function (e) {
+                        if (!categoryDropdown.contains(e.target) && !categoryDropdownBtn.contains(e.target)) {
+                            categoryDropdown.classList.add('hidden');
+                        }
+                    });
                 }
+
+                const announcementBar = document.getElementById('announcement-bar');
+                if (!announcementBar) return;
+
+                const items = announcementBar.querySelectorAll('.announcement-item');
+                if (items.length <= 1) return;
+
+                let currentIndex = 0;
+                let intervalId = null;
+                let isAnimating = false;
+
+                function typeWriter(element, text, speed = 30) {
+                    return new Promise(resolve => {
+                        element.textContent = '';
+                        let i = 0;
+                        (function type() {
+                            if (i < text.length) {
+                                element.textContent += text.charAt(i++);
+                                setTimeout(type, speed);
+                            } else {
+                                resolve();
+                            }
+                        })();
+                    });
+                }
+
+                function slideUp(current, next) {
+                    return new Promise(resolve => {
+                        current.style.transition = 'transform 0.5s ease-out, opacity 0.5s ease-out';
+                        current.style.transform = 'translateY(-100%)';
+                        current.style.opacity = '0';
+                        next.style.transition = 'transform 0.5s ease-out, opacity 0.5s ease-out';
+                        next.style.transform = 'translateY(0)';
+                        next.style.opacity = '1';
+                        setTimeout(resolve, 500);
+                    });
+                }
+
+                async function showNext() {
+                    if (isAnimating) return;
+                    isAnimating = true;
+
+                    const current = items[currentIndex];
+                    const nextIndex = (currentIndex + 1) % items.length;
+                    const next = items[nextIndex];
+                    const animation = current.dataset.animation || 'slide';
+                    const duration = parseInt(current.dataset.duration) || 5000;
+
+                    if (animation === 'typewriter') {
+                        const textEl = next.querySelector('.announcement-text');
+                        if (textEl && textEl.dataset.fullText) {
+                            await typeWriter(textEl, textEl.dataset.fullText, 30);
+                        }
+                        current.style.transition = 'opacity 0.3s ease-out';
+                        current.style.opacity = '0';
+                        next.style.transition = 'opacity 0.3s ease-out';
+                        next.style.opacity = '1';
+                    } else {
+                        await slideUp(current, next);
+                    }
+
+                    currentIndex = nextIndex;
+                    isAnimating = false;
+                    intervalId = setTimeout(showNext, duration);
+                }
+
+                items.forEach(item => {
+                    const textEl = item.querySelector('.announcement-text');
+                    if (textEl) {
+                        textEl.dataset.fullText = textEl.textContent.trim();
+                        if (item.dataset.animation === 'typewriter') textEl.textContent = '';
+                    }
+                });
+
+                items[0].style.opacity = '1';
+                items[0].style.transform = 'translateY(0)';
+
+                intervalId = setTimeout(showNext, parseInt(items[0].dataset.duration) || 5000);
+
+                announcementBar.addEventListener('mouseenter', () => clearTimeout(intervalId));
+                announcementBar.addEventListener('mouseleave', () => {
+                    if (!isAnimating) {
+                        intervalId = setTimeout(showNext, parseInt(items[currentIndex].dataset.duration) || 5000);
+                    }
+                });
             });
-        });
+        })();
     </script>
     @endpush
 

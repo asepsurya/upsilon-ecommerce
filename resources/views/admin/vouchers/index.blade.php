@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Vouchers - Admin')
+@section('title', 'Vouchers | Upsilon')
 
 @section('page-title', 'Vouchers')
 

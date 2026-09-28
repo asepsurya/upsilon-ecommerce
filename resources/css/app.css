@@ -205,3 +205,34 @@ input:where([type=text]):focus, input:where(:not([type])):focus, input:where([ty
     --tw-ring-offset-width: 2px;
     --tw-ring-offset-color: var(--surface);
 }
+
+@keyframes promo-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.animate-promo-scroll {
+    animation: promo-scroll 35s linear infinite;
+}
+
+.animate-promo-scroll:hover {
+    animation-play-state: paused;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #000000;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -6px;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    cursor: pointer;
+    background: #14b8a6;
+    border-radius: 2px;
+}

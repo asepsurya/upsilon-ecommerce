@@ -1,1140 +1,1120 @@
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>JD Sports Indonesia | King of Trainers</title>
-    <!-- Tailwind CSS CDN -->
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Offers &amp; Sale Adidas | JD Sports Indonesia</title>
+    <!-- Tailwind CSS v3 with Plugins -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <!-- Google Fonts: Inter & Montserrat / Oswald style fonts for sports look -->
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Inter:wght@400;500;600;700;800;900&amp;family=Oswald:wght@500;600;700&amp;display=swap"
-        rel="stylesheet">
-    <script>
+    <!-- Tailwind Configuration -->
+    <script data-purpose="tailwind-config">
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        jd: {
-                            yellow: '#F5E400',
-                            orange: '#FF5000',
-                            darkorange: '#E04400',
-                            black: '#111111',
-                            dark: '#1A1A1A',
-                            cardbg: '#252525'
-                        }
+                        jdYellow: '#ffe500',
+                        jdDark: '#121212',
+                        jdRed: '#e52d2d',
+                        jdGreyBg: '#f8f8f8',
+                        jdBorder: '#e2e2e2'
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Oswald', 'sans-serif'],
-                        impact: ['Anton', 'sans-serif']
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-    <style data-purpose="base-layout">
-        body {
-            font-family: 'Inter', sans-serif;
-            color: #111111;
-            background-color: #FFFFFF;
-            overflow-x: hidden;
+    <!-- Phosphor Icons for Crisp UI Glyphs -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Custom Styles for Precise Aesthetics -->
+    <style data-purpose="custom-styling">
+        /* Custom Scrollbar and layout tweaks */
+        input[type=range]::-webkit-slider-thumb {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #000000;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -6px;
         }
 
-        .font-condensed {
-            font-family: 'Oswald', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: -0.02em;
-        }
-    </style>
-    <style data-purpose="custom-decorations">
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        .diagonal-text {
-            transform: skew(-5deg);
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #14b8a6;
+            border-radius: 2px;
         }
     </style>
 </head>
 
-<body class="antialiased selection:bg-black selection:text-white">
+<body class="bg-white text-neutral-900 font-sans antialiased text-xs selection:bg-neutral-900 selection:text-white">
     <!-- BEGIN: TopUtilityBar -->
-    <div class="bg-white border-b border-gray-200 text-[11px] font-medium text-gray-700 py-1.5 px-4 lg:px-8">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <!-- Utility Links Left -->
-            <div class="flex items-center space-x-6">
-                <a class="flex items-center gap-1.5 hover:text-black" href="#">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                    Download Aplikasi JD Sports
+    <aside class="bg-neutral-100 border-b border-neutral-200 py-1 px-4 sm:px-8 text-[11px] text-neutral-600">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
+            <!-- Left utility links -->
+            <div class="flex items-center space-x-4">
+                <a class="flex items-center hover:text-black gap-1 transition-colors" href="#">
+                    <i class="ph ph-device-mobile"></i> Download Aplikasi JD Sports
                 </a>
-                <span class="text-gray-300">|</span>
-                <a class="hover:text-black" href="#">Help &amp; Contact Us</a>
-                <span class="text-gray-300">|</span>
-                <a class="hover:text-black" href="#">Track My Order</a>
+                <span class="text-neutral-300">|</span>
+                <a class="hover:text-black transition-colors" href="#">Help &amp; Contact Us</a>
+                <span class="text-neutral-300">|</span>
+                <a class="hover:text-black transition-colors" href="#">Track My Order</a>
             </div>
-            <!-- Utility Links Right -->
-            <div class="flex items-center space-x-6">
-                <a class="hover:text-black" href="#">Find a Store</a>
-                <span class="text-gray-300">|</span>
-                <button class="flex items-center gap-1 hover:text-black">
-                    Deliver To...
-                    <svg class="w-3 h-3 ml-0.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                </button>
-                <span class="text-gray-300">|</span>
-                <a class="font-semibold text-black hover:underline" href="#">Login</a>
+            <!-- Right utility links -->
+            <div class="flex items-center space-x-4">
+                <a class="hover:text-black transition-colors" href="#">Find a Store</a>
+                <span class="text-neutral-300">|</span>
+                <div class="flex items-center gap-1 cursor-pointer hover:text-black">
+                    <span>Deliver To...</span>
+                    <img alt="Indonesia" class="w-4 h-2.5 inline-block rounded-xs shadow-xs"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCwpv0W9A0rhAHZS6n7TZ5lUUse-ZqkoTeur6xrW_xsrsQkb8umLvcS3wu1lnosxfe7p1nd_CvlNOLXdLYbAP3NqpH5Wf_NdXPdZZJPFS11Xt_VWMN-BS70xYxCFlDgFVhcZiYt4eI_nrNxKWSpSvlT3VcEMzBcIj1saQ0wzaUOgbA4dZJWKND0vCBXtGz70vx5UVVkMo5buRx7iLRnT9CdXOiUgWy154S_RT4bXMUMaROjWd7eeTM" />
+                </div>
+                <span class="text-neutral-300">|</span>
+                <a class="flex items-center gap-1 font-semibold text-black hover:opacity-80 transition-opacity"
+                    href="#">
+                    <i class="ph ph-user text-sm"></i> Login
+                </a>
             </div>
         </div>
-    </div>
+    </aside>
     <!-- END: TopUtilityBar -->
     <!-- BEGIN: MainHeader -->
-    <header class="bg-white sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8 py-3.5">
-            <div class="flex items-center justify-between gap-8">
-                <!-- Logo JD Sports -->
-                <a class="flex-shrink-0" href="#">
-                     <img alt="Forever Forward JD Sports Logo" class="h-8 lg:h-9 w-auto object-contain"
-                        src="logo-black.png">
-                </a>
-                <!-- Search Form -->
-                <div class="flex-1 max-w-xl hidden md:block">
-                    <div class="relative">
-                        <input
-                            class="w-full bg-[#f4f4f4] border border-transparent rounded-full py-2 pl-4 pr-10 text-xs placeholder-gray-500 focus:outline-none focus:border-black focus:bg-white transition"
-                            placeholder="Cari produk, kategori atau merek" type="text">
-                        <button class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <!-- Right Quick Icons -->
-                <div class="flex items-center space-x-5">
-                    <!-- Mobile search icon -->
-                    <button class="md:hidden text-gray-800">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
-                                stroke-linejoin="round" stroke-width="2"></path>
-                        </svg>
-                    </button>
-                    <!-- Wishlist -->
-                    <a class="text-gray-800 hover:text-black relative" href="#" title="Wishlist">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
-                        </svg>
-                    </a>
-                    <!-- Bag / Cart -->
-                    <a class="text-gray-800 hover:text-black relative" href="#" title="Keranjang Belanja">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round"
-                                stroke-linejoin="round" stroke-width="1.8"></path>
-                        </svg>
-                        <span
-                            class="absolute -top-1.5 -right-2 bg-black text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">0</span>
-                    </a>
-                    <!-- Notification Bell -->
-                    <a class="text-gray-800 hover:text-black" href="#" title="Notifikasi">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
-                        </svg>
-                    </a>
-                </div>
+    <header class="sticky top-0 z-50 bg-white border-b border-neutral-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3 flex items-center justify-between gap-6">
+            <!-- Brand Logo -->
+            <a class="shrink-0 flex items-center" href="#">
+                <img alt="JD Sports Forever Forward" class="h-9 md:h-11 object-contain"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyvqyb7omvz687JtD24mf9EaqHuxwagstZrEUGuVCDeAl5PDUOd0inJ00TMKISl7lbAK1vk5WvMhGndDw7XpCqYB5Xle4RAcO2enBvMrZ-iLCHeYBSDmyN2FQySjUJoYcvrqOxXHO_scRkY0LM7WRl-0PhALCE-zaiopU_bRSRJRU6AH5XRs1pSEcIQOVK89cXNZVgtP3J4fT9A4CTeySe6n5Oef5I0743e7Qc94fjUuOritjWQtJo" />
+            </a>
+            <!-- Search Bar -->
+            <div class="flex-1 max-w-xl relative">
+                <input
+                    class="w-full pl-4 pr-10 py-2 border border-neutral-300 rounded-full text-xs placeholder:text-neutral-400 focus:outline-none focus:border-black transition-colors"
+                    placeholder="Cari produk, kategori atau merek" type="text" />
+                <button aria-label="Search"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-black" type="button">
+                    <i class="ph ph-magnifying-glass text-lg"></i>
+                </button>
             </div>
-            <!-- Navigation Categories -->
-            <nav
-                class="flex items-center justify-center space-x-8 pt-3 border-t border-gray-100 mt-2.5 text-xs font-bold tracking-wider uppercase text-black">
-                <a class="hover:text-jd-orange transition" href="#">Launches</a>
-                <a class="hover:text-jd-orange transition" href="#">Men</a>
-                <a class="hover:text-jd-orange transition" href="#">Women</a>
-                <a class="hover:text-jd-orange transition" href="#">Kids</a>
-                <a class="hover:text-jd-orange transition" href="#">Collections</a>
-                <a class="hover:text-jd-orange transition" href="#">Sports</a>
-                <a class="hover:text-jd-orange transition" href="#">Brands</a>
-                <a class="text-red-600 hover:text-red-700 transition" href="#">Offers</a>
-            </nav>
+            <!-- Action Icons -->
+            <div class="flex items-center space-x-5 text-xl text-neutral-800">
+                <button aria-label="Notifications" class="hover:text-black relative" title="Notifications"
+                    type="button">
+                    <i class="ph ph-bell"></i>
+                </button>
+                <button aria-label="Wishlist" class="hover:text-black relative" title="Wishlist" type="button">
+                    <i class="ph ph-heart"></i>
+                </button>
+                <button aria-label="Cart" class="hover:text-black relative" title="Shopping Bag" type="button">
+                    <i class="ph ph-handbag"></i>
+                    <span
+                        class="absolute -top-1.5 -right-2 bg-neutral-900 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+                </button>
+            </div>
         </div>
+        <!-- Category Navigation -->
+        <nav class="border-t border-neutral-100 hidden md:block">
+            <div
+                class="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-center space-x-8 text-[12px] font-bold uppercase tracking-wider py-2.5">
+                <a class="hover:text-neutral-500 transition-colors" href="#">Launches</a>
+                <a class="hover:text-neutral-500 transition-colors" href="#">Men</a>
+                <a class="hover:text-neutral-500 transition-colors" href="#">Women</a>
+                <a class="hover:text-neutral-500 transition-colors" href="#">Kids</a>
+                <a class="hover:text-neutral-500 transition-colors" href="#">Collections</a>
+                <a class="hover:text-neutral-500 transition-colors" href="#">Sports</a>
+                <a class="hover:text-neutral-500 transition-colors" href="#">Brands</a>
+                <a class="text-jdRed font-extrabold tracking-widest hover:opacity-80 transition-opacity"
+                    href="#">Offers</a>
+            </div>
+        </nav>
     </header>
     <!-- END: MainHeader -->
-    <!-- BEGIN: PromoNotificationBar -->
-    <div class="bg-jd-yellow text-black border-y border-yellow-400 font-bold uppercase text-[10px] tracking-tight">
+    <!-- BEGIN: USP Promo Ticker Banner -->
+    <section class="bg-jdYellow text-black py-2 font-bold text-[11px] tracking-wide border-b border-yellow-400">
         <div
-            class="max-w-7xl mx-auto px-4 py-2 grid grid-cols-1 md:grid-cols-6 gap-2 text-center divide-y md:divide-y-0 md:divide-x divide-black/10">
-            <div>
-                <span class="">FREE SHIPPING NATIONWIDE</span>
-                <span class="block text-[8px] font-medium">NEXT DAY &amp; STANDARD DELIVERY*</span>
+            class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 text-center divide-y md:divide-y-0 md:divide-x divide-black/10 gap-1 md:gap-0">
+            <div class="px-2">
+                <span class="uppercase">FREE SHIPPING NATIONWIDE*</span>
+                <p class="text-[9px] font-normal tracking-normal text-neutral-800">NEXT DAY &amp; STANDARD DELIVERY*</p>
             </div>
-            <div>
-                <span class="">ASICS GEL-CUMULUS</span>
-                <span class="block text-[8px] font-medium">WHERE COMFORT PURSUES US</span>
+            <div class="px-2">
+                <span class="uppercase">ASICS GEL-CUMULUS</span>
+                <p class="text-[9px] font-normal tracking-normal text-neutral-800">WHERE COMFORT PURSUES US</p>
             </div>
-            <div>
-                <span class="">CLICK AND COLLECT</span>
-                <span class="block text-[8px] font-medium">AVAILABLE IN WEB &amp; APP</span>
-            </div>
-            <div>
-                <span class="">NEW ARRIVALS</span>
-                <span class="block text-[8px] font-medium">JUST LANDED - FRESH PICKS</span>
-            </div>
-            <div>
-                <span class="">FLASH SALE</span>
-                <span class="block text-[8px] font-medium">UP TO 70% OFF - TODAY ONLY</span>
-            </div>
-            <div>
-                <span class="">EXCLUSIVE PERKS</span>
-                <span class="block text-[8px] font-medium">EARLY ACCESS - JOIN NOW</span>
+            <div class="px-2">
+                <span class="uppercase">CLICK AND COLLECT</span>
+                <p class="text-[9px] font-normal tracking-normal text-neutral-800">AVAILABLE IN WEB &amp; APP</p>
             </div>
         </div>
+    </section>
+    <!-- END: USP Promo Ticker Banner -->
+    <!-- BEGIN: Breadcrumb -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3 text-[11px] text-neutral-500">
+        <nav class="flex items-center space-x-2">
+            <a class="hover:underline" href="#">Home</a>
+            <span>/</span>
+            <a class="hover:underline" href="#">Offers</a>
+            <span>/</span>
+            <span class="text-neutral-800 font-semibold">Adidas Sale</span>
+        </nav>
     </div>
-    <!-- END: PromoNotificationBar -->
-    <main>
-        <!-- BEGIN: HeroCarousel -->
-        <section id="hero-slider" class="relative bg-black w-full overflow-hidden" data-purpose="hero-banner">
-            <div class="relative w-full aspect-[21/9] min-h-[380px] max-h-[600px]">
-                <div class="hero-slide absolute inset-0 transition-all duration-1000 ease-in-out opacity-100 scale-100">
-                    <img alt="Heat Check Hero Banner featuring On Running" class="w-full h-full object-cover object-center"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtNJa3i2KGqysZ_Y0EFLPYyy4fFe0PVCXKN0zUGArGTPRsXcj2GaIy61qdFR3OGF9eyFow2EJoFVcRuItfkcOcgRHZkkEu8oEG8-PbLDLvKMj0GYAx_3GHeB38q2zxCjWzjOa-ueoyCfXyViCAhk7dVIN_WgOEcw6FHfLyVZ3HmN_jkZopffs7mRSe08o04C-C1nGHTwFGzKCXM4NwD5HC5e7W_Mo9dGrQloc4-kDXyTan6aQhsVYn">
+    <!-- END: Breadcrumb -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 pb-12">
+        <!-- BEGIN: Sale Hero Banner -->
+        <section class="bg-[#4d5156] text-white rounded-sm overflow-hidden mb-6 relative">
+            <div class="grid grid-cols-1 md:grid-cols-12 items-center p-6 md:p-8">
+                <!-- Promo Text -->
+                <div class="md:col-span-8 z-10">
+                    <h1 class="text-3xl md:text-4xl font-extrabold uppercase tracking-tight mb-2">SALE UP TO 50%</h1>
+                    <p class="text-xs text-neutral-300 max-w-xl leading-relaxed mb-4">
+                        Belanja di JD Sports Indonesia dan temukan diskon sneakers, clothing dan accessories dari top
+                        brand favorit seperti Nike, adidas, New Balance, ASICS, PUMA, dan lainnya di JD SPORTS ID.
+                        Nikmati Gratis Ongkir* T&amp;C apply.
+                    </p>
+                    <!-- Category Quick Filters -->
+                    <div class="flex flex-wrap gap-2 text-[11px]">
+                        <a class="border border-white/80 px-4 py-1.5 rounded-sm hover:bg-white hover:text-black transition-colors font-medium"
+                            href="#">Footwear Up To 50% Off</a>
+                        <a class="border border-white/80 px-4 py-1.5 rounded-sm hover:bg-white hover:text-black transition-colors font-medium"
+                            href="#">Apparel Up To 50% Off</a>
+                        <a class="border border-white/80 px-4 py-1.5 rounded-sm hover:bg-white hover:text-black transition-colors font-medium"
+                            href="#">Accessories Up To 50% Off</a>
+                    </div>
                 </div>
-                <div class="hero-slide absolute inset-0 transition-all duration-1000 ease-in-out opacity-0 scale-105">
-                    <img alt="Summer Sale Banner" class="w-full h-full object-cover object-center"
-                        src="logo-black.png">
-                </div>
-                <!-- Banner Slider Arrow Controls -->
-                <button id="hero-prev"
-                    class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 flex items-center justify-center text-white transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                        </path>
-                    </svg>
-                </button>
-                <button id="hero-next"
-                    class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 flex items-center justify-center text-white transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                </button>
-                <!-- Dot Indicators -->
-                <div id="hero-dots"
-                    class="absolute bottom-6 left-0 right-0 flex items-center justify-center gap-2">
-                </div>
-                <!-- CTA Action Buttons on Hero -->
-                <div class="absolute bottom-6 right-6 md:bottom-10 md:right-12 flex items-center gap-3">
-                    <a class="bg-white hover:bg-gray-100 text-black font-condensed px-6 py-2 text-xs md:text-sm font-bold tracking-wider shadow-md transition"
-                        href="#">
-                        Shop Men's
-                    </a>
-                    <a class="bg-white hover:bg-gray-100 text-black font-condensed px-6 py-2 text-xs md:text-sm font-bold tracking-wider shadow-md transition"
-                        href="#">
-                        Shop Women's
-                    </a>
-                    <a class="bg-white hover:bg-gray-100 text-black font-condensed px-6 py-2 text-xs md:text-sm font-bold tracking-wider shadow-md transition"
-                        href="#">
-                        Shop Kids'
-                    </a>
+                <!-- Promo Graphic Visual -->
+                <div class="md:col-span-4 mt-6 md:mt-0 flex justify-end">
+                    <img alt="Great Deals Up to 50% Off" class="max-h-36 md:max-h-44 object-contain"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqa9m3lb9KcsVzCYZK_d6f8NWkO8oTp-gjtxFrYl-hOqNJmjVs-gmhLJnrs4EZimhXcr95IcI_9hZhePlDkI7xToE0nDXUzgp5D77n-eqscfnk9sWczc81OrzmVPe5mHY1_AjxRfOIcVxEH4ze5IiOZ-2vhpgAwWNxdGBIvCr-uOe4wCdnzXxm2qn6BZhhVUMQPi0QByaizlPFFHUnEbncAUdACNtF9-TqWRbPdOU06vAe9NQ8png-" />
                 </div>
             </div>
         </section>
-        <!-- END: HeroCarousel -->
-        <!-- BEGIN: LimitedPairsCountdownSale -->
-        <section class="bg-[#2A2E33] py-8 text-white">
-            <div class="max-w-7xl mx-auto px-4 lg:px-8">
-                <!-- Header with Countdown -->
-                <div class="flex flex-wrap items-center justify-between mb-6 pb-2 border-b border-gray-700">
-                    <div class="flex items-center gap-4">
-                        <h2 class="text-2xl md:text-3xl font-condensed font-extrabold text-[#FF5000] tracking-wide">
-                            Limited Pairs Only
-                        </h2>
-                        <div class="flex items-center gap-2 text-xs font-semibold text-gray-300">
-                            <span class="">Berakhir dalam</span>
-                            <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded text-xs">20</span>
-                            <span class="">:</span>
-                            <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded text-xs">01</span>
-                            <span class="">:</span>
-                            <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded text-xs">41</span>
+        <!-- END: Sale Hero Banner -->
+        <!-- BEGIN: Catalog Controls / Toolbar -->
+        <div class="flex flex-wrap items-center justify-between border-b border-neutral-200 pb-3 mb-6 gap-4">
+            <div class="flex items-center space-x-4">
+                <label class="text-neutral-500 font-medium" for="sort-select">Urutkan:</label>
+                <select
+                    class="border border-neutral-300 rounded px-3 py-1.5 text-xs bg-white focus:ring-0 focus:border-black cursor-pointer"
+                    id="sort-select">
+                    <option>Rekomendasi</option>
+                    <option>Harga: Rendah ke Tinggi</option>
+                    <option>Harga: Tinggi ke Rendah</option>
+                    <option>Terbaru</option>
+                    <option>Diskon Terbesar</option>
+                </select>
+                <!-- View layout column toggles -->
+                <div class="hidden sm:flex items-center space-x-1 pl-4 border-l border-neutral-200 text-neutral-400">
+                    <button aria-label="3 Columns" class="w-4 h-4 bg-teal-600 rounded-xs" title="3 Columns"
+                        type="button"></button>
+                    <button aria-label="4 Columns" class="w-4 h-4 bg-neutral-300 hover:bg-neutral-400 rounded-xs"
+                        title="4 Columns" type="button"></button>
+                    <button aria-label="5 Columns" class="w-4 h-4 bg-neutral-300 hover:bg-neutral-400 rounded-xs"
+                        title="5 Columns" type="button"></button>
+                </div>
+            </div>
+            <div class="text-neutral-600 text-xs font-medium">
+                <span>137 Produk</span> | <a class="font-bold text-black hover:underline" href="#">Lihat Lebih
+                    Banyak</a>
+            </div>
+        </div>
+        <!-- END: Catalog Controls / Toolbar -->
+        <!-- BEGIN: Two-Column Product & Filter Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- BEGIN: Left Filter Sidebar -->
+            <aside class="lg:col-span-3 space-y-5 divide-y divide-neutral-200">
+                <!-- Filter: Color -->
+                <div class="pt-2">
+                    <button
+                        class="w-full flex justify-between items-center text-xs font-bold uppercase tracking-wide py-2"
+                        type="button">
+                        <span>Color</span>
+                        <i class="ph ph-x text-sm"></i>
+                    </button>
+                    <div class="mt-2 space-y-1.5 text-neutral-600 max-h-40 overflow-y-auto pr-1">
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> (1)</span>
+                            <span class="text-neutral-400 text-[10px]">1</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Beige</span>
+                            <span class="text-neutral-400 text-[10px]">6</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Black</span>
+                            <span class="text-neutral-400 text-[10px]">35</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Blue</span>
+                            <span class="text-neutral-400 text-[10px]">23</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Brown</span>
+                            <span class="text-neutral-400 text-[10px]">8</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Green</span>
+                            <span class="text-neutral-400 text-[10px]">9</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Grey</span>
+                            <span class="text-neutral-400 text-[10px]">10</span>
+                        </label>
+                    </div>
+                </div>
+                <!-- Filter: Age -->
+                <div class="pt-4">
+                    <button
+                        class="w-full flex justify-between items-center text-xs font-bold uppercase tracking-wide py-1"
+                        type="button">
+                        <span>Age</span>
+                        <i class="ph ph-x text-sm"></i>
+                    </button>
+                    <div class="mt-2 space-y-1.5 text-neutral-600">
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input checked=""
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Adult</span>
+                            <span class="text-neutral-400 text-[10px]">120</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Junior</span>
+                            <span class="text-neutral-400 text-[10px]">22</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Children</span>
+                            <span class="text-neutral-400 text-[10px]">10</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Infant</span>
+                            <span class="text-neutral-400 text-[10px]">3</span>
+                        </label>
+                    </div>
+                </div>
+                <!-- Filter: Gender -->
+                <div class="pt-4">
+                    <button
+                        class="w-full flex justify-between items-center text-xs font-bold uppercase tracking-wide py-1"
+                        type="button">
+                        <span>Gender</span>
+                        <i class="ph ph-x text-sm"></i>
+                    </button>
+                    <div class="mt-2 space-y-1.5 text-neutral-600">
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Kids</span>
+                            <span class="text-neutral-400 text-[10px]">35</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input checked=""
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Men</span>
+                            <span class="text-neutral-400 text-[10px]">120</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Women</span>
+                            <span class="text-neutral-400 text-[10px]">58</span>
+                        </label>
+                    </div>
+                </div>
+                <!-- Filter: Size -->
+                <div class="pt-4">
+                    <button
+                        class="w-full flex justify-between items-center text-xs font-bold uppercase tracking-wide py-1"
+                        type="button">
+                        <span>Size</span>
+                        <i class="ph ph-x text-sm"></i>
+                    </button>
+                    <div class="mt-2 space-y-1 text-neutral-600 max-h-36 overflow-y-auto">
+                        <label class="flex items-center justify-between cursor-pointer"><span
+                                class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> 38</span><span
+                                class="text-neutral-400 text-[10px]">8</span></label>
+                        <label class="flex items-center justify-between cursor-pointer"><span
+                                class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> 39</span><span
+                                class="text-neutral-400 text-[10px]">14</span></label>
+                        <label class="flex items-center justify-between cursor-pointer"><span
+                                class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> 40</span><span
+                                class="text-neutral-400 text-[10px]">27</span></label>
+                        <label class="flex items-center justify-between cursor-pointer"><span
+                                class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> 41</span><span
+                                class="text-neutral-400 text-[10px]">15</span></label>
+                        <label class="flex items-center justify-between cursor-pointer"><span
+                                class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> 42</span><span
+                                class="text-neutral-400 text-[10px]">35</span></label>
+                        <label class="flex items-center justify-between cursor-pointer"><span
+                                class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> 43</span><span
+                                class="text-neutral-400 text-[10px]">22</span></label>
+                        <label class="flex items-center justify-between cursor-pointer"><span
+                                class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> 44</span><span
+                                class="text-neutral-400 text-[10px]">18</span></label>
+                    </div>
+                </div>
+                <!-- Filter: JD Exclusive -->
+                <div class="pt-4">
+                    <button
+                        class="w-full flex justify-between items-center text-xs font-bold uppercase tracking-wide py-1"
+                        type="button">
+                        <span>JD Exclusive</span>
+                        <i class="ph ph-x text-sm"></i>
+                    </button>
+                    <div class="mt-2 space-y-1.5 text-neutral-600">
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> No</span>
+                            <span class="text-neutral-400 text-[10px]">122</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input checked=""
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Yes</span>
+                            <span class="text-neutral-400 text-[10px]">15</span>
+                        </label>
+                    </div>
+                </div>
+                <!-- Filter: Category -->
+                <div class="pt-4">
+                    <button
+                        class="w-full flex justify-between items-center text-xs font-bold uppercase tracking-wide py-1"
+                        type="button">
+                        <span>Category</span>
+                        <i class="ph ph-x text-sm"></i>
+                    </button>
+                    <div class="mt-2 space-y-1.5 text-neutral-600">
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Clothing</span>
+                            <span class="text-neutral-400 text-[10px]">75</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input checked=""
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Footwear</span>
+                            <span class="text-neutral-400 text-[10px]">49</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> Accessories</span>
+                            <span class="text-neutral-400 text-[10px]">13</span>
+                        </label>
+                    </div>
+                </div>
+                <!-- Filter: Brand -->
+                <div class="pt-4">
+                    <button
+                        class="w-full flex justify-between items-center text-xs font-bold uppercase tracking-wide py-1"
+                        type="button">
+                        <span>Brand</span>
+                        <i class="ph ph-x text-sm"></i>
+                    </button>
+                    <div class="mt-2 space-y-1.5 text-neutral-600">
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> adidas</span>
+                            <span class="text-neutral-400 text-[10px]">49</span>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer hover:text-black">
+                            <span class="flex items-center gap-2"><input checked=""
+                                    class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"
+                                    type="checkbox" /> adidas Originals</span>
+                            <span class="text-neutral-400 text-[10px]">88</span>
+                        </label>
+                    </div>
+                </div>
+                <!-- Filter: Harga Slider -->
+                <div class="pt-4">
+                    <button
+                        class="w-full flex justify-between items-center text-xs font-bold uppercase tracking-wide py-1"
+                        type="button">
+                        <span>Harga</span>
+                        <i class="ph ph-x text-sm"></i>
+                    </button>
+                    <div class="mt-3">
+                        <input class="w-full h-1 bg-teal-500 rounded-lg appearance-none cursor-pointer" max="10000000"
+                            min="0" type="range" value="6500000" />
+                        <div class="text-[11px] text-neutral-500 mt-2">
+                            From <span class="font-semibold text-black">Rp 0</span> - To <span
+                                class="font-semibold text-black">Rp 10.000.000</span>
                         </div>
                     </div>
-                    <a class="text-xs font-semibold text-gray-300 hover:text-white underline" href="#">
-                        Lihat semua
-                    </a>
                 </div>
-                <!-- Product Rail with FINAL CALL Banner -->
-                <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
-                    <!-- Final Call Graphic Box -->
-                    <div
-                        class="col-span-2 md:col-span-1 bg-gradient-to-b from-[#2E3339] to-[#1E2125] p-4 flex flex-col justify-center items-center text-center border border-gray-700">
-                        <h3 class="font-impact text-3xl md:text-4xl text-white tracking-wider leading-none">
-                            FINAL<br><span class="text-gray-400">CALL</span>
-                        </h3>
-                        <p class="text-[10px] text-gray-400 uppercase mt-2 tracking-widest font-semibold">Special
-                            Pricing</p>
-                    </div>
+            </aside>
+            <!-- END: Left Filter Sidebar -->
+            <!-- BEGIN: Product Grid -->
+            <section class="lg:col-span-9">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8">
                     <!-- Product Card 1 -->
-                    <div class="bg-white text-black p-3 flex flex-col justify-between rounded-sm shadow-sm group">
-                        <div class="relative w-full aspect-square bg-gray-50 flex items-center justify-center p-2 mb-2">
-                            <img alt="Nike Air Max"
-                                class="max-h-24 w-auto object-contain transform group-hover:scale-105 transition"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6gMXDFrS1DXsUQ2Q3qHT9iIXFZMRkiu6bxUqOnZF-4r1Yi-d7Xyis4fs9uXtnZvcx5lghjklFBOq2kNVM0TU213IVjEX9Iu9sJ-gdKgre8p3utofZl08AoUrZL2GLcoT1RPkJKWF5N5Es7Aw9SbbYAUic4dYQA8Z0jf9uDymQwq57xj4vHbclSxw3i35tRsqsQzL0WG6FSpXBHLvfox2tZC1cOVOycVaBKA-XQ-0Jq1NBjVGh7KLZ">
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Munchen"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzdPC-TkNomuFBv6apRppYK3GVrI-aqveom6oAEafBpIjwj_xCDU4qzmxvQS1_K5tNFAwpXP9AS4oh31jAVhFgwvp8HwCtxWYzPCm4j9YF2knJ344uMywnWR7PwRyEV5kTJUi7SUAuOJxJS4kCIm6IA283LFO22z0boeX8etxBIwehGUOtopNv6ZPKaSQKcb-rfqPQE1UcLocXSoBWDfLjLjHLHTHhCCoA69noLaT5U5RDWkXyi7Z3" />
                         </div>
-                        <div>
-                            <span class="text-[9px] text-gray-500 uppercase tracking-wider block">Nike</span>
-                            <h4 class="text-xs font-bold truncate">Nike Air Max AP</h4>
-                            <p class="text-[10px] text-gray-400 line-through mt-1">Rp 1.909.000</p>
-                            <div class="flex items-center justify-between mt-0.5">
-                                <span class="text-xs font-bold text-red-600">Rp 1.336.300</span>
-                                <span class="text-[10px] font-bold text-red-600">Save 30%</span>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Munchen</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 1.900.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 1.330.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 30%</span>
                             </div>
-                            <span
-                                class="text-[9px] text-green-700 bg-green-50 px-1.5 py-0.5 mt-2 inline-block font-medium">Tersedia</span>
                         </div>
-                    </div>
+                    </article>
                     <!-- Product Card 2 -->
-                    <div class="bg-white text-black p-3 flex flex-col justify-between rounded-sm shadow-sm group">
-                        <div class="relative w-full aspect-square bg-gray-50 flex items-center justify-center p-2 mb-2">
-                            <img alt="Nike Vomero"
-                                class="max-h-24 w-auto object-contain transform group-hover:scale-105 transition"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7AAepFFHofNuXJqwutdk9BjEL5xKjcrcCIiSC7ZsW9nzOp0R8g9bFtORooAy-8pkYK9g4Hg6j2btZe0rj4rcVSZ6h7xE5xUHqL9gIvB1GUhnKGEclOTTmb84C7U4XemTu5vj9wGmuBSl0Tr3qlsfFcz7yMJQ6cgMVNqTiF3YJb4IFFofLWxy6Hx1kkg02UDz6_YRRLch5fmZmykuRzwLynP2G4o8T6he2Vdq3WVBCeBYEEuP0MVh4">
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Munchen Beige"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzYF6RfsD1H_I_DUmmmeJKmcwXXb0HLynqgU9daKRYFlPB0-Ut9oxucrZOojkU961kGb4z3jKBy4B4tYgIDHeWzFqGb4GSUcZwtCQESXs0HtfGbIeEEo3_kiRt9Rf0_sTETcPw9PRbwED5sIUHB30NBRSLhBkeuDk2BtAHgE74u1BNOtMmQ_1V-Y8rlEdERlBHFm1ynDBE3Gcd46xw_g5MaVnfLMNAshuEsA9ftu9CbZK8Nx9zL_E8" />
                         </div>
-                        <div>
-                            <span class="text-[9px] text-gray-500 uppercase tracking-wider block">Nike</span>
-                            <h4 class="text-xs font-bold truncate">Nike Vomero 5 Women's</h4>
-                            <p class="text-[10px] text-gray-400 line-through mt-1">Rp 2.489.000</p>
-                            <div class="flex items-center justify-between mt-0.5">
-                                <span class="text-xs font-bold text-red-600">Rp 1.742.300</span>
-                                <span class="text-[10px] font-bold text-red-600">Save 30%</span>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Munchen</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 1.900.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 1.330.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 30%</span>
                             </div>
-                            <span
-                                class="text-[9px] text-green-700 bg-green-50 px-1.5 py-0.5 mt-2 inline-block font-medium">Tersedia</span>
                         </div>
-                    </div>
+                    </article>
                     <!-- Product Card 3 -->
-                    <div class="bg-white text-black p-3 flex flex-col justify-between rounded-sm shadow-sm group">
-                        <div class="relative w-full aspect-square bg-gray-50 flex items-center justify-center p-2 mb-2">
-                            <img alt="New Balance 1000"
-                                class="max-h-24 w-auto object-contain transform group-hover:scale-105 transition"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCa6Kp-b4WOE1Dpz4ZE0MDJsaM6CORuLzlkomtYxff51GUoN7p6Hy-ACYhZMFBtEuEKWg-PrlXX6a84mvKZKYciZmkcUnj9LdKAyUDcgv1nDytZJ2W9k_KMNp_NQyuqqMAj6-J48KmJkRn0r0ftQZSvULMeMA9m2laKO6Nk2fGRXpNkSj-DS_cP_ovsb-G9kPgrBdmtMd5Cq4ctMevdWb1fUCUAfv0QwFDMHIxND98alYdnT4HFSn60">
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Tokyo MJ Women's"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_xFQ8O5gwLSDf-jzCJhXm53H9phIWc89oQOKTIaausRHfcy9HeB0sqvGkBj-gi6HkUhh21arclRN9_0iWDGfx_ZpLusnqkYK-7gUetPy1xnstg06FldYcn2Zs3DhegWJlpdifOL5lfgoOZZHa5d7CIN-Ixj-SKF_g0GEXE_xVWFZBNIRc1_BqjdkuonWgIt1qQCeZUeOv93OO0yyopIgwTgFGKaBTbc3fC5hSJkT9RA12Srf6nywD" />
                         </div>
-                        <div>
-                            <span class="text-[9px] text-gray-500 uppercase tracking-wider block">New Balance</span>
-                            <h4 class="text-xs font-bold truncate">New Balance 1000</h4>
-                            <p class="text-[10px] text-gray-400 line-through mt-1">Rp 2.599.000</p>
-                            <div class="flex items-center justify-between mt-0.5">
-                                <span class="text-xs font-bold text-red-600">Rp 1.559.400</span>
-                                <span class="text-[10px] font-bold text-red-600">Save 40%</span>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Tokyo MJ
+                                Women's</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 1.600.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 1.120.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 30%</span>
                             </div>
-                            <span
-                                class="text-[9px] text-green-700 bg-green-50 px-1.5 py-0.5 mt-2 inline-block font-medium">Tersedia</span>
                         </div>
-                    </div>
+                    </article>
                     <!-- Product Card 4 -->
-                    <div class="bg-white text-black p-3 flex flex-col justify-between rounded-sm shadow-sm group">
-                        <div class="relative w-full aspect-square bg-gray-50 flex items-center justify-center p-2 mb-2">
-                            <img alt="adidas Adizero Evo"
-                                class="max-h-24 w-auto object-contain transform group-hover:scale-105 transition"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ-WDmrkgYmmaOw8WyV6cFSZ4KNuEMl9kChuVZcge5O1PvUZhXkWhB8JWNO2nyNxR2CCd9LmxJcKha1MdOSR6TcWAXavgojl9KyYrBcnONwzRWlLckVKJvtXgFS72d6qpa_QR3CjX_2hG0F2ptkD5WG3tvYsU7GWyUneosYmOok4i2uH6x1aE0Q4g4-x3Q147LWnQqZyup77KmEJuoN0RDGM8sz6f88CMcTIR1RcaeqbeiDbe9Gddt">
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Tokyo MJ Women's"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6cBHTRL3yN9gax4sq2jC3bPzXCKh-wnR_kxxa3MJhtCMkWN89jDMIiUOiyInS3qUsrrPyw3kbZNyX96dYKTek6XobB0PupYpVpt5r8Kgi8_4mlagwUmcKplNx-KzSVxkwMMs__5q5-iTtJwYwITEjaxbEpnjKhXTqvgaXmBrCcEs_SGNDLavpWbesIslaXHoOoJl0i26_uMCJvdX5HS7w50nS8pRt84q4inzVT4NYl-0-5abZjd0m" />
                         </div>
-                        <div>
-                            <span class="text-[9px] text-gray-500 uppercase tracking-wider block">adidas</span>
-                            <h4 class="text-xs font-bold truncate">adidas Adizero Evo SL</h4>
-                            <p class="text-[10px] text-gray-400 line-through mt-1">Rp 2.500.000</p>
-                            <div class="flex items-center justify-between mt-0.5">
-                                <span class="text-xs font-bold text-red-600">Rp 1.750.000</span>
-                                <span class="text-[10px] font-bold text-red-600">Save 30%</span>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Tokyo MJ
+                                Women's</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 1.600.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 1.120.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 30%</span>
                             </div>
-                            <span
-                                class="text-[9px] text-green-700 bg-green-50 px-1.5 py-0.5 mt-2 inline-block font-medium">Tersedia</span>
                         </div>
+                    </article>
+                    <!-- Product Card 5 (JD Exclusive) -->
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <!-- JD Exclusive Badge -->
+                            <span
+                                class="absolute top-2 right-8 z-10 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                                <i class="ph ph-shield-check"></i> JD
+                            </span>
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Handball Spezial"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCOH-QCtLSY-y0qpdraYjyHVgpLdurXhX_Z2af57Qm6Z8gn1eNP-K8uU5pNDnRdb5scum4O4rzyLoo1pZ_f1NAZfcKxEY-qQliDBA4qZj3GHjgHNWAH6fxTd9g8Co0yljCEZpalNoem5Jnp326tTLMeO583RSca_x5lGsE7QmQD3ez2FFVQoWznp9yCZPJqI9LSUlPIuSm0DP6VjuC98jvPpqfoJQXy76SVUE0FMxV1tZpNXjCM9Pl" />
+                        </div>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Handball
+                                Spezial</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 1.900.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 950.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 50%</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Product Card 6 -->
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span
+                                class="absolute top-2 right-8 z-10 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                                <i class="ph ph-shield-check"></i> JD
+                            </span>
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Samba"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-mEZCRZXpbEfT_k6crJqyBGskECIyqOipfjCqdzUksw5iLTxkQDui8yEchyM3qIyoUxA-FDvZuPLBzKKVBsrH1_XULFJs4394k-DqnDnDpEaemH-JDsxI2zyo6NDPFgj-kUO0GN2hgnUBAcY9tjxG3gltb97iU6LHwPblrdQXN46PE6_s8QqBRUWx-NT2y0CtgoQg4twSYZp-V7zHlJwjIxi14FpDOJeTDeaPYTe5BDmuizzoVvcJ" />
+                        </div>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Samba</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 2.200.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 1.540.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 30%</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Product Card 7 -->
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span
+                                class="absolute top-2 right-8 z-10 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                                <i class="ph ph-shield-check"></i> JD
+                            </span>
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Samba Black"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW7mZSpNPcC6QS7sns3-0XPu16KqBo4oM1akrO585_aN9-hmrUGNe2ElD1V8ZDrTKz_yoIhrRr6PyaFxOTCphYdgx_kVhyuDN8v49Vp9r17hPoq1qR1nBNN58sqS6sdGHq3-K0frKEGWaXzGGf5D-yxpQ541V3TouItRFqo074qf-mpD9_6RqdgauMq2bUdiKFfiY-fpC9emygBzaUWALNQll0A4ue96CGY5sCl_6TToPzTLxh0-cQ" />
+                        </div>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Samba</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 2.200.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 1.540.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 30%</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Product Card 8 -->
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Handball Spezial Women's"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTsdytbR-JGJyBvZOSrnocnpQhuJZD_csq8lzvKzOyBFO-gQx-m4w6kyUPNJvJjuxuZWH6mn6UAvXB2qQw2JH3WmkZC9zEG3GEpUf-qxE0eaLs198-2GayPxS8Jeb8U5tQo9zHsd4gBCKb5ZBaMiW9rcsDHtc6JKD58qIu5WIhxUB2C1mLl9PxI_Ur8E-YmeVE18TYD2lCLDdKSB_beygtuJ6AdPxjuOTDL47S5Qyk9rfzAgQK23LN" />
+                        </div>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Handball
+                                Spezial Women's</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 1.900.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 1.330.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 30%</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Product Card 9 -->
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span
+                                class="absolute top-2 right-8 z-10 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                                <i class="ph ph-shield-check"></i> JD
+                            </span>
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Handball Spezial Junior"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-naQV7Irpi-0jYmgGlOFkCDylEKBJHfMwixmPKTgZWDRltKgFHBGUtz88NNwsRV-HRaUxzm-C2-XPycJhSMyyzssu5Q3IhA8d6meDdyZjhdwkxJC5Axp-Ixcm_OCLNm3xnMCqcNQRmVX1fncXpzYporOn70N-YDkN3e8OFpW49sGomoYPG1NEBeeL98W_pAf-x6KELDWZoOT51iO8xdXNixuPJ42N_R6CyPP5ASACArMrbEm5A6rm" />
+                        </div>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Handball
+                                Spezial Junior</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 1.300.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 910.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 30%</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Product Card 10 (Apparel) -->
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span
+                                class="absolute top-2 right-8 z-10 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                                <i class="ph ph-shield-check"></i> JD
+                            </span>
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Skirts Women's"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6Gnbx_F5i9smcPPDWv0daf9g3IqrQnenjx80umj6cPBOk6NG0_XjV9hIeAM-p_5mgYT4CR2zhrP_MR-4Rp3ong-y9hDTs-BBKjDFWojlm6ERZovm5Coyfk-w8WfCKCGnBEEShvs6SXTrHLMyOkY9BsFEftK6CEJonVFE-XkbOETIWt4rEWteuKScElobEqlKya-SMY4r0a3_Xs5tfXScERYXkQ-emr9MJMb2hvy7EsfOLqZ6tpmKG" />
+                        </div>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Skirts
+                                Women's</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 600.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 360.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 40%</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Product Card 11 (Apparel) -->
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Instant Noodle T-Shirt"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPvb1DKJNfnP4yl4vG21pi5Wki9ERDCQcfT44FqYmiwNVdoT7OqLq9pbrG0MhnxLj6XAcAcJJhlIPQsjiNO1iCmKM-w782J0LDEoxA3GwBW_e-etIZ4Mddp3bP9yH4eySBRjTPHkxz-2zHJ71ib0Aqp59ugnRPjVOtFgOvGJch73Pucnd7N4k8A2ocuWK_EiRhO9LPz9XQTIuiT2U94I6V5svoqwNug52pSy--iZ8rmFEk4ZZUHs_Y" />
+                        </div>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Instant
+                                Noodle T-Shirt</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 500.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 350.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 30%</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Product Card 12 (Apparel) -->
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Fortune Cat T-Shirt"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuADubGbrkzS1-DW3Pp6S0c7QbZIF8vJQR4RQ53hiHRLrK_0ZlFzBeopHrj0mY_SLwavGPw4gqwf5RYqC9P1Wyz0pk4NV5WX9YRXV6bCADlMViY4oQ4uKA38Z39INrxRZFQuxEbEMiG9thCJXIz3apAvDkCCSR61YdY9ugZr5nWTyGPC-PJCNRwLM6qfN-m5yBv4oRKa1TywDUw_7bWnFtYif33sRlDc5s9N6jtIrZ5DF5Hidc1Gzvhd" />
+                        </div>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Fortune Cat
+                                T-Shirt</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 500.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 350.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 30%</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Product Card 13 (Duck Graphic Tee) -->
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Originals Duck Graphic T-Shirts"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDH72gcGGnuju4hbMBrFWrWkNFjcPueH2CDN_bbLQWH5z6iAVSaRWZWuE806Pp2iDlCK2FR0E6IyNex9EeW5SiCryCyD2nhi_vMzq31LQKQjGWWQDpUY-bWoXxi-oLIg3X9UHZpOvw4yp_l2idZxf2DTetSOJawJBXOn_tqIjNOAJ2LJFZt78GPD2w051efCzP2AMGaOboN3MBMqMw_2ueN613F-Vuc5viK_nPFIO5P761DZAzyCyck" />
+                        </div>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Originals Duck Graphic
+                                T-Shirts</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 850.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 425.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 50%</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Product Card 14 (Italy Home Jersey) -->
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Italy Home Jersey Women's"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcc65KzQfKx6ueJNdD8S99I1pZi-FyZoy4tYUZ3H8Aaxhi4AGR8optiZMcuO46A3aiewOb4nnmFK1Ef13dulXw6fE7ocIl_HCwnvEYH57Ubg9BAQPXlt0LwMBBjUKQxnoryPvY3gZFkKfIUbFtKZ5nK3k80Io1JpvpxiXy8gHi29Xl2Zpmx2dM23lW5ORvkWdXbJMKL45iFU7mwCEkTJYZlRtcCGLgFzrsa4hxrqn9EkGtHcKSEJEx" />
+                        </div>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Italy Home Jersey
+                                Women's</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 1.000.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 500.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 50%</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Product Card 15 (Climacool Laced) -->
+                    <article class="group relative flex flex-col justify-between">
+                        <div
+                            class="relative bg-neutral-100 rounded-sm aspect-square overflow-hidden flex items-center justify-center p-3">
+                            <span class="absolute top-2 right-2 z-10">
+                                <button aria-label="Add to Wishlist"
+                                    class="text-neutral-400 hover:text-jdRed transition-colors" type="button">
+                                    <i class="ph ph-heart text-lg"></i>
+                                </button>
+                            </span>
+                            <img alt="adidas Climacool Laced"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzX9WFl1X8sac6AMeefHsivoSi3Zl1Po1cax-STl_0fmYuJ_rqb_uVQG8v9c7vN5ShYJE0DT0ptlzXfDuLx_YSzU5tyxX3WixQik7OjvnYPNuCdEWlkAEY8osaG1A-hZCH7pr4n6c_jpdi9LvNFT2fz20SBh9j0NaZ7_lJNRms9PFAhC5P7dNwU4UduIiNGKzjAkyy1gTwCOEg6pKlFMPrFnJ5rAJL3gdi_Ph_XL9Mfz_H3uZI4HBX" />
+                        </div>
+                        <div class="mt-2.5">
+                            <h2 class="text-xs font-normal text-neutral-800 line-clamp-1">adidas Climacool Laced</h2>
+                            <div class="text-[11px] text-neutral-400 line-through mt-0.5">Rp 2.700.000</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-jdRed font-bold text-xs">Now Rp 1.620.000</span>
+                                <span class="text-jdRed text-[11px] font-semibold">Save 40%</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <!-- BEGIN: Pagination Section -->
+                <div class="mt-12 flex flex-wrap items-center justify-between border-t border-neutral-200 pt-6">
+                    <div class="flex items-center space-x-1">
+                        <button aria-label="Previous Page"
+                            class="w-8 h-8 flex items-center justify-center rounded border border-neutral-300 text-neutral-400 hover:bg-neutral-50"
+                            type="button">
+                            <i class="ph ph-caret-left"></i>
+                        </button>
+                        <button class="w-8 h-8 flex items-center justify-center rounded bg-black text-white font-bold"
+                            type="button">1</button>
+                        <button
+                            class="w-8 h-8 flex items-center justify-center rounded border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
+                            type="button">2</button>
+                        <button
+                            class="w-8 h-8 flex items-center justify-center rounded border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
+                            type="button">3</button>
+                        <button
+                            class="w-8 h-8 flex items-center justify-center rounded border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
+                            type="button">4</button>
+                        <button aria-label="Next Page"
+                            class="w-8 h-8 flex items-center justify-center rounded border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
+                            type="button">
+                            <i class="ph ph-caret-right"></i>
+                        </button>
                     </div>
-                    <!-- Product Card 5 -->
-                    <div class="bg-white text-black p-3 flex flex-col justify-between rounded-sm shadow-sm group">
-                        <div class="relative w-full aspect-square bg-gray-50 flex items-center justify-center p-2 mb-2">
-                            <img alt="On Running"
-                                class="max-h-24 w-auto object-contain transform group-hover:scale-105 transition"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeDQ_1e7PCIgqfjUj0659aYYa1l0dXBymIpoEWRlLYIrGsLDobZn26wMIJwBRu0IBoH2knnNYDRB4DGqhmPqamNK1ghhjkHZqaoX6E72Chgr_X3yel2FslK0QI_0V6Z5FGpiHqnJ4mm-WI4JFiGEvnNEYcAdaCAtCwWtF9UsidRekGRG_jXz3fj6PYSvAi-_2M1e-iuVwa_8KG7PWonqq5YZ15oxRt3-qoCDMaUF9SsZjgiNHI-eGm">
-                        </div>
-                        <div>
-                            <span class="text-[9px] text-gray-500 uppercase tracking-wider block">On</span>
-                            <h4 class="text-xs font-bold truncate">Cloudtilt Running</h4>
-                            <p class="text-[10px] text-gray-400 line-through mt-1">Rp 2.800.000</p>
-                            <div class="flex items-center justify-between mt-0.5">
-                                <span class="text-xs font-bold text-red-600">Rp 1.960.000</span>
-                                <span class="text-[10px] font-bold text-red-600">Save 30%</span>
-                            </div>
-                            <span
-                                class="text-[9px] text-green-700 bg-green-50 px-1.5 py-0.5 mt-2 inline-block font-medium">Tersedia</span>
-                        </div>
+                    <div class="text-neutral-500 text-xs">
+                        137 Produk | <a class="font-bold text-black hover:underline" href="#">Lihat Lebih Banyak</a>
                     </div>
                 </div>
+                <!-- END: Pagination Section -->
+            </section>
+            <!-- END: Product Grid -->
+        </div>
+        <!-- END: Two-Column Product & Filter Layout -->
+        <!-- BEGIN: SEO Informational Footer Content -->
+        <section class="mt-16 pt-8 border-t border-neutral-200 text-neutral-600">
+            <h2 class="text-sm font-bold text-neutral-900 uppercase">GREAT DEALS - OFFERS &amp; PROMO JD SPORTS</h2>
+            <h3 class="text-xs font-semibold text-neutral-800 mt-1">Great Deals Up to 50% Off - Diskon Sepatu &amp;
+                Sneakers</h3>
+            <p class="text-neutral-500 mt-2 text-[11px] leading-relaxed line-clamp-2">
+                Temukan penawaran terbaik dan promo diskon produk Adidas Original mulai dari Samba, Gazelle, Handball
+                Spezial, Stan Smith, hingga koleksi jersey sepakbola dan sportswear terkini di JD Sports Indonesia.
+                Nikmati penawaran eksklusif online &amp; in-store dengan jaminan produk 100% original.
+            </p>
+            <div class="text-center mt-4">
+                <button class="text-xs font-bold text-black inline-flex items-center gap-1 hover:underline"
+                    type="button">
+                    Lihat Lebih Banyak <i class="ph ph-caret-down text-sm"></i>
+                </button>
             </div>
         </section>
-        <!-- END: LimitedPairsCountdownSale -->
-        <!-- BEGIN: ShopTheOffers -->
-        <section class="bg-[#F25C19] py-8 text-white" data-purpose="brand-promotions">
-            <div class="max-w-7xl mx-auto px-4 lg:px-8">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl md:text-3xl font-condensed font-black tracking-wide">
-                        Shop The Offers
-                    </h2>
-                    <a class="text-xs font-bold uppercase tracking-wider hover:underline" href="#">
-                        Shop All
-                    </a>
+        <!-- END: SEO Informational Footer Content -->
+    </main>
+    <!-- BEGIN: Interactive Pre-Footer Banners -->
+    <section class="bg-neutral-100 py-10 border-t border-neutral-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
+            <!-- Newsletter Signup -->
+            <div
+                class="bg-white p-6 md:p-8 rounded-sm shadow-xs border border-neutral-200 text-center max-w-2xl mx-auto">
+                <h3 class="text-base font-bold text-neutral-900 uppercase">Baru bergabung dengan JD?</h3>
+                <p class="text-neutral-500 text-xs mt-1 mb-4">Dapatkan rekomendasi produk kami dan miliki produk
+                    favoritmu.</p>
+                <div class="relative max-w-md mx-auto">
+                    <input
+                        class="w-full pl-4 pr-12 py-2.5 border border-neutral-300 rounded text-xs focus:ring-1 focus:ring-black focus:border-black"
+                        placeholder="Masukkan email Anda" type="email" />
+                    <button aria-label="Submit Email"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white p-1.5 rounded hover:bg-neutral-800 transition-colors"
+                        type="button">
+                        <i class="ph ph-arrow-right text-base"></i>
+                    </button>
                 </div>
-                <!-- 4 Brand Discount Tiles -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    <!-- Nike 50% Tile -->
-                    <div
-                        class="bg-[#3b434a] border border-gray-600 aspect-[4/3] p-4 flex flex-col justify-center items-center text-center rounded-sm hover:scale-[1.02] transition cursor-pointer">
-                        <span class="font-impact text-3xl md:text-4xl text-orange-500 tracking-wider">NIKE</span>
-                        <span class="font-impact text-2xl md:text-3xl text-white tracking-wide leading-none mt-1">UP TO
-                            50% OFF</span>
-                    </div>
-                    <!-- Adidas 50% Tile -->
-                    <div
-                        class="bg-[#3b434a] border border-gray-600 aspect-[4/3] p-4 flex flex-col justify-center items-center text-center rounded-sm hover:scale-[1.02] transition cursor-pointer">
-                        <span class="font-impact text-3xl md:text-4xl text-orange-500 tracking-wider">ADIDAS</span>
-                        <span class="font-impact text-2xl md:text-3xl text-white tracking-wide leading-none mt-1">UP TO
-                            50% OFF</span>
-                    </div>
-                    <!-- New Balance 50% Tile -->
-                    <div
-                        class="bg-[#3b434a] border border-gray-600 aspect-[4/3] p-4 flex flex-col justify-center items-center text-center rounded-sm hover:scale-[1.02] transition cursor-pointer">
-                        <span class="font-impact text-2xl md:text-3xl text-orange-500 tracking-wider">NEW BALANCE</span>
-                        <span class="font-impact text-2xl md:text-3xl text-white tracking-wide leading-none mt-1">UP TO
-                            50% OFF</span>
-                    </div>
-                    <!-- Puma 50% Tile -->
-                    <div
-                        class="bg-[#3b434a] border border-gray-600 aspect-[4/3] p-4 flex flex-col justify-center items-center text-center rounded-sm hover:scale-[1.02] transition cursor-pointer">
-                        <span class="font-impact text-3xl md:text-4xl text-orange-500 tracking-wider">PUMA</span>
-                        <span class="font-impact text-2xl md:text-3xl text-white tracking-wide leading-none mt-1">UP TO
-                            50% OFF</span>
-                    </div>
-                </div>
-                <!-- Horizontal New Balance 530 Promo Banner -->
-                <div class="relative bg-white text-black p-4 flex items-center justify-between rounded overflow-hidden">
-                    <div class="flex items-center space-x-6 z-10">
-                        <span class="font-impact text-xl tracking-wider text-black">BALANCE</span>
-                        <h3 class="font-impact text-2xl md:text-3xl tracking-tight">NEW BALANCE 530</h3>
-                    </div>
-                    <div class="flex items-center gap-4 z-10">
-                        <a class="bg-black text-white text-xs font-condensed font-bold px-6 py-2 hover:bg-gray-800 transition"
-                            href="#">
-                            Shop Now
+            </div>
+            <!-- App Download Promotion Box -->
+            <div
+                class="bg-white p-6 md:p-8 rounded-sm shadow-xs border border-neutral-200 text-center max-w-2xl mx-auto">
+                <h3 class="text-base font-bold text-neutral-900 uppercase">Promo Eksklusif Hanya di JD Sports App</h3>
+                <p class="text-neutral-500 text-xs mt-1 mb-5">Dapatkan promo menarik, penawaran eksklusif, hingga update
+                    produk terbaru hanya di aplikasi JD Sports.</p>
+                <div class="bg-black text-white p-3.5 rounded max-w-xs mx-auto">
+                    <span
+                        class="text-[10px] tracking-wider uppercase text-neutral-400 block mb-1.5 font-semibold">Download
+                        Sekarang</span>
+                    <div class="flex justify-center items-center gap-4 text-xs font-semibold">
+                        <a class="flex items-center gap-1.5 hover:text-neutral-300" href="#">
+                            <i class="ph ph-apple-logo text-base"></i> App Store
+                        </a>
+                        <span class="text-neutral-600">|</span>
+                        <a class="flex items-center gap-1.5 hover:text-neutral-300" href="#">
+                            <i class="ph ph-google-play-logo text-base"></i> Google Play
                         </a>
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- END: ShopTheOffers -->
-        <!-- BEGIN: ShopByCategory -->
-        <section class="bg-[#F25C19] pb-12 pt-4 text-white" data-purpose="category-pillars">
-            <div class="max-w-7xl mx-auto px-4 lg:px-8">
-                <h2 class="text-2xl md:text-3xl font-condensed font-black tracking-wide mb-6">
-                    Shop by Category
-                </h2>
-                <!-- 3 Category Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Men's Pillar -->
-                    <div class="relative flex flex-col">
-                        <div class="relative aspect-[3/4] w-full overflow-hidden rounded shadow-lg">
-                            <img alt="Shop Men's Fashion &amp; Shoes" class="w-full h-full object-cover object-center"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDj6p6gHw9_GgiqsrIDTHZ242LhXf4uGrR8XzsLZGXnjAb7wfGA1d_OD51z5hWjkBOdwT5fkZRDhicKZ79-TD4SVAyenXN08vOLreg4d4BG0Bwx_ff6HSuxvihMsbuK7I9tjSSIZhOUTCS-MbN6YevLc2zL1gpNFWQcDavr4FyXceY5TCR6x_V82BRfSeCMVn-9xFMXobzu-da1eSfhRiGwjEEqx6GqbvjuFhufbSuSHptywcsGcNdz">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end justify-center pb-8">
-                                <h3 class="font-impact text-3xl md:text-4xl text-white tracking-wider">SHOP MEN'S</h3>
-                            </div>
-                        </div>
-                        <!-- Sub-buttons -->
-                        <div class="mt-3 space-y-2">
-                            <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
-                                href="#">
-                                Men's Footwear
-                            </a>
-                            <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
-                                href="#">
-                                Men's Clothing
-                            </a>
-                            <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
-                                href="#">
-                                Men's Accessories
-                            </a>
-                        </div>
-                    </div>
-                    <!-- Women's Pillar -->
-                    <div class="relative flex flex-col">
-                        <div class="relative aspect-[3/4] w-full overflow-hidden rounded shadow-lg">
-                            <img alt="Shop Women's Fashion &amp; Shoes" class="w-full h-full object-cover object-center"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqAqBFMrojmKVKtRKHmvz0qVVrgjXdpEStaG2Ekyz6nNYnIDLElx7ofTyy7Fbgf3g8wwT4tM-BlVOVLa9R64c8wT8d7XZeW2Ifq_-tUxlMVbiw7mmgkAszB0N8Qoustu_3y8E6KQNFcZWqFwGaLxi-wQTge-RckAaF2Vp6PfwSIgWUMQpNwqxckDiNh7_rN-lhEJouhHjGkikAYtUEUVwYTUOchHbmCo_CyaTKZZi4JmQqNsUDQgnI">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end justify-center pb-8">
-                                <h3 class="font-impact text-3xl md:text-4xl text-white tracking-wider">SHOP WOMEN'S</h3>
-                            </div>
-                        </div>
-                        <!-- Sub-buttons -->
-                        <div class="mt-3 space-y-2">
-                            <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
-                                href="#">
-                                Women's Footwear
-                            </a>
-                            <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
-                                href="#">
-                                Women's Clothing
-                            </a>
-                            <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
-                                href="#">
-                                Women's Accessories
-                            </a>
-                        </div>
-                    </div>
-                    <!-- Kids' Pillar -->
-                    <div class="relative flex flex-col">
-                        <div class="relative aspect-[3/4] w-full overflow-hidden rounded shadow-lg">
-                            <img alt="Shop Kids' Shoes &amp; Apparel" class="w-full h-full object-cover object-center"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLNwPnKujOp99ThZ1nURuBdrvMoA4pm0E2GADaQQCS3NxqOfGsC0GaZxB9B408weQ5w3Mm3nX2GB9MLKk3DituvKElWWx0076jyvAOCLhzTcKsTnx5mJmPszr_kLSpgQ0g_oIeXvy1EQUDvCDRRsrMG0WdDWZO6IjZrDooGgXBWpZZDBerQl4h0_94we06tc-LJIttz6_TNJYdpV8zb7hirPMLrpnQF3iNZ_Xwfrt_OidGgv2FTjHO">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end justify-center pb-8">
-                                <h3 class="font-impact text-3xl md:text-4xl text-white tracking-wider">SHOP KIDS'</h3>
-                            </div>
-                        </div>
-                        <!-- Sub-buttons -->
-                        <div class="mt-3 space-y-2">
-                            <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
-                                href="#">
-                                Kids' Footwear
-                            </a>
-                            <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
-                                href="#">
-                                Kids' Clothing
-                            </a>
-                            <a class="block w-full bg-white text-black text-center text-xs font-bold py-2.5 rounded-sm hover:bg-gray-100 transition shadow"
-                                href="#">
-                                Kids' Accessories
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- END: ShopByCategory -->
-        <!-- BEGIN: TopPicks -->
-        <section class="bg-[#F25C19] pb-10 text-white" data-purpose="our-top-picks">
-            <div class="max-w-7xl mx-auto px-4 lg:px-8">
-                <h2 class="text-2xl md:text-3xl font-condensed font-black tracking-wide mb-4">
-                    Our Top Picks
-                </h2>
-                <!-- Filter Tabs -->
-                <div class="flex items-center space-x-2 mb-6">
-                    <button class="bg-black text-white text-xs font-bold px-4 py-2 rounded-sm">
-                        Shop Men's
-                    </button>
-                    <button
-                        class="bg-transparent border border-white/50 text-white text-xs font-bold px-4 py-2 rounded-sm hover:bg-white/10">
-                        Shop Women's
-                    </button>
-                    <button
-                        class="bg-transparent border border-white/50 text-white text-xs font-bold px-4 py-2 rounded-sm hover:bg-white/10">
-                        Shop Kids'
-                    </button>
-                </div>
-                <!-- Top Picks Product Row -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <!-- Product 1 -->
-                    <div class="bg-white text-black p-3 rounded flex flex-col justify-between shadow">
-                        <div class="w-full aspect-square bg-[#f9f9f9] flex items-center justify-center mb-3">
-                            <img alt="Nike Mind 001 Slides" class="max-h-36 object-contain"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0vf8-yqYBegctGr4QzNClKRyqkPxBN0LPqith-cUlI54rnN4lQplW4fxY_KYuKoo29_btYrC-YH2HpWhnCy7OkKG-htbpvoZLBhroBRd-90dqAvV8RBmUWjCb8Gq3jYayyt9bYtGIN2JIvfaDVbSoQYoASwuecA3xrYxz781pHnhpb6Sv-w2fewTEjH5x-vLpWMD3RqTuZosAGVHbPp1TZ3_CUejUYjxfl9Eab1KjNCxxBtRf7JOz">
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-bold truncate">Nike Mind 001 Slides</h4>
-                            <p class="text-xs font-extrabold text-black mt-1">Rp 1.199.000</p>
-                        </div>
-                    </div>
-                    <!-- Product 2 -->
-                    <div class="bg-white text-black p-3 rounded flex flex-col justify-between shadow">
-                        <div class="w-full aspect-square bg-[#f9f9f9] flex items-center justify-center mb-3">
-                            <img alt="adidas Originals T-Shirt" class="max-h-36 object-contain"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwO8BkR7TQqghn6-ctwQltSo-YChgjllToj8QXZwMmM-684sylZRPeih9733GU7x4XmnKM-2ogpEVNlf_xXFliMxIvRnBw1GpAQykw9S09DAGz1Yx3L2ahBt_4SEEzUfDLkPM2MkcM9RTaOt1jHhbJl2cZSOa7BfKtkmHRLrs5dky0WpuT9Yhk2C3bbRfpAbzfLjYPeos7k-fQlSP-Y_IleAQ1zUNaq9k5hxY0lYvaC_NFK0J1CF-_">
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-bold truncate">adidas Originals Essentials T-Shirt</h4>
-                            <p class="text-xs font-extrabold text-black mt-1">Rp 550.000</p>
-                        </div>
-                    </div>
-                    <!-- Product 3 -->
-                    <div class="bg-white text-black p-3 rounded flex flex-col justify-between shadow">
-                        <div class="w-full aspect-square bg-[#f9f9f9] flex items-center justify-center mb-3">
-                            <img alt="Nike Mind Slides Blue" class="max-h-36 object-contain"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuArBZY2tMKgu4Cb1o2mj6-rIMkt-M5COirITSskJiJUSmNuX4XdMfHLyDOmP_w2CLVOA2P0kUyqqU4aehmdi9Ct8fSShqHJ6okmGTc6VVfeqGwqUdjvO8OwI8cNV_DKhqUsoVdyYSl-CV1h4ZzsZPVz_QKAb8XEOZc08NeLI-yek0UhLMNPuOOBgy5rehlJ8SraPOlmyG8mfYUYyStml3rMKrxFSrgHjK23OAkl-wDRgDwotlNO3o-X">
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-bold truncate">Nike Mind 001 Slides</h4>
-                            <p class="text-xs font-extrabold text-black mt-1">Rp 1.199.000</p>
-                        </div>
-                    </div>
-                    <!-- Product 4 -->
-                    <div class="bg-white text-black p-3 rounded flex flex-col justify-between shadow">
-                        <div class="w-full aspect-square bg-[#f9f9f9] flex items-center justify-center mb-3">
-                            <img alt="Nike Heritage Backpack" class="max-h-36 object-contain"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4ZgOQCpboXIcYJJqYkUN-IL8F1PUCfLb0JdQQXPFD6R2D0-zsOL24XmqlyqRWNZeCixd2oqDCQ2B8sXDT7ykL9_FFwkXxIicCJDW8myHIUhRswt6L7H18goZn6GLNuZx7im-1Zc9q5gkhD8b8FdvdEKPy55NET6RLWQRD2X7n1v3mCk9ASbBBZxjje5uz33hnO59agE8eDEQZ2wUxuvlI9lGr8Z38jz82S-wQhx3_fvUMc41sIVG2">
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-bold truncate">Nike Heritage Backpack</h4>
-                            <p class="text-xs font-extrabold text-black mt-1">Rp 499.000</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- END: TopPicks -->
-        <!-- BEGIN: SeasonalSpotlightBanners -->
-        <section class="bg-black py-4">
-            <div class="max-w-7xl mx-auto px-4 lg:px-8 space-y-4">
-                <!-- Complimentary Adidas Bag Banner -->
-                <div class="bg-[#1C3545] p-4 flex flex-wrap items-center justify-between text-white rounded">
-                    <div class="flex items-center space-x-4">
-                        <div class="flex items-center space-x-2 text-2xl font-bold">
-                            <span class="">///</span>
-                            <span class="">JD</span>
-                        </div>
-                        <h4 class="font-condensed text-lg md:text-xl font-bold tracking-wider">
-                            COMPLIMENTARY ADIDAS ADICOLOR CLASSIC BAG
-                        </h4>
-                    </div>
-                    <a class="bg-white text-black font-condensed px-6 py-1.5 text-xs font-bold tracking-wider hover:bg-gray-100 transition"
-                        href="#">
-                        Shop Now
-                    </a>
-                </div>
-                <!-- Salomon Urban Expeditions Banner -->
-                <div class="relative w-full rounded overflow-hidden">
-                    <img alt="Salomon For Urban Expeditions" class="w-full h-auto object-cover"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQ8PrQPNBvmyn4Jq7XF6di4jaqNgXEy0Wy6KHLjR7oA--t5rxIjU64hpEA8cP7NT2KVp0slbNGViZnQCpxUEGlNZunzyzgOfZbmglZbmLgT68Tm008PcnYz2VYAxzHDivz7rQ6dis6AcQfBkqdkOgZfL1FH8UBAIBw7OB1SDPyihanZR-GNvpZI1y3f2r_y_jbCmGcGRD7ySkl7spPuUk_UNTz0dVbe3yRGyjn9PncijpOg5equyo7">
-                </div>
-                <!-- Twin Feature Promo: Asics Kayano 14 & adidas by JENNIE -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Asics Gel-Kayano 14 -->
-                    <div class="group relative overflow-hidden rounded bg-gray-900">
-                        <img alt="Asics Gel-Kayano 14"
-                            class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition duration-500"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY5ILgvs3pAQ8F7WcKHhqrcPtRvmjfdS5VDoBzYrq3bNXj75dC61jRoe2OR06n8bzT4n48b5rf92tNyj8G4qtsGSl3Mexmk-2JuA7iVIamHegrslS6DBAFyiS6K8JS5DdhQotHwCY_8MDZcKcA7wq_tSgy126LkFOmEDCZJlNNxc7K500pPnLXrGtTWPG9tf82llxHo7n6f4BKUSaiFYZtOdL2vIHCsArH2MHB4O58hcpCpgju9haE">
-                        <div class="p-3 bg-black text-white flex items-center justify-between">
-                            <span class="text-xs font-bold uppercase tracking-wider">Asics Gel-Kayano 14</span>
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <!-- adidas Originals by JENNIE -->
-                    <div class="group relative overflow-hidden rounded bg-gray-900">
-                        <img alt="adidas Originals by JENNIE"
-                            class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition duration-500"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuClwwyoi_pbt4zNim5oSXicpW3ev-ez7_Vl_FqpMSC95DNeWwESp3LVLRaQjo4SW4r3SmdQ-GXb5p6DJUCg1SXuHgnXqw9-OMr1wyHn8eeVtjm91m4yskSyb7YcTpPvbUqX5Pn2A5BnNRw1vH1--I3o-2EVZgNKJkQhUghwzNwINBi3ibDS19Adn_vztZFNNmtlQIe6R29bj_O2oH1QGUpR7dW7gKEhkFDBPwbnQmN5jfOJ917zbO9j">
-                        <div class="p-3 bg-black text-white flex items-center justify-between">
-                            <span class="text-xs font-bold uppercase tracking-wider">adidas Originals by JENNIE</span>
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- END: SeasonalSpotlightBanners -->
-        <!-- BEGIN: TheBrandsYouLove -->
-        <section class="bg-[#F25C19] py-8 text-white" data-purpose="popular-brands">
-            <div class="max-w-7xl mx-auto px-4 lg:px-8">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl md:text-3xl font-condensed font-black tracking-wide">
-                        The Brands You Love
-                    </h2>
-                    <a class="text-xs font-bold uppercase tracking-wider hover:underline" href="#">
-                        View All
-                    </a>
-                </div>
-                <!-- 4 Grid Brand Tiles -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <!-- Nike -->
-                    <div class="group cursor-pointer">
-                        <div class="relative aspect-square w-full rounded overflow-hidden shadow">
-                            <img alt="Nike Collection"
-                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBr1pMgezqpSpqjLewd74x9lZS-Pa6TmjbT3ZaXp7KVNO-r68TAroPbKhvELKyjrP2g6LfWjXqUQlqmK3nCh4ZpCWslj9IVrLvopv7Ai5hWZRWE0_tDp7C0fvW6KeDksJrEGhHV5QMqraeHnY4S_ZoeSqnO0XtjOLRMfY5JIUxonwXtrjPYg-2qPuFdZsQwXgCJCGXC1aBVeHUmikj2vT3a3e3EvdANgt5P0xZi9kf35kXYp_wyZMok">
-                            <div
-                                class="absolute bottom-3 left-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-black">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <h4 class="mt-2 text-xs font-bold uppercase tracking-wider">Nike</h4>
-                    </div>
-                    <!-- adidas -->
-                    <div class="group cursor-pointer">
-                        <div class="relative aspect-square w-full rounded overflow-hidden shadow">
-                            <img alt="adidas Collection"
-                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAU24NJlo25hF-SmJwSOnX3Vz07PH_iXUwLyKn5roaOy9Q4W20ta3nY6KL7gtLFrAa7iMhLNy1V0moM0vS7UqTm5m8HYrMd6_l6s233BpIcaIfRJrrDSCWDsXx_KoKOnd5CGNQdMqqMiLttamZxbY1RzHdp_uU8wbTwH1lYmeDn3kWR4VyXllgyoRLoY1mrlUrBsDo-P7XXz_ino14dgocq3xwoq9dJw2eHJYBWGem5JJ8EELrmOTFt">
-                            <div
-                                class="absolute bottom-3 left-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-black">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <h4 class="mt-2 text-xs font-bold uppercase tracking-wider">adidas</h4>
-                    </div>
-                    <!-- On Running -->
-                    <div class="group cursor-pointer">
-                        <div class="relative aspect-square w-full rounded overflow-hidden shadow">
-                            <img alt="On Running"
-                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdEfaz8UzuqLktxsCRHotLYiF2fEvPBmJ5CejRgMpkWOXChOZ1MeA5f3DheGl0ee9hNSFHy8X6J4xQQMpRseZ47fuGeTgVhqlghrRYGDq85LcWDTzAa2b8CEo9W1zaMq1olMmFhBC9dsVD0jMe5Ts6stYgYVaphH7uBgf29yA8fVMP0FuXAkxj6jBBCEIHVLjFyb300ucNxZS4YEEuUYxX87exXMioLFoSBiPcx3GImc2rk0mb37Bd">
-                            <div
-                                class="absolute bottom-3 left-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-black">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <h4 class="mt-2 text-xs font-bold uppercase tracking-wider">On</h4>
-                    </div>
-                    <!-- New Balance -->
-                    <div class="group cursor-pointer">
-                        <div class="relative aspect-square w-full rounded overflow-hidden shadow">
-                            <img alt="New Balance Collection"
-                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmGvdwz_i4nxQUNobL2eBS9_UHP4yPtucfw5WYGyUJ3C97zT8WxeMWFkWAfxERucLJrvVOKaV-Pf1BYkHhM1h8hBjWQWMiA4846Z8QU7my58gDM1NgIpb1gbgNeozpAJkEEnUrWbauBxEVeAnGF0N47b1foOXC_M4AksHAXyjyFXEhqENZF8c0ABSi0X6bXJFYFZibQR9yOPdysUtQG_b8D--RJxIcVWl-_TjAAhtny_0lg7OWxgZM">
-                            <div
-                                class="absolute bottom-3 left-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-black">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <h4 class="mt-2 text-xs font-bold uppercase tracking-wider">New Balance</h4>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- END: TheBrandsYouLove -->
-        <!-- BEGIN: DiscoverJDStyleEditorial -->
-        <section class="bg-[#F25C19] pb-12 text-white" data-purpose="editorial-blogs">
-            <div class="max-w-7xl mx-auto px-4 lg:px-8">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl md:text-3xl font-condensed font-black tracking-wide">
-                        Discover JD Style
-                    </h2>
-                    <a class="text-xs font-bold uppercase tracking-wider hover:underline" href="#">
-                        View All
-                    </a>
-                </div>
-                <!-- 4 Editorial Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <!-- Article 1: Jennie -->
-                    <div class="bg-white text-black rounded overflow-hidden flex flex-col justify-between shadow">
-                        <div>
-                            <div class="aspect-square w-full overflow-hidden">
-                                <img alt="adidas Originals JENNIE"
-                                    class="w-full h-full object-cover hover:scale-105 transition duration-300"
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHHD1SLdXYabTKxbZ32Gya6lbg4-aCmZt4Aj8ioMdENvmRV71UmW-jWVApxm_JZBv_OK51uD7ubsZhu7d-Z4UAN1BR4j4jIv-6Rx3Lin431q9fq4XUoUxGG_3UqrJ8d5XyzKrmwdsurARKCwVLoDTQUP1-beY9a1bdDN58JoUXlq-bp6BvMc8hRqJTywy9x-EL42aPP_A7V1J4FbIfdoIoOoYdyuttMp43ljTHvcjQRXrjmWEmlkJ_">
-                            </div>
-                            <div class="p-3">
-                                <h4 class="font-bold text-xs leading-snug line-clamp-2">
-                                    adidas Originals JENNIE: The Collection Every JENNIE Fan Needs to See
-                                </h4>
-                                <p class="text-[11px] text-gray-600 mt-1.5 line-clamp-3 leading-relaxed">
-                                    Kolaborasi perdana JENNIE bersama adidas Originals akhirnya hadir! Dari Superstar
-                                    dengan sentuhan balet hingga apparel yang effortless.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="p-3 pt-0">
-                            <a class="text-[11px] font-bold uppercase flex items-center gap-1 hover:underline" href="#">
-                                Read More <span class="">→</span>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- Article 2: ANFU -->
-                    <div class="bg-white text-black rounded overflow-hidden flex flex-col justify-between shadow">
-                        <div>
-                            <div class="aspect-square w-full overflow-hidden">
-                                <img alt="adidas Originals ANFU"
-                                    class="w-full h-full object-cover hover:scale-105 transition duration-300"
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAijvu4c1u9n4hf3xJuJX_d-xH5Au_oTjmybZInVdvnNYHJSGPF8eVt1qHY5cGEDmIGLOYM0HaoiL8Daugu8vtT04vE-4RPITmkxxX-JDFu5sTwAocF-KSSOKmRpAGD3rckUFvbi5Dqre1TPWCBpvtfZzj9jHP9qU9LnyA7XYySZZAO8Exua7QSb4Gnfsuix87ZdUnzBds2CexNTOyw6kcfK0rEB6t37MwRDOzSWrLblTtQ37Pmx9Y3">
-                            </div>
-                            <div class="p-3">
-                                <h4 class="font-bold text-xs leading-snug line-clamp-2">
-                                    New Drop, Instant Crush: adidas Originals ANFU
-                                </h4>
-                                <p class="text-[11px] text-gray-600 mt-1.5 line-clamp-3 leading-relaxed">
-                                    Mood baru, sneakers baru! adidas Originals ANFU hadir dengan sentuhan retro Mary
-                                    Jane yang versatile dan stylish untuk OOTD harianmu.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="p-3 pt-0">
-                            <a class="text-[11px] font-bold uppercase flex items-center gap-1 hover:underline" href="#">
-                                Read More <span class="">→</span>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- Article 3: Puma Tacklette -->
-                    <div class="bg-white text-black rounded overflow-hidden flex flex-col justify-between shadow">
-                        <div>
-                            <div class="aspect-square w-full overflow-hidden">
-                                <img alt="PUMA Tacklette"
-                                    class="w-full h-full object-cover hover:scale-105 transition duration-300"
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn6T1v0MEhQWSuZb0jHF2BcvZyjzWR1Oj97Kb3rvZksB-GeHZFAIziZzZ7Zmg1rJolQOEANbUWsEF5xxPCbOM1uftU1-6nM9X4XuDAWxflprK6rrybc-vuQEJNJ34aJrYvOmj8etWT6o6sm1sQ0uhJSBJkGPuytLtTRcZq6Kaqf1wg8WrgGgwxeEzv_8qA-UCS-TZp-u1oP1mJdaHevKIywDktX1GfefCMqoSJ4ZI3fiXYT-qM62Vk">
-                            </div>
-                            <div class="p-3">
-                                <h4 class="font-bold text-xs leading-snug line-clamp-2">
-                                    Cute Meets Classic: Kenalan dengan PUMA Tacklette
-                                </h4>
-                                <p class="text-[11px] text-gray-600 mt-1.5 line-clamp-3 leading-relaxed">
-                                    Meet your new sneaker crush, Puma Tacklette! Perpaduan gaya terrace klasik dengan
-                                    sentuhan Mary Jane-inspired yang playful dan chic.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="p-3 pt-0">
-                            <a class="text-[11px] font-bold uppercase flex items-center gap-1 hover:underline" href="#">
-                                Read More <span class="">→</span>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- Article 4: Final Piala Dunia -->
-                    <div class="bg-white text-black rounded overflow-hidden flex flex-col justify-between shadow">
-                        <div>
-                            <div
-                                class="aspect-square w-full bg-gradient-to-br from-red-600 to-indigo-900 flex items-center justify-center p-4 text-center">
-                                <div class="text-white">
-                                    <span class="block font-impact text-lg">FINAL WORLD CUP</span>
-                                    <span class="block text-2xl font-black mt-2">2026</span>
-                                    <p class="text-[10px] mt-1 text-gray-200">Spanyol vs Argentina</p>
-                                </div>
-                            </div>
-                            <div class="p-3">
-                                <h4 class="font-bold text-xs leading-snug line-clamp-2">
-                                    Final Piala Dunia 2026: Spanyol vs Argentina, Duel Generasi Barcelona
-                                </h4>
-                                <p class="text-[11px] text-gray-600 mt-1.5 line-clamp-3 leading-relaxed">
-                                    Siap menyambut Final Piala Dunia 2026? Saksikan duel seru jersey resmi Spanyol
-                                    maupun Argentina yang bisa kamu dapatkan di JD Sports.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="p-3 pt-0">
-                            <a class="text-[11px] font-bold uppercase flex items-center gap-1 hover:underline" href="#">
-                                Read More <span class="">→</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- END: DiscoverJDStyleEditorial -->
-        <!-- BEGIN: NewsletterAndAppSection -->
-        <section class="bg-gray-100 py-10" data-purpose="newsletter-and-app-download">
-            <div class="max-w-3xl mx-auto px-4 text-center space-y-8">
-                <!-- Newsletter Box -->
-                <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-                    <h3 class="text-lg md:text-xl font-bold text-black mb-1">
-                        Baru bergabung dengan JD?
-                    </h3>
-                    <p class="text-xs text-gray-600 mb-4">
-                        Dapatkan rekomendasi produk kami dan miliki produk favoritmu.
-                    </p>
-                    <div
-                        class="max-w-md mx-auto flex items-center bg-[#EAEAEA] rounded-md overflow-hidden p-1 border border-gray-300">
-                        <input
-                            class="bg-transparent text-xs w-full py-2 px-3 border-none focus:outline-none focus:ring-0 placeholder-gray-500"
-                            placeholder="Masukkan email Anda" type="email">
-                        <button
-                            class="bg-black text-white px-4 py-2 text-xs font-bold rounded hover:bg-gray-800 transition">
-                            →
-                        </button>
-                    </div>
-                </div>
-                <!-- App Download Box -->
-                <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-                    <h3 class="text-lg md:text-xl font-bold text-black mb-1">
-                        Promo Eksklusif Hanya di JD Sports App
-                    </h3>
-                    <p class="text-xs text-gray-600 mb-5">
-                        Dapatkan promo menarik, penawaran eksklusif, hingga update produk terbaru hanya di aplikasi JD
-                        Sports.
-                    </p>
-                    <div class="inline-flex bg-black text-white px-6 py-3 rounded-lg flex-col items-center">
-                        <span class="text-[10px] uppercase font-bold tracking-widest text-gray-400">Download
-                            Sekarang</span>
-                        <div class="flex items-center gap-4 mt-2">
-                            <span class="flex items-center text-xs font-semibold gap-1">
-                                <span class="">🍎</span> App Store
-                            </span>
-                            <span class="text-gray-600">|</span>
-                            <span class="flex items-center text-xs font-semibold gap-1">
-                                <span class="">▶</span> Google Play
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- END: NewsletterAndAppSection -->
-        <!-- BEGIN: StoreAndLoyaltyBanners -->
-        <section class="bg-black py-6">
-            <div class="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Find a Store Banner -->
+            <!-- Dual Promotional Graphics -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Store Locator Card -->
                 <div
-                    class="bg-[#181818] border border-gray-800 p-6 flex items-center justify-between rounded text-white">
-                    <div>
-                        <h4 class="font-condensed text-xl font-bold uppercase tracking-wider">JD Store Locator</h4>
-                        <p class="text-xs text-gray-400 mt-1">Pick up your latest fits at all stores near you</p>
+                    class="bg-black text-white rounded-sm overflow-hidden p-6 flex flex-col justify-between min-h-[160px] relative">
+                    <div class="z-10">
+                        <span class="text-jdYellow font-extrabold uppercase tracking-wider text-xs">OFFLINE STORE
+                            EXPERIENCE</span>
+                        <h4 class="text-xl font-bold mt-1">FIND YOUR NEAREST STORE</h4>
+                        <p class="text-neutral-400 text-xs mt-1">Pick up your latest kicks at our offline retail
+                            network.</p>
                     </div>
-                    <a class="border border-white text-white font-condensed text-xs font-bold px-4 py-2 hover:bg-white hover:text-black transition"
-                        href="#">
-                        See Stores Near Me
-                    </a>
+                    <div class="mt-4 z-10">
+                        <a class="inline-block bg-white text-black font-extrabold px-5 py-2 text-[11px] uppercase tracking-wider hover:bg-jdYellow transition-colors"
+                            href="#">
+                            SEE STORES NEAR ME
+                        </a>
+                    </div>
+                    <div class="absolute -right-4 -bottom-4 opacity-10 text-white pointer-events-none">
+                        <i class="ph ph-storefront text-[140px]"></i>
+                    </div>
                 </div>
-                <!-- Eraspace Loyalty Banner -->
+                <!-- Eraspace Voucher Card -->
                 <div
-                    class="bg-[#181818] border border-gray-800 p-6 flex items-center justify-between rounded text-white">
-                    <div>
-                        <span class="text-xs font-semibold text-sky-400">My eraspace</span>
-                        <h4 class="font-condensed text-xl font-bold uppercase tracking-wider">Earn 10% Off on your first
-                            purchase*</h4>
-                        <p class="text-xs text-yellow-400 font-mono mt-0.5">USE CODE: JDSQUAD10</p>
+                    class="bg-neutral-900 text-white rounded-sm overflow-hidden p-6 flex flex-col justify-between min-h-[160px] relative border border-neutral-800">
+                    <div class="z-10">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span
+                                class="bg-teal-500 text-black text-[10px] font-black px-1.5 py-0.5 rounded uppercase">Eraspace</span>
+                            <span class="text-xs text-neutral-300">JD SPORTS INDONESIA</span>
+                        </div>
+                        <h4 class="text-lg font-bold">Earn 10% Off on your first purchase*</h4>
+                        <div
+                            class="mt-2 inline-flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded border border-neutral-700">
+                            <span class="text-neutral-400 text-[10px]">USE CODE:</span>
+                            <span class="font-mono text-xs font-bold text-teal-400 tracking-wider">JDSQUAD10</span>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-2 text-[10px]">
-                        <span class="bg-white/10 px-2 py-1 rounded">App Store</span>
-                        <span class="bg-white/10 px-2 py-1 rounded">Google Play</span>
+                    <p class="text-[10px] text-neutral-500 mt-3 z-10">*T&amp;C Apply. Valid on official mobile apps
+                        &amp; website.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END: Interactive Pre-Footer Banners -->
+    <!-- BEGIN: MainFooter -->
+    <footer class="bg-white border-t border-neutral-200 pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 grid grid-cols-2 md:grid-cols-5 gap-8 text-[11px]">
+            <!-- Column 1: Hubungi Kami -->
+            <div>
+                <h4 class="font-bold text-black uppercase tracking-wider mb-3">Hubungi Kami</h4>
+                <div class="space-y-2 text-neutral-600">
+                    <p class="font-semibold text-black">Jam Operasional</p>
+                    <p>Senin - Minggu : 9.00 - 18.00 WIB<br />(Termasuk hari libur nasional)</p>
+                    <div class="pt-2">
+                        <p class="font-semibold text-black">Layanan Pengaduan Konsumen</p>
+                        <p>PT Erajaya Swasembada Tbk / eraspace.com</p>
+                        <p>Call Center : 1500372</p>
+                        <p>WhatsApp : 0812 9077 7722</p>
+                        <p>Email : customercare@eraspace.com</p>
+                    </div>
+                    <div class="pt-2 text-[10px] text-neutral-500">
+                        Direktorat Jenderal Perlindungan Konsumen dan Tertib Niaga Kementerian Perdagangan RI<br />
+                        WhatsApp: +62 853 1111 1010
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- END: StoreAndLoyaltyBanners -->
-    </main>
-    <!-- BEGIN: Footer -->
-    <footer class="bg-[#B9BCC0] text-[#222222] text-xs pt-12 pb-8 border-t border-gray-300">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8">
-            <!-- Footer Columns -->
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 pb-10 border-b border-gray-400/50">
-                <!-- Column 1: Hubungi Kami -->
-                <div class="col-span-2 md:col-span-1 space-y-3">
-                    <h4 class="font-bold text-black uppercase tracking-wider text-[11px]">Hubungi Kami</h4>
-                    <div class="text-[11px] leading-relaxed text-gray-800">
-                        <p class="font-semibold text-black">Jam Operasional:</p>
-                        <p class="">Senin - Minggu: Jam 9.00 - 18.00 WIB<br>(Termasuk hari libur nasional)</p>
-                    </div>
-                    <div class="text-[11px] leading-relaxed text-gray-800 pt-2">
-                        <p class="font-semibold text-black">Layanan Pengaduan Konsumen:</p>
-                        <p class="">PT Era Gaya Aktif / www.jdsports.id</p>
-                        <p class="">Call Center : 1500372</p>
-                        <p class="">WhatsApp : 0812 9077 7722</p>
-                        <p class="">Email : cs@jdsports.id</p>
-                    </div>
-                    <div class="text-[10px] text-gray-600 pt-1">
-                        <p class="">Direktorat Jenderal Perlindungan Konsumen dan Tertib Niaga</p>
-                        <p class="">Kementerian Perdagangan RI</p>
-                        <p class="">WhatsApp: 082852 1111 1010</p>
-                    </div>
-                </div>
-                <!-- Column 2: Shopping With JD -->
-                <div class="space-y-2">
-                    <h4 class="font-bold text-black uppercase tracking-wider text-[11px]">Shopping With JD</h4>
-                    <ul class="space-y-1.5 text-[11px] text-gray-800">
-                        <li class=""><a class="hover:underline" href="#">Size Guide</a></li>
-                        <li class=""><a class="hover:underline" href="#">Find a Store</a></li>
-                    </ul>
-                </div>
-                <!-- Column 3: Customer Care -->
-                <div class="space-y-2">
-                    <h4 class="font-bold text-black uppercase tracking-wider text-[11px]">Customer Care</h4>
-                    <ul class="space-y-1.5 text-[11px] text-gray-800">
-                        <li class=""><a class="hover:underline" href="#">Delivery &amp; Returns</a></li>
-                        <li class=""><a class="hover:underline" href="#">Payment Information</a></li>
-                        <li class=""><a class="hover:underline" href="#">Help &amp; Contact Us</a></li>
-                        <li class=""><a class="hover:underline" href="#">Track My Order</a></li>
-                        <li class=""><a class="hover:underline" href="#">FAQ</a></li>
-                        <li class=""><a class="hover:underline" href="#">Beware of Scams</a></li>
-                    </ul>
-                </div>
-                <!-- Column 4: Information -->
-                <div class="space-y-2">
-                    <h4 class="font-bold text-black uppercase tracking-wider text-[11px]">Information</h4>
-                    <ul class="space-y-1.5 text-[11px] text-gray-800">
-                        <li class=""><a class="hover:underline" href="#">Career</a></li>
-                        <li class=""><a class="hover:underline" href="#">About Us</a></li>
-                        <li class=""><a class="hover:underline" href="#">JD Sports Fashion Plc</a></li>
-                    </ul>
-                </div>
-                <!-- Column 5: Legal -->
-                <div class="space-y-2">
-                    <h4 class="font-bold text-black uppercase tracking-wider text-[11px]">Legal</h4>
-                    <ul class="space-y-1.5 text-[11px] text-gray-800">
-                        <li class=""><a class="hover:underline" href="#">Terms &amp; Conditions</a></li>
-                        <li class=""><a class="hover:underline" href="#">Privacy &amp; Cookies</a></li>
-                    </ul>
-                </div>
+            <!-- Column 2: Shopping With JD -->
+            <div>
+                <h4 class="font-bold text-black uppercase tracking-wider mb-3">Shopping With JD</h4>
+                <ul class="space-y-2 text-neutral-600">
+                    <li><a class="hover:underline" href="#">Size Guide</a></li>
+                    <li><a class="hover:underline" href="#">Find a Store</a></li>
+                </ul>
             </div>
-            <!-- Footer Bottom Copyright & Payment Methods -->
-            <div class="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] text-gray-700">
-                <div>
-                    <p class="">Visit our corporate website at www.jdplc.com</p>
-                    <p class="mt-0.5">Copyright © 2022 JD Sports All rights reserved.</p>
-                </div>
-                <!-- Payment Badges Representation -->
-                <div class="flex flex-col md:items-end">
-                    <span class="text-[9px] uppercase font-bold text-gray-700 mb-1">Metode pembayaran yang
-                        tersedia</span>
-                    <div class="flex flex-wrap gap-1.5 text-[10px] font-bold text-gray-800">
-                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">BCA</span>
-                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">Mandiri</span>
-                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">BNI</span>
-                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">BRI</span>
-                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">QRIS</span>
-                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">GoPay</span>
-                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">OVO</span>
-                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">ShopeePay</span>
-                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">VISA</span>
-                        <span class="bg-white px-2 py-0.5 rounded border border-gray-300">Mastercard</span>
-                    </div>
+            <!-- Column 3: Customer Care -->
+            <div>
+                <h4 class="font-bold text-black uppercase tracking-wider mb-3">Customer Care</h4>
+                <ul class="space-y-2 text-neutral-600">
+                    <li><a class="hover:underline" href="#">Delivery &amp; Returns</a></li>
+                    <li><a class="hover:underline" href="#">Payment Information</a></li>
+                    <li><a class="hover:underline" href="#">Help &amp; Contact Us</a></li>
+                    <li><a class="hover:underline" href="#">Track My Order</a></li>
+                    <li><a class="hover:underline" href="#">FAQ</a></li>
+                    <li><a class="hover:underline" href="#">Beware of Scams</a></li>
+                </ul>
+            </div>
+            <!-- Column 4: Information -->
+            <div>
+                <h4 class="font-bold text-black uppercase tracking-wider mb-3">Information</h4>
+                <ul class="space-y-2 text-neutral-600">
+                    <li><a class="hover:underline" href="#">Career</a></li>
+                    <li><a class="hover:underline" href="#">About Us</a></li>
+                    <li><a class="hover:underline" href="#">JD Sports Fashion Plc</a></li>
+                </ul>
+            </div>
+            <!-- Column 5: Legal -->
+            <div>
+                <h4 class="font-bold text-black uppercase tracking-wider mb-3">Legal</h4>
+                <ul class="space-y-2 text-neutral-600">
+                    <li><a class="hover:underline" href="#">Terms &amp; Conditions</a></li>
+                    <li><a class="hover:underline" href="#">Privacy &amp; Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- Payment Gateways & Corporate Info -->
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-8 mt-12 pt-6 border-t border-neutral-100 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-neutral-500">
+            <div>
+                <p>Visit our corporate website at <a class="underline"
+                        href="https://www.jdsports.id">www.jdsports.id</a></p>
+                <p>Copyright © 2025 JD Sports. All rights reserved.</p>
+            </div>
+            <!-- Payment Methods Badge Representation -->
+            <div class="flex flex-col items-center md:items-end">
+                <span class="mb-1 font-semibold text-neutral-700">Metode pembayaran yang tersedia:</span>
+                <div
+                    class="flex flex-wrap items-center gap-1.5 grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-all">
+                    <span
+                        class="border border-neutral-200 px-1.5 py-0.5 rounded font-bold text-[9px] bg-neutral-50">BCA</span>
+                    <span
+                        class="border border-neutral-200 px-1.5 py-0.5 rounded font-bold text-[9px] bg-neutral-50">Mandiri</span>
+                    <span
+                        class="border border-neutral-200 px-1.5 py-0.5 rounded font-bold text-[9px] bg-neutral-50">BNI</span>
+                    <span
+                        class="border border-neutral-200 px-1.5 py-0.5 rounded font-bold text-[9px] bg-neutral-50">BRI</span>
+                    <span
+                        class="border border-neutral-200 px-1.5 py-0.5 rounded font-bold text-[9px] bg-neutral-50">CIMB</span>
+                    <span
+                        class="border border-neutral-200 px-1.5 py-0.5 rounded font-bold text-[9px] bg-neutral-50 text-indigo-700">OVO</span>
+                    <span
+                        class="border border-neutral-200 px-1.5 py-0.5 rounded font-bold text-[9px] bg-neutral-50 text-orange-600">ShopeePay</span>
+                    <span
+                        class="border border-neutral-200 px-1.5 py-0.5 rounded font-bold text-[9px] bg-neutral-50 text-blue-700">VISA</span>
+                    <span
+                        class="border border-neutral-200 px-1.5 py-0.5 rounded font-bold text-[9px] bg-neutral-50 text-red-600">Mastercard</span>
+                    <span
+                        class="border border-neutral-200 px-1.5 py-0.5 rounded font-bold text-[9px] bg-neutral-50 text-sky-500">QRIS</span>
                 </div>
             </div>
         </div>
     </footer>
-    <!-- END: Footer -->
-    <!-- BEGIN: FloatingDiscountBadge -->
-    <!-- Pop up promo voucher widget floating at the bottom right/center -->
-    <div class="fixed bottom-6 right-6 z-50 shadow-2xl transition transform hover:scale-105"
-        data-purpose="floating-promo">
-        <div class="relative bg-jd-yellow text-black p-4 rounded-lg border-2 border-black w-64 shadow-xl">
-            <!-- Close button -->
-
-            <!-- JD Round Logo -->
-            <div
-                class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center font-black text-xs mb-1">
-                JD
-            </div>
-            <!-- Headline -->
-            <h5 class="font-impact text-2xl leading-tight tracking-tight uppercase">
-                GET 10% OFF
-            </h5>
-            <p class="font-condensed text-sm font-bold uppercase tracking-wider mb-2">
-                ON YOUR FIRST ORDER
-            </p>
-            <div class="bg-black/10 p-1.5 rounded text-[8px] flex items-center justify-between mb-3 font-semibold">
-                <span class="">FREE DELIVERY</span>
-                <span class="">•</span>
-                <span class="">NEXT DAY AVAILABLE</span>
-            </div>
-            <a class="block w-full bg-black text-white text-center font-condensed font-bold py-2 text-xs uppercase tracking-wider hover:bg-gray-900 transition flex items-center justify-center gap-1"
-                href="#">
-                CLAIM NOW <span class="">→</span>
-            </a>
+    <!-- END: MainFooter -->
+    <!-- BEGIN: Sticky Cookie Consent Banner -->
+    <aside
+        class="sticky bottom-0 z-50 bg-neutral-900/95 text-neutral-300 backdrop-blur-xs py-2 px-4 text-[10px] text-center border-t border-neutral-700">
+        <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
+            <span>We use cookies to ensure we give you the best experience of our website. To accept click on any link
+                or continue to browse. To find out more about the cookies we use <a
+                    class="underline text-white font-semibold" href="#">click here</a>.</span>
+            <button aria-label="Close Cookie Notice" class="ml-2 text-white hover:text-jdYellow" type="button">
+                <i class="ph ph-x"></i>
+            </button>
         </div>
-    </div>
-    <!-- END: FloatingDiscountBadge -->
-    <!-- Cookie Consent Banner -->
-    <div class="bg-neutral-900 text-white text-[10px] py-1 px-4 text-center border-t border-neutral-800">
-        <span class="">We use cookies to ensure we give you the best experience of our website, to accept click on any
-            link or continue to browse. To find out more about the cookies we use <a class="underline text-gray-300"
-                href="#">click here</a>.</span>
-    </div>
-
-    <!-- BEGIN: HeroSliderScript -->
-    <script>
-        (function () {
-            const slides = document.querySelectorAll('[data-purpose="hero-banner"] .hero-slide');
-            const dotsContainer = document.getElementById('hero-dots');
-            const heroSection = document.querySelector('[data-purpose="hero-banner"]');
-            let current = 0;
-            let interval;
-
-            if (slides.length === 0) return;
-
-            function createDots() {
-                if (!dotsContainer || slides.length <= 1) return;
-                dotsContainer.innerHTML = '';
-                slides.forEach((_, i) => {
-                    const dot = document.createElement('button');
-                    dot.type = 'button';
-                    dot.className = 'w-2.5 h-2.5 rounded-full bg-white/30 hover:bg-white/60 transition-all duration-300';
-                    if (i === 0) dot.classList.add('bg-white', 'w-6');
-                    dot.addEventListener('click', () => goTo(i));
-                    dotsContainer.appendChild(dot);
-                });
-            }
-
-            function updateDots() {
-                const dots = dotsContainer?.querySelectorAll('button');
-                if (!dots) return;
-                dots.forEach((d, i) => {
-                    d.classList.toggle('bg-white', i === current);
-                    d.classList.toggle('w-6', i === current);
-                    d.classList.toggle('bg-white/30', i !== current);
-                    d.classList.toggle('w-2.5', i !== current);
-                });
-            }
-
-            function show(index) {
-                slides.forEach((s, i) => {
-                    s.classList.toggle('opacity-100', i === index);
-                    s.classList.toggle('opacity-0', i !== index);
-                    s.classList.toggle('scale-100', i === index);
-                    s.classList.toggle('scale-105', i !== index);
-                });
-                current = index;
-                updateDots();
-            }
-
-            function next() { show((current + 1) % slides.length); }
-            function prev() { show((current - 1 + slides.length) % slides.length); }
-
-            function goTo(index) {
-                show(index);
-                reset();
-            }
-
-            function reset() {
-                clearInterval(interval);
-                interval = setInterval(next, 6000);
-            }
-
-            createDots();
-            show(0);
-            interval = setInterval(next, 6000);
-
-            document.getElementById('hero-prev')?.addEventListener('click', () => { prev(); reset(); });
-            document.getElementById('hero-next')?.addEventListener('click', () => { next(); reset(); });
-            heroSection?.addEventListener('mouseenter', () => clearInterval(interval));
-            heroSection?.addEventListener('mouseleave', () => interval = setInterval(next, 6000));
-        })();
-    </script>
-    <!-- END: HeroSliderScript -->
+    </aside>
+    <!-- END: Sticky Cookie Consent Banner -->
 </body>
 
 </html>

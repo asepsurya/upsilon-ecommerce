@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark h-full">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 
 <head>
     <meta charset="UTF-8">
@@ -8,18 +8,38 @@
     <title>{{ $title ?? 'Authentication - ' . config('app.name', 'Upsilon') }}</title>
     <meta name="description" content="{{ $description ?? 'Sign in to your account' }}">
 
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap"
         rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         /* ── Auth Design Tokens ─────────────────────────────── */
         :root {
+            /* Light */
+            --auth-bg: #f7f8fa;
+            --auth-surface: #ffffff;
+            --auth-surface-raised: #f1f3f6;
+            --auth-border: rgba(0, 0, 0, 0.08);
+            --auth-border-focus: rgba(212, 160, 23, 0.7);
+            --auth-text: #15171a;
+            --auth-text-muted: rgba(0, 0, 0, 0.45);
+            --auth-gold: #d4a017;
+            --auth-gold-dim: rgba(212, 160, 23, 0.12);
+            --auth-gold-glow: rgba(212, 160, 23, 0.25);
+            --auth-error: #dc2626;
+            --auth-error-bg: rgba(220, 38, 38, 0.08);
+            --auth-success: #16a34a;
+            --auth-success-bg: rgba(22, 163, 74, 0.08);
+        }
+
+        .dark {
+            /* Dark */
             --auth-bg: #0b0c10;
             --auth-surface: #13141a;
             --auth-surface-raised: #1a1b22;
@@ -70,6 +90,15 @@
             min-height: 100vh;
         }
 
+        /* Light mode adjustments */
+        :root {
+            color-scheme: light;
+        }
+
+        .dark {
+            color-scheme: dark;
+        }
+
         /* ── Split Layout ───────────────────────────────────── */
         .auth-shell {
             display: flex;
@@ -90,6 +119,14 @@
             background: #080a0d;
         }
 
+        .dark .auth-brand {
+            background: #080a0d;
+        }
+
+        :root .auth-brand {
+            background: linear-gradient(160deg, #f1f3f6 0%, #e8eaef 100%);
+        }
+
         @media (max-width: 1023px) {
             .auth-brand {
                 display: none;
@@ -104,6 +141,18 @@
                 linear-gradient(160deg, #0d0e14 0%, #080a0d 100%);
         }
 
+        .dark .auth-brand__bg {
+            background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(242, 202, 80, 0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 70% at 10% 80%, rgba(180, 120, 20, 0.12) 0%, transparent 60%),
+                linear-gradient(160deg, #0d0e14 0%, #080a0d 100%);
+        }
+
+        :root .auth-brand__bg {
+            background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(212, 160, 23, 0.10) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 70% at 10% 80%, rgba(180, 120, 20, 0.08) 0%, transparent 60%),
+                linear-gradient(160deg, #f1f3f6 0%, #e8eaef 100%);
+        }
+
         /* Animated golden orbs */
         .auth-brand__orb {
             position: absolute;
@@ -112,7 +161,7 @@
             animation: orbFloat 8s ease-in-out infinite;
         }
 
-        .auth-brand__orb--1 {
+        .dark .auth-brand__orb--1 {
             width: 380px;
             height: 380px;
             top: -80px;
@@ -121,7 +170,16 @@
             animation-duration: 9s;
         }
 
-        .auth-brand__orb--2 {
+        :root .auth-brand__orb--1 {
+            width: 380px;
+            height: 380px;
+            top: -80px;
+            left: -60px;
+            background: rgba(212, 160, 23, 0.10);
+            animation-duration: 9s;
+        }
+
+        .dark .auth-brand__orb--2 {
             width: 280px;
             height: 280px;
             bottom: 20%;
@@ -131,12 +189,32 @@
             animation-delay: -3s;
         }
 
-        .auth-brand__orb--3 {
+        :root .auth-brand__orb--2 {
+            width: 280px;
+            height: 280px;
+            bottom: 20%;
+            right: -40px;
+            background: rgba(212, 160, 23, 0.08);
+            animation-duration: 11s;
+            animation-delay: -3s;
+        }
+
+        .dark .auth-brand__orb--3 {
             width: 200px;
             height: 200px;
             top: 40%;
             left: 30%;
             background: rgba(242, 202, 80, 0.07);
+            animation-duration: 7s;
+            animation-delay: -5s;
+        }
+
+        :root .auth-brand__orb--3 {
+            width: 200px;
+            height: 200px;
+            top: 40%;
+            left: 30%;
+            background: rgba(212, 160, 23, 0.06);
             animation-duration: 7s;
             animation-delay: -5s;
         }
@@ -163,6 +241,18 @@
             background-size: 48px 48px;
         }
 
+        .dark .auth-brand__grid {
+            background-image:
+                linear-gradient(rgba(242, 202, 80, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(242, 202, 80, 0.03) 1px, transparent 1px);
+        }
+
+        :root .auth-brand__grid {
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+        }
+
         /* Diagonal accent lines */
         .auth-brand__lines {
             position: absolute;
@@ -181,6 +271,14 @@
             transform: rotate(-20deg);
         }
 
+        .dark .auth-brand__lines::before {
+            background: linear-gradient(to bottom, transparent, rgba(242, 202, 80, 0.15) 30%, rgba(242, 202, 80, 0.3) 50%, rgba(242, 202, 80, 0.15) 70%, transparent);
+        }
+
+        :root .auth-brand__lines::before {
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.08) 30%, rgba(0, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0.08) 70%, transparent);
+        }
+
         .auth-brand__lines::after {
             content: '';
             position: absolute;
@@ -190,6 +288,14 @@
             height: 200%;
             background: linear-gradient(to bottom, transparent, rgba(242, 202, 80, 0.08) 40%, rgba(242, 202, 80, 0.18) 50%, rgba(242, 202, 80, 0.08) 60%, transparent);
             transform: rotate(-20deg);
+        }
+
+        .dark .auth-brand__lines::after {
+            background: linear-gradient(to bottom, transparent, rgba(242, 202, 80, 0.08) 40%, rgba(242, 202, 80, 0.18) 50%, rgba(242, 202, 80, 0.08) 60%, transparent);
+        }
+
+        :root .auth-brand__lines::after {
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.05) 40%, rgba(0, 0, 0, 0.10) 50%, rgba(0, 0, 0, 0.05) 60%, transparent);
         }
 
         /* Brand content */
@@ -215,6 +321,16 @@
             margin-bottom: 1.5rem;
         }
 
+        .dark .auth-brand__badge {
+            border-color: rgba(242, 202, 80, 0.25);
+            background: rgba(242, 202, 80, 0.06);
+        }
+
+        :root .auth-brand__badge {
+            border-color: rgba(212, 160, 23, 0.25);
+            background: rgba(212, 160, 23, 0.08);
+        }
+
         .auth-brand__headline {
             font-family: 'Cormorant Garamond', serif;
             font-size: clamp(2rem, 3vw, 2.8rem);
@@ -222,6 +338,14 @@
             line-height: 1.25;
             color: #fff;
             margin: 0 0 1rem;
+        }
+
+        .dark .auth-brand__headline {
+            color: #fff;
+        }
+
+        :root .auth-brand__headline {
+            color: #15171a;
         }
 
         .auth-brand__headline em {
@@ -245,12 +369,30 @@
             border-radius: 0 8px 8px 0;
         }
 
+        .dark .auth-brand__quote {
+            border-left-color: rgba(242, 202, 80, 0.4);
+            background: rgba(242, 202, 80, 0.04);
+        }
+
+        :root .auth-brand__quote {
+            border-left-color: rgba(212, 160, 23, 0.4);
+            background: rgba(212, 160, 23, 0.06);
+        }
+
         .auth-brand__quote p {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
             font-size: 0.95rem;
             color: rgba(232, 230, 234, 0.75);
             margin: 0 0 0.5rem;
+        }
+
+        .dark .auth-brand__quote p {
+            color: rgba(232, 230, 234, 0.75);
+        }
+
+        :root .auth-brand__quote p {
+            color: rgba(0, 0, 0, 0.65);
         }
 
         .auth-brand__quote cite {
@@ -268,6 +410,14 @@
             margin-top: 2rem;
             padding-top: 2rem;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .dark .auth-brand__stats {
+            border-top-color: rgba(255, 255, 255, 0.06);
+        }
+
+        :root .auth-brand__stats {
+            border-top-color: rgba(0, 0, 0, 0.08);
         }
 
         .auth-brand__stat-num {
@@ -296,6 +446,18 @@
             z-index: 10;
         }
 
+        .auth-brand-logo {
+            display: block;
+        }
+
+        .dark .auth-brand-logo {
+            filter: brightness(1.2) drop-shadow(0 0 16px rgba(242,202,80,0.35));
+        }
+
+        :root .auth-brand-logo {
+            filter: brightness(0);
+        }
+
         /* ── Form Panel (Right) ─────────────────────────────── */
         .auth-form-panel {
             flex: 1;
@@ -309,12 +471,50 @@
             position: relative;
         }
 
+        .dark .auth-form-panel::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(242, 202, 80, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        :root .auth-form-panel::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 160, 23, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
         /* Mobile top bar */
         .auth-mobile-bar {
             display: none;
             width: 100%;
             max-width: 460px;
             margin-bottom: 2rem;
+        }
+
+        .auth-mobile-logo {
+            display: block;
+            height: 32px;
+            width: auto;
+        }
+
+        .dark .auth-mobile-logo {
+            filter: brightness(1.2);
+        }
+
+        :root .auth-mobile-logo {
+            filter: brightness(0);
         }
 
         @media (max-width: 1023px) {
@@ -623,6 +823,30 @@
             opacity: 0.75;
         }
 
+        /* ── Theme toggle ───────────────────────────────────── */
+        .auth-theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--auth-border);
+            background: var(--auth-surface);
+            color: var(--auth-text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .auth-theme-toggle:hover {
+            background: var(--auth-surface-raised);
+            border-color: var(--auth-border-focus);
+        }
+
+        .auth-theme-toggle .material-symbols-outlined {
+            font-size: 20px;
+        }
+
         /* ── Progress dots ──────────────────────────────────── */
         .auth-progress {
             display: flex;
@@ -647,7 +871,7 @@
         }
 
         /* ── Floating particles ─────────────────────────────── */
-        .auth-form-panel::before {
+        .dark .auth-form-panel::after {
             content: '';
             position: absolute;
             top: -200px;
@@ -656,6 +880,18 @@
             height: 500px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(242, 202, 80, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        :root .auth-form-panel::after {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 160, 23, 0.05) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -733,7 +969,7 @@
             <div class="auth-brand__logo-wrap">
                 <a href="{{ route('home') }}">
                     <img src="{{ asset('images/logo-white.png') }}" alt="{{ config('app.name', 'Upsilon') }}"
-                        style="height:36px;width:auto;filter:brightness(1.2) drop-shadow(0 0 16px rgba(242,202,80,0.35));">
+                        class="auth-brand-logo" style="height:36px;width:auto;">
                 </a>
             </div>
 
@@ -784,8 +1020,14 @@
             <div class="auth-mobile-bar">
                 <a href="{{ route('home') }}">
                     <img src="{{ asset('images/logo-white.png') }}" alt="{{ config('app.name', 'Upsilon') }}"
-                        style="height:32px;width:auto;filter:brightness(1.2);">
+                        class="auth-mobile-logo" style="height:32px;width:auto;">
                 </a>
+            </div>
+
+            <div style="display:flex;justify-content:flex-end;width:100%;max-width:420px;margin-bottom:1rem;">
+                <button id="auth-theme-toggle" class="auth-theme-toggle" aria-label="Toggle theme">
+                    <span class="material-symbols-outlined" id="auth-theme-icon">dark_mode</span>
+                </button>
             </div>
 
             @yield('content')
@@ -794,6 +1036,34 @@
     </div>
 
     @stack('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('auth-theme-icon');
+            const themeToggle = document.getElementById('auth-theme-toggle');
+            if (!themeToggle || !themeIcon) return;
+
+            const currentTheme = localStorage.getItem('auth-theme');
+            if (currentTheme === 'dark') {
+                html.classList.add('dark');
+                themeIcon.textContent = 'light_mode';
+            } else {
+                html.classList.remove('dark');
+                themeIcon.textContent = 'dark_mode';
+            }
+
+            themeToggle.addEventListener('click', function() {
+                html.classList.toggle('dark');
+                if (html.classList.contains('dark')) {
+                    localStorage.setItem('auth-theme', 'dark');
+                    themeIcon.textContent = 'light_mode';
+                } else {
+                    localStorage.setItem('auth-theme', 'light');
+                    themeIcon.textContent = 'dark_mode';
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

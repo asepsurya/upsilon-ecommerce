@@ -4,14 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Bundle;
 use App\Models\BundleItem;
+use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\Label;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
+use App\Models\ProductView;
+use App\Models\PromoBanner;
 use App\Models\Review;
+use App\Models\Setting;
 use App\Models\Size;
 use App\Models\Slider;
 use App\Models\User;
@@ -19,6 +25,7 @@ use App\Models\Voucher;
 use Buglinjo\LaravelWebp\Facades\Webp;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -31,7 +38,20 @@ class AdminController extends Controller
         $totalOrders = Order::count();
         $totalCustomers = User::customer()->count();
         $totalProducts = Product::count();
-        $revenue = Order::where('payment_status', 'paid')->sum('total');
+        $revenue = $totalSales;
+
+        $pendingOrders = Order::where('status', 'pending')->count();
+        $processingOrders = Order::where('status', 'processing')->count();
+        $shippedOrders = Order::where('status', 'shipped')->count();
+        $deliveredOrders = Order::where('status', 'delivered')->count();
+        $cancelledOrders = Order::where('status', 'cancelled')->count();
+
+        $totalCarts = Cart::count();
+        $activeCarts = Cart::whereHas('items')->count();
+        $cartItems = CartItem::count();
+        $abandonedCarts = Cart::whereDoesntHave('items')->orWhereHas('items', function ($q) {
+            $q->where('quantity', '<=', 0);
+        })->count();
 
         $recentOrders = Order::with(['user', 'items'])
             ->latest()
@@ -45,10 +65,63 @@ class AdminController extends Controller
             ->with('product:id,name')
             ->get();
 
+        $mostViewed = ProductView::select('product_id', DB::raw('COUNT(*) as view_count'))
+            ->groupBy('product_id')
+            ->orderByDesc('view_count')
+            ->limit(10)
+            ->with('product:id,name,base_price,sale_price')
+            ->get();
+
+        $chartData = $this->getSalesChartData();
+
+        $monthlySales = $this->getMonthlySalesData();
+
         return view('admin.dashboard', compact(
             'totalSales', 'totalOrders', 'totalCustomers',
-            'totalProducts', 'revenue', 'recentOrders', 'bestSelling'
+            'totalProducts', 'revenue', 'bestSelling', 'mostViewed',
+            'pendingOrders', 'processingOrders', 'shippedOrders',
+            'deliveredOrders', 'cancelledOrders', 'totalCarts',
+            'activeCarts', 'cartItems', 'abandonedCarts', 'chartData', 'monthlySales'
         ));
+    }
+
+    private function getSalesChartData(): array
+    {
+        $days = [];
+        $values = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $days[] = $date->format('D');
+            $values[] = (float) Order::where('payment_status', 'paid')
+                ->whereDate('created_at', $date)
+                ->sum('total');
+        }
+
+        return [
+            'labels' => $days,
+            'values' => $values,
+        ];
+    }
+
+    private function getMonthlySalesData(): array
+    {
+        $months = [];
+        $values = [];
+
+        for ($i = 11; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $months[] = $date->format('M Y');
+            $values[] = (float) Order::where('payment_status', 'paid')
+                ->whereMonth('created_at', $date->month)
+                ->whereYear('created_at', $date->year)
+                ->sum('total');
+        }
+
+        return [
+            'labels' => $months,
+            'values' => $values,
+        ];
     }
 
     public function products(Request $request)
@@ -69,8 +142,9 @@ class AdminController extends Controller
         $categories = Category::active()->sorted()->get();
         $sizes = Size::sorted()->get();
         $colors = Color::orderBy('name')->get();
+        $labels = Label::active()->sorted()->get();
 
-        return view('admin.products.create', compact('categories', 'sizes', 'colors'));
+        return view('admin.products.create', compact('categories', 'sizes', 'colors', 'labels'));
     }
 
     public function storeProduct(Request $request)
@@ -89,6 +163,8 @@ class AdminController extends Controller
             'is_bestseller' => 'boolean',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
+            'label_ids' => 'nullable|array',
+            'label_ids.*' => 'exists:labels,id',
             'selected_sizes' => 'nullable|array',
             'selected_sizes.*' => 'exists:sizes,id',
             'selected_colors' => 'nullable|array',
@@ -99,7 +175,7 @@ class AdminController extends Controller
             'variants.*.size_id' => 'required|exists:sizes,id',
             'variants.*.color_id' => 'required|exists:colors,id',
             'variants.*.sku' => 'nullable|string|max:255',
-            'variants.*.stock' => 'required|integer|min:0',
+            'variants.*.stock' => 'nullable|integer|min:0',
             'variants.*.price_override' => 'nullable|numeric|min:0',
             'variants.*.sale_price_override' => 'nullable|numeric|min:0',
             'variants.*.is_active' => 'boolean',
@@ -110,13 +186,17 @@ class AdminController extends Controller
         $validated['is_featured'] = $request->boolean('is_featured', false);
         $validated['is_bestseller'] = $request->boolean('is_bestseller', false);
 
-        unset($validated['selected_sizes'], $validated['selected_colors']);
+        unset($validated['selected_sizes'], $validated['selected_colors'], $validated['label_ids']);
 
         $product = Product::create($validated);
 
         $this->syncVariants($product, $request->input('variants', []));
 
         $this->syncProductImages($product, $request);
+
+        if ($request->filled('label_ids')) {
+            $product->labels()->sync($request->input('label_ids'));
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully');
     }
@@ -126,9 +206,10 @@ class AdminController extends Controller
         $categories = Category::active()->sorted()->get();
         $sizes = Size::sorted()->get();
         $colors = Color::orderBy('name')->get();
-        $product->load(['variants.size', 'variants.color', 'images']);
+        $labels = Label::active()->sorted()->get();
+        $product->load(['variants.size', 'variants.color', 'images', 'labels']);
 
-        return view('admin.products.edit', compact('product', 'categories', 'sizes', 'colors'));
+        return view('admin.products.edit', compact('product', 'categories', 'sizes', 'colors', 'labels'));
     }
 
     public function updateProduct(Request $request, Product $product)
@@ -147,6 +228,8 @@ class AdminController extends Controller
             'is_bestseller' => 'boolean',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
+            'label_ids' => 'nullable|array',
+            'label_ids.*' => 'exists:labels,id',
             'selected_sizes' => 'nullable|array',
             'selected_sizes.*' => 'exists:sizes,id',
             'selected_colors' => 'nullable|array',
@@ -157,7 +240,7 @@ class AdminController extends Controller
             'variants.*.size_id' => 'required|exists:sizes,id',
             'variants.*.color_id' => 'required|exists:colors,id',
             'variants.*.sku' => 'nullable|string|max:255',
-            'variants.*.stock' => 'required|integer|min:0',
+            'variants.*.stock' => 'nullable|integer|min:0',
             'variants.*.price_override' => 'nullable|numeric|min:0',
             'variants.*.sale_price_override' => 'nullable|numeric|min:0',
             'variants.*.is_active' => 'boolean',
@@ -168,13 +251,19 @@ class AdminController extends Controller
         $validated['is_featured'] = $request->boolean('is_featured', false);
         $validated['is_bestseller'] = $request->boolean('is_bestseller', false);
 
-        unset($validated['selected_sizes'], $validated['selected_colors']);
+        unset($validated['selected_sizes'], $validated['selected_colors'], $validated['label_ids']);
 
         $product->update($validated);
 
         $this->syncVariants($product, $request->input('variants', []));
 
         $this->syncProductImages($product, $request);
+
+        if ($request->filled('label_ids')) {
+            $product->labels()->sync($request->input('label_ids'));
+        } else {
+            $product->labels()->detach();
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully');
     }
@@ -429,6 +518,7 @@ class AdminController extends Controller
         }
 
         Category::create($validated);
+        Cache::forget('categories.active');
 
         return back()->with('success', 'Category created successfully');
     }
@@ -455,6 +545,7 @@ class AdminController extends Controller
         }
 
         $category->update($validated);
+        Cache::forget('categories.active');
 
         return back()->with('success', 'Category updated successfully');
     }
@@ -466,6 +557,7 @@ class AdminController extends Controller
         }
 
         $category->delete();
+        Cache::forget('categories.active');
 
         return back()->with('success', 'Category deleted successfully');
     }
@@ -643,9 +735,21 @@ class AdminController extends Controller
         return back()->with('success', 'Voucher deleted successfully');
     }
 
+    protected function updateProductRating(Product $product): void
+    {
+        $stats = $product->reviews()
+            ->selectRaw('AVG(rating) as average_rating, COUNT(*) as review_count')
+            ->first();
+
+        $product->update([
+            'average_rating' => (float) ($stats->average_rating ?? 0),
+            'review_count' => (int) ($stats->review_count ?? 0),
+        ]);
+    }
+
     public function reviews(Request $request)
     {
-        $query = Review::with(['user', 'product']);
+        $query = Review::with(['user', 'product', 'replies.user']);
 
         if ($search = $request->input('search')) {
             $query->where('review', 'like', "%{$search}%");
@@ -665,14 +769,44 @@ class AdminController extends Controller
 
         $review->update($validated);
 
+        $this->updateProductRating($review->product);
+
         return back()->with('success', 'Review updated successfully');
     }
 
     public function deleteReview(Review $review)
     {
+        $product = $review->product;
         $review->delete();
 
+        $this->updateProductRating($product);
+
         return back()->with('success', 'Review deleted successfully');
+    }
+
+    public function storeReviewReply(Request $request, Review $review)
+    {
+        $validated = $request->validate([
+            'body' => 'required|string|max:2000',
+        ]);
+
+        $review->replies()->create([
+            'user_id' => auth()->id(),
+            'body' => $validated['body'],
+        ]);
+
+        return back()->with('success', 'Reply added successfully');
+    }
+
+    public function destroyReviewReply(Review $review, ReviewReply $reply)
+    {
+        if ($reply->review_id !== $review->id) {
+            abort(404);
+        }
+
+        $reply->delete();
+
+        return back()->with('success', 'Reply deleted successfully');
     }
 
     public function bundles(Request $request)
@@ -832,6 +966,7 @@ class AdminController extends Controller
             'heading' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'image' => 'required|image|mimes:jpeg,png,gif,webp|max:5120',
+            'image_mobile' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
             'link' => 'nullable|url|max:255',
             'link_text' => 'nullable|string|max:100',
             'is_active' => 'boolean',
@@ -844,6 +979,10 @@ class AdminController extends Controller
 
         if ($request->hasFile('image')) {
             $validated['image'] = $this->storeWebPImage($request->file('image'), 'sliders');
+        }
+
+        if ($request->hasFile('image_mobile')) {
+            $validated['image_mobile'] = $this->storeWebPImage($request->file('image_mobile'), 'sliders/mobile');
         }
 
         Slider::create($validated);
@@ -863,6 +1002,7 @@ class AdminController extends Controller
             'heading' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
+            'image_mobile' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
             'link' => 'nullable|url|max:255',
             'link_text' => 'nullable|string|max:100',
             'is_active' => 'boolean',
@@ -881,6 +1021,14 @@ class AdminController extends Controller
             $validated['image'] = $this->storeWebPImage($request->file('image'), 'sliders');
         }
 
+        if ($request->hasFile('image_mobile')) {
+            if ($slider->image_mobile && str_starts_with($slider->image_mobile, 'sliders/')) {
+                Storage::disk('public')->delete($slider->image_mobile);
+            }
+
+            $validated['image_mobile'] = $this->storeWebPImage($request->file('image_mobile'), 'sliders/mobile');
+        }
+
         $slider->update($validated);
 
         return redirect()->route('admin.sliders.index')->with('success', 'Slider updated successfully');
@@ -890,6 +1038,10 @@ class AdminController extends Controller
     {
         if ($slider->image && str_starts_with($slider->image, 'sliders/')) {
             Storage::disk('public')->delete($slider->image);
+        }
+
+        if ($slider->image_mobile && str_starts_with($slider->image_mobile, 'sliders/')) {
+            Storage::disk('public')->delete($slider->image_mobile);
         }
 
         $slider->delete();
@@ -902,5 +1054,229 @@ class AdminController extends Controller
         $slider->update(['is_active' => ! $slider->is_active]);
 
         return back()->with('success', 'Slider status updated successfully');
+    }
+
+    public function labels()
+    {
+        $labels = Label::sorted()->paginate(20);
+
+        return view('admin.labels.index', compact('labels'));
+    }
+
+    public function createLabel()
+    {
+        return view('admin.labels.create');
+    }
+
+    public function storeLabel(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:labels,slug',
+            'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
+            'color' => 'nullable|string|max:7',
+            'text_color' => 'nullable|string|max:7',
+            'style' => 'nullable|string|max:50',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'labels');
+        }
+
+        Label::create($validated);
+        Cache::forget('labels.active');
+
+        return redirect()->route('admin.labels.index')->with('success', 'Label created successfully');
+    }
+
+    public function editLabel(Label $label)
+    {
+        return view('admin.labels.edit', compact('label'));
+    }
+
+    public function updateLabel(Request $request, Label $label)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:labels,slug,'.$label->id,
+            'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
+            'color' => 'nullable|string|max:7',
+            'text_color' => 'nullable|string|max:7',
+            'style' => 'nullable|string|max:50',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            if ($label->image && str_starts_with($label->image, 'labels/')) {
+                Storage::disk('public')->delete($label->image);
+            }
+
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'labels');
+        }
+
+        $label->update($validated);
+        Cache::forget('labels.active');
+
+        return redirect()->route('admin.labels.index')->with('success', 'Label updated successfully');
+    }
+
+    public function deleteLabel(Label $label)
+    {
+        if ($label->image && str_starts_with($label->image, 'labels/')) {
+            Storage::disk('public')->delete($label->image);
+        }
+
+        $label->delete();
+        Cache::forget('labels.active');
+
+        return back()->with('success', 'Label deleted successfully');
+    }
+
+    public function toggleLabel(Label $label)
+    {
+        $label->update(['is_active' => ! $label->is_active]);
+        Cache::forget('labels.active');
+
+        return back()->with('success', 'Label status updated successfully');
+    }
+
+    public function promoBanners()
+    {
+        $promoBanners = PromoBanner::sorted()->paginate(20);
+
+        return view('admin.promo-banners.index', compact('promoBanners'));
+    }
+
+    public function createPromoBanner()
+    {
+        return view('admin.promo-banners.create');
+    }
+
+    public function storePromoBanner(Request $request)
+    {
+        $validated = $request->validate([
+            'heading' => 'nullable|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
+            'link' => 'nullable|url|max:255',
+            'link_text' => 'nullable|string|max:100',
+            'background_color' => 'nullable|string|max:7',
+            'text_color' => 'nullable|string|max:7',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'promo-banners');
+        }
+
+        PromoBanner::create($validated);
+
+        return redirect()->route('admin.promo-banners.index')->with('success', 'Promo banner created successfully');
+    }
+
+    public function editPromoBanner(PromoBanner $promoBanner)
+    {
+        return view('admin.promo-banners.edit', compact('promoBanner'));
+    }
+
+    public function updatePromoBanner(Request $request, PromoBanner $promoBanner)
+    {
+        $validated = $request->validate([
+            'heading' => 'nullable|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
+            'link' => 'nullable|url|max:255',
+            'link_text' => 'nullable|string|max:100',
+            'background_color' => 'nullable|string|max:7',
+            'text_color' => 'nullable|string|max:7',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            if ($promoBanner->image && str_starts_with($promoBanner->image, 'promo-banners/')) {
+                Storage::disk('public')->delete($promoBanner->image);
+            }
+
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'promo-banners');
+        }
+
+        $promoBanner->update($validated);
+
+        return redirect()->route('admin.promo-banners.index')->with('success', 'Promo banner updated successfully');
+    }
+
+    public function deletePromoBanner(PromoBanner $promoBanner)
+    {
+        if ($promoBanner->image && str_starts_with($promoBanner->image, 'promo-banners/')) {
+            Storage::disk('public')->delete($promoBanner->image);
+        }
+
+        $promoBanner->delete();
+
+        return back()->with('success', 'Promo banner deleted successfully');
+    }
+
+    public function togglePromoBanner(PromoBanner $promoBanner)
+    {
+        $promoBanner->update(['is_active' => ! $promoBanner->is_active]);
+
+        return back()->with('success', 'Promo banner status updated successfully');
+    }
+
+    public function settings()
+    {
+        $settings = Setting::all()->pluck('value', 'key')->toArray();
+
+        $data = [
+            'app_name' => $settings['app_name'] ?? config('app.name', 'Upsilon'),
+            'app_url' => $settings['app_url'] ?? config('app.url', ''),
+            'mail_from_address' => $settings['mail_from_address'] ?? config('mail.from.address', ''),
+            'mail_from_name' => $settings['mail_from_name'] ?? config('mail.from.name', ''),
+            'whatsapp_number' => $settings['whatsapp_number'] ?? config('services.whatsapp.number', ''),
+            'whatsapp_default_message' => $settings['whatsapp_default_message'] ?? config('services.whatsapp.default_message', ''),
+            'instagram_account_id' => $settings['instagram_account_id'] ?? config('services.instagram.account_id', ''),
+            'instagram_access_token' => $settings['instagram_access_token'] ?? config('services.instagram.access_token', ''),
+            'instagram_api_version' => $settings['instagram_api_version'] ?? config('services.instagram.api_version', 'v22.0'),
+            'instagram_api_base_url' => $settings['instagram_api_base_url'] ?? config('services.instagram.api_base_url', 'https://graph.facebook.com'),
+            'instagram_cache_ttl' => $settings['instagram_cache_ttl'] ?? config('services.instagram.cache_ttl', 3600),
+        ];
+
+        return view('admin.settings.index', compact('data'));
+    }
+
+    public function updateSettings(Request $request)
+    {
+        $validated = $request->validate([
+            'app_name' => 'nullable|string|max:255',
+            'app_url' => 'nullable|url|max:255',
+            'mail_from_address' => 'nullable|email|max:255',
+            'mail_from_name' => 'nullable|string|max:255',
+            'whatsapp_number' => 'nullable|string|max:255',
+            'whatsapp_default_message' => 'nullable|string|max:1000',
+            'instagram_account_id' => 'nullable|string|max:255',
+            'instagram_access_token' => 'nullable|string|max:255',
+            'instagram_api_version' => 'nullable|string|max:50',
+            'instagram_api_base_url' => 'nullable|url|max:255',
+            'instagram_cache_ttl' => 'nullable|integer|min:0',
+        ]);
+
+        foreach ($validated as $key => $value) {
+            Setting::set($key, $value);
+        }
+
+        return redirect()->route('admin.settings.index')->with('success', 'Settings updated successfully');
     }
 }

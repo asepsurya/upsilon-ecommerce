@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Edit Product - Admin')
+@section('title', 'Edit Product | Upsilon')
 
 @section('page-title', 'Edit Product')
 
@@ -162,6 +162,38 @@
                     <div class="admin-form-group">
                         <label class="admin-form-label">Description</label>
                         <textarea name="description" rows="4" class="admin-form-input">{{ old('description', $product->description) }}</textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Material</label>
+                            <input type="text" name="material" value="{{ old('material', $product->material) }}" class="admin-form-input" placeholder="Contoh: Cotton, Polyester, Wool">
+                        </div>
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Size Fit</label>
+                            <input type="text" name="size_fit" value="{{ old('size_fit', $product->size_fit) }}" class="admin-form-input" placeholder="Contoh: Regular, Slim, Loose">
+                        </div>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Labels</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            @foreach($labels as $label)
+                                <label class="flex items-center gap-2 p-3 border border-outline rounded cursor-pointer hover:bg-muted/50 transition-colors">
+                                    <input type="checkbox" name="label_ids[]" value="{{ $label->id }}" {{ $product->labels->contains($label->id) ? 'checked' : '' }}
+                                        class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary">
+                                    <div class="flex items-center gap-2">
+                                        @if($label->image)
+                                            <img src="{{ $label->image_url }}" alt="{{ $label->name }}" class="w-8 h-5 object-cover rounded">
+                                        @endif
+                                        <span class="text-sm">{{ $label->name }}</span>
+                                    </div>
+                                </label>
+                            @endforeach
+                        </div>
+                        @if($labels->isEmpty())
+                            <p class="text-xs text-muted mt-2">No labels available. <a href="{{ route('admin.labels.create') }}" class="text-primary underline">Create a label</a> first.</p>
+                        @endif
                     </div>
 
                     <hr class="my-6 border-border">

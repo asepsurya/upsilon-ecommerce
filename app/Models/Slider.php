@@ -17,6 +17,7 @@ class Slider extends Model
         'heading',
         'description',
         'image',
+        'image_mobile',
         'link',
         'link_text',
         'is_active',
@@ -32,7 +33,7 @@ class Slider extends Model
         'ends_at' => 'datetime',
     ];
 
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url', 'image_mobile_url'];
 
     public function getImageUrlAttribute(): string
     {
@@ -41,6 +42,15 @@ class Slider extends Model
         }
 
         return asset(str_starts_with($this->image, 'storage/') ? $this->image : 'storage/'.$this->image);
+    }
+
+    public function getImageMobileUrlAttribute(): string
+    {
+        if (! $this->image_mobile) {
+            return $this->image_url;
+        }
+
+        return asset(str_starts_with($this->image_mobile, 'storage/') ? $this->image_mobile : 'storage/'.$this->image_mobile);
     }
 
     public function scopeActive(Builder $query): Builder

@@ -19,7 +19,7 @@ class Product extends Model
         'category_id', 'name', 'slug', 'description', 'material', 'size_fit',
         'base_price', 'sale_price', 'is_new_arrival', 'is_featured',
         'is_bestseller', 'sort_order', 'is_active', 'badge', 'edition',
-        'subtitle', 'bottom_label',
+        'subtitle', 'bottom_label', 'average_rating', 'review_count',
     ];
 
     protected $casts = [
@@ -79,6 +79,11 @@ class Product extends Model
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function labels(): BelongsToMany
+    {
+        return $this->belongsToMany(Label::class, 'label_product');
     }
 
     public function scopeActive($query)
@@ -142,5 +147,27 @@ class Product extends Model
         }
 
         return round((($this->base_price - $this->sale_price) / $this->base_price) * 100);
+    }
+
+    public function getFormattedPriceAttribute(): string
+    {
+        $price = $this->effective_price;
+
+        if ($this->sale_price && $this->sale_price < $this->base_price) {
+            return '$'.number_format($this->sale_price, 2).' <span class="text-muted line-through">$'.number_format($this->base_price, 2).'</span>';
+        }
+
+        return '$'.number_format($price, 2);
+    }
+
+    public function getImageUrlAttribute(): string
+    {
+        $image = $this->images->first() ?? $this->images()->orderBy('sort_order')->first();
+
+        if (! $image) {
+            return asset('storage/images/sample/no-image.png');
+        }
+
+        return $image->url;
     }
 }

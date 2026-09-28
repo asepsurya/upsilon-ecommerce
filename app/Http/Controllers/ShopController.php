@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\Label;
 use App\Models\Product;
+use App\Models\PromoBanner;
 use App\Models\Size;
+use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -16,7 +19,7 @@ class ShopController extends Controller
         $query = Product::active()
             ->with(['images' => function ($q) {
                 $q->orderBy('sort_order')->limit(1);
-            }, 'category', 'reviews'])
+            }, 'category', 'reviews', 'labels'])
             ->withCount('reviews');
 
         if ($request->search) {
@@ -25,6 +28,12 @@ class ShopController extends Controller
 
         if ($request->category) {
             $query->where('category_id', $request->category);
+        }
+
+        if ($request->label) {
+            $query->whereHas('labels', function ($q) use ($request) {
+                $q->where('slug', $request->label);
+            });
         }
 
         if ($request->sizes) {
@@ -84,10 +93,17 @@ class ShopController extends Controller
             return Color::all();
         });
 
+        $labels = Cache::remember('labels.active', now()->addHours(6), function () {
+            return Label::active()->sorted()->get();
+        });
+
         $maxPrice = Product::active()->max('base_price') ?: 1850;
 
+        $sliders = Slider::active()->get();
+        $promoBanners = PromoBanner::active()->get();
+
         return view('shop.index', compact(
-            'products', 'categories', 'sizes', 'colors', 'maxPrice'
+            'products', 'categories', 'sizes', 'colors', 'labels', 'maxPrice', 'sliders', 'promoBanners'
         ));
     }
 

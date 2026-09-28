@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Create Bundle - Admin')
+@section('title', 'Create Bundle | Upsilon')
 
 @section('page-title', 'Create Bundle')
 

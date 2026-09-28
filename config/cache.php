@@ -1,11 +1,19 @@
 <?php
 
+use App\Models\Announcement;
+use App\Models\Bundle;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\FlashSale;
+use App\Models\Label;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
+use App\Models\PromoBanner;
+use App\Models\Review;
 use App\Models\Size;
+use App\Models\Slider;
+use App\Models\Voucher;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 
@@ -142,9 +150,17 @@ return [
         Category::class,
         Size::class,
         Color::class,
+        Label::class,
         Product::class,
         ProductImage::class,
         ProductVariant::class,
+        Slider::class,
+        PromoBanner::class,
+        FlashSale::class,
+        Announcement::class,
+        Bundle::class,
+        Voucher::class,
+        Review::class,
         Collection::class,
     ],
 

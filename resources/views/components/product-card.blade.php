@@ -11,12 +11,12 @@
             ?? optional($product->images?->first())?->url
             ?? null;
         $productLink = route('product.show', $product->slug ?? $product->id);
-        $brand = $product->subtitle ?? optional($product->category)->name ?? 'JD Sports';
+        $brand = $product->subtitle ?? optional($product->category)->name ?? 'Upsilon';
         $inStock = $product->activeVariants()->exists();
     } else {
         $imageUrl = $product->image_url ?? $product->image ?? null;
         $productLink = $product->permalink ?? route('shop');
-        $brand = $product->brand ?? 'JD Sports';
+        $brand = $product->brand ?? 'Upsilon';
         $inStock = true;
     }
 
@@ -50,6 +50,20 @@
             </span>
         @endif
 
+        @if($isModel && $product->labels->isNotEmpty())
+            <div class="absolute top-2 right-2 flex flex-wrap gap-1 justify-end max-w-[60%]">
+                @foreach($product->labels->take(2) as $label)
+                    @if($label->image)
+                        <img src="{{ $label->image_url }}" alt="{{ $label->name }}" class="h-4 w-auto object-contain">
+                    @else
+                        <span class="inline-block px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-sm" style="background-color: {{ $label->color ?? '#000' }}; color: {{ $label->text_color ?? '#fff' }};">
+                            {{ $label->name }}
+                        </span>
+                    @endif
+                @endforeach
+            </div>
+        @endif
+
         @if($showStock)
             <span class="absolute top-2 right-2 {{ $inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }} text-[10px] font-bold px-2 py-0.5 rounded">
                 {{ $inStock ? 'In Stock' : 'Out of Stock' }}
@@ -58,7 +72,7 @@
 
         <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex justify-center py-3">
             <a href="https://wa.me/{{ config('services.whatsapp.number', '6281234567890') }}?text={{ urlencode('Hi, I would like to buy ' . $product->name . ' for ' . currency($displayPrice) . '. Can you give me info?') }}"
-                class="text-[10px] font-bold uppercase tracking-wider text-white hover:text-jd-yellow transition-colors"
+                class="text-[10px] font-bold uppercase tracking-wider text-white hover:text-brand-yellow transition-colors"
                 target="_blank" rel="noopener">
                 Chat on WhatsApp
             </a>
@@ -84,7 +98,7 @@
         <div class="flex items-center justify-between mt-auto pt-2 border-t border-gray-200">
             <div class="flex flex-col">
                 @if($hasDiscount)
-                    <span class="text-sm font-bold text-jd-orange">${{ number_format($salePrice, 2, '.', ',') }}</span>
+                    <span class="text-sm font-bold text-brand-orange">${{ number_format($salePrice, 2, '.', ',') }}</span>
                     <span class="text-xs text-gray-400 line-through">${{ number_format($basePrice, 2, '.', ',') }}</span>
                 @else
                     <span class="text-sm font-bold text-black">${{ number_format($displayPrice, 2, '.', ',') }}</span>

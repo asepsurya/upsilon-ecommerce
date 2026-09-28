@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Order #' . $order->order_number . ' - Admin')
+@section('title', 'Order #' . $order->order_number . ' | Upsilon')
 
 @section('page-title', 'Order #' . $order->order_number)
 
