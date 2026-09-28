@@ -32,10 +32,22 @@ class DatabaseSeeder extends BaseSeeder
         DB::table('order_items')->truncate();
         DB::table('wishlists')->truncate();
         DB::table('product_variants')->truncate();
+        DB::table('label_product')->truncate();
+        DB::table('flash_sale_product')->truncate();
+        DB::table('bundle_items')->truncate();
         DB::table('products')->truncate();
         DB::table('categories')->truncate();
         DB::table('sizes')->truncate();
         DB::table('colors')->truncate();
+        DB::table('sliders')->truncate();
+        DB::table('flash_sales')->truncate();
+        DB::table('promo_banners')->truncate();
+        DB::table('labels')->truncate();
+        DB::table('announcements')->truncate();
+        DB::table('settings')->truncate();
+        DB::table('bundles')->truncate();
+        DB::table('vouchers')->truncate();
+        DB::table('size_guides')->truncate();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -43,7 +55,17 @@ class DatabaseSeeder extends BaseSeeder
             CategorySeeder::class,
             SizeSeeder::class,
             ColorSeeder::class,
+            SizeGuideSeeder::class,
             ProductSeeder::class,
+            ProductSalePriceSeeder::class,
+            AnnouncementSeeder::class,
+            SliderSeeder::class,
+            FlashSaleSeeder::class,
+            PromoBannerSeeder::class,
+            LabelSeeder::class,
+            SettingSeeder::class,
+            BundleSeeder::class,
+            VoucherSeeder::class,
         ]);
     }
 }

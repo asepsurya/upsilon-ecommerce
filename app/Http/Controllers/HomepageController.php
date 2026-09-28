@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Announcement;
 use App\Models\Bundle;
 use App\Models\Category;
 use App\Models\FlashSale;
@@ -77,8 +78,10 @@ class HomepageController extends Controller
 
         $labels = Label::active()->sorted()->get();
 
+        $announcements = Announcement::active()->get();
+
         return view('home.index', compact(
-            'categories', 'featuredProducts', 'products', 'newArrivals', 'bundles', 'articles', 'sliders', 'flashSale', 'flashSaleDeadline', 'flashSaleProducts', 'promoBanners', 'limitedPairsList', 'topPicksList', 'labels'
+            'categories', 'featuredProducts', 'products', 'newArrivals', 'bundles', 'articles', 'sliders', 'flashSale', 'flashSaleDeadline', 'flashSaleProducts', 'promoBanners', 'limitedPairsList', 'topPicksList', 'labels', 'announcements'
         ));
     }
 

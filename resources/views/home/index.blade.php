@@ -260,17 +260,17 @@
     </header>
 
     {{-- ============================================================
-    3. PROMO BAR (SCROLLER)
-    ============================================================ --}}
+     3. PROMO BAR (SCROLLER)
+     ============================================================ --}}
     @php
-        $promoBarItems = [
-            ['FREE SHIPPING NATIONWIDE', 'Next day & standard delivery*'],
-            ['ASICS GEL-CUMULUS', 'Where comfort pursues us'],
-            ['CLICK AND COLLECT', 'Available in web & app'],
-            ['NEW ARRIVALS', 'Just landed — fresh picks'],
-            ['FLASH SALE', 'Up to 70% off — today only'],
-            ['EXCLUSIVE PERKS', 'Early access — join now'],
-        ];
+        $promoBarItems = $announcements->map(fn($a) => [$a->title, $a->message])->toArray();
+
+        if ($promoBarItems === []) {
+            $promoBarItems = [
+                ['FREE SHIPPING NATIONWIDE', 'Next day & standard delivery*'],
+                ['ASICS GEL-CUMULUS', 'Where comfort pursues us'],
+            ];
+        }
     @endphp
 
     <div class="border-y border-yellow-400 bg-brand-yellow font-bold uppercase tracking-tight text-black overflow-hidden"

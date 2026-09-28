@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductView;
+use App\Models\SizeGuide;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 
@@ -42,8 +43,12 @@ class ProductController extends Controller
 
         $recentlyViewed = $this->getRecentlyViewed($product);
 
+        $sizeGuides = SizeGuide::where('size_type', 'tshirt')
+            ->orderBy('size_label')
+            ->get();
+
         return view('product.show', compact(
-            'product', 'related', 'recentlyViewed'
+            'product', 'related', 'recentlyViewed', 'sizeGuides'
         ));
     }
 

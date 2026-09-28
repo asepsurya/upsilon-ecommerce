@@ -3,8 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductVariant;
+use App\Models\Size;
 use Illuminate\Database\Seeder as BaseSeeder;
 
 class ProductSeeder extends BaseSeeder
@@ -12,6 +15,8 @@ class ProductSeeder extends BaseSeeder
     public function run(): void
     {
         $categories = Category::all()->keyBy('slug');
+        $sizes = Size::all();
+        $colors = Color::all();
 
         $products = [
             [
@@ -32,6 +37,12 @@ class ProductSeeder extends BaseSeeder
                 'subtitle' => 'Atelier Tailoring',
                 'bottom_label' => 'Includes Fitting',
                 'image' => 'storage/images/sample/prod-trench.jpg',
+                'variants' => [
+                    ['size' => 'S', 'color' => 'Black', 'sku' => 'TRENCH-S-BLK', 'stock' => 10],
+                    ['size' => 'M', 'color' => 'Black', 'sku' => 'TRENCH-M-BLK', 'stock' => 15],
+                    ['size' => 'L', 'color' => 'Charcoal', 'sku' => 'TRENCH-L-CHR', 'stock' => 8],
+                    ['size' => 'XL', 'color' => 'Navy', 'sku' => 'TRENCH-XL-NVY', 'stock' => 5],
+                ],
             ],
             [
                 'name' => 'Hand-Stitched Wool Blazer',
@@ -51,6 +62,12 @@ class ProductSeeder extends BaseSeeder
                 'subtitle' => 'Sartorial Master',
                 'bottom_label' => 'Includes Fitting',
                 'image' => 'storage/images/sample/prod-blazer.jpg',
+                'variants' => [
+                    ['size' => 'S', 'color' => 'Navy', 'sku' => 'BLAZER-S-NVY', 'stock' => 12],
+                    ['size' => 'M', 'color' => 'Navy', 'sku' => 'BLAZER-M-NVY', 'stock' => 20],
+                    ['size' => 'L', 'color' => 'Charcoal', 'sku' => 'BLAZER-L-CHR', 'stock' => 18],
+                    ['size' => 'XL', 'color' => 'Black', 'sku' => 'BLAZER-XL-BLK', 'stock' => 6],
+                ],
             ],
             [
                 'name' => 'Pleated Silk Georgette Gown',
@@ -70,6 +87,12 @@ class ProductSeeder extends BaseSeeder
                 'subtitle' => 'Couture Soirée',
                 'bottom_label' => 'Includes Fitting',
                 'image' => 'storage/images/sample/prod-gown.jpg',
+                'variants' => [
+                    ['size' => 'S', 'color' => 'Burgundy', 'sku' => 'GOWN-S-BRG', 'stock' => 5],
+                    ['size' => 'M', 'color' => 'Burgundy', 'sku' => 'GOWN-M-BRG', 'stock' => 8],
+                    ['size' => 'L', 'color' => 'Black', 'sku' => 'GOWN-L-BLK', 'stock' => 7],
+                    ['size' => 'XL', 'color' => 'Cream', 'sku' => 'GOWN-XL-CRM', 'stock' => 4],
+                ],
             ],
             [
                 'name' => 'Ribbed Mongolian Turtleneck',
@@ -89,6 +112,12 @@ class ProductSeeder extends BaseSeeder
                 'subtitle' => 'Permanent Archive',
                 'bottom_label' => 'Immediate Dispatch',
                 'image' => 'storage/images/sample/prod-turtleneck.jpg',
+                'variants' => [
+                    ['size' => 'S', 'color' => 'Cream', 'sku' => 'TURT-S-CRM', 'stock' => 15],
+                    ['size' => 'M', 'color' => 'Cream', 'sku' => 'TURT-M-CRM', 'stock' => 25],
+                    ['size' => 'L', 'color' => 'Olive', 'sku' => 'TURT-L-OLV', 'stock' => 20],
+                    ['size' => 'XL', 'color' => 'Charcoal', 'sku' => 'TURT-XL-CHR', 'stock' => 12],
+                ],
             ],
             [
                 'name' => 'Structured Italian Satin Tuxedo',
@@ -108,6 +137,12 @@ class ProductSeeder extends BaseSeeder
                 'subtitle' => 'Formal Atelier',
                 'bottom_label' => 'Includes Fitting',
                 'image' => 'storage/images/sample/prod-tuxedo.jpg',
+                'variants' => [
+                    ['size' => 'S', 'color' => 'Black', 'sku' => 'TUX-S-BLK', 'stock' => 6],
+                    ['size' => 'M', 'color' => 'Black', 'sku' => 'TUX-M-BLK', 'stock' => 10],
+                    ['size' => 'L', 'color' => 'Black', 'sku' => 'TUX-L-BLK', 'stock' => 8],
+                    ['size' => 'XL', 'color' => 'Navy', 'sku' => 'TUX-XL-NVY', 'stock' => 4],
+                ],
             ],
             [
                 'name' => 'Asymmetric Cut-Out Velvet Dress',
@@ -127,6 +162,12 @@ class ProductSeeder extends BaseSeeder
                 'subtitle' => 'Sculptural Nocturne',
                 'bottom_label' => 'Includes Fitting',
                 'image' => 'storage/images/sample/prod-velvet.jpg',
+                'variants' => [
+                    ['size' => 'S', 'color' => 'Burgundy', 'sku' => 'DRESS-S-BRG', 'stock' => 7],
+                    ['size' => 'M', 'color' => 'Burgundy', 'sku' => 'DRESS-M-BRG', 'stock' => 10],
+                    ['size' => 'L', 'color' => 'Black', 'sku' => 'DRESS-L-BLK', 'stock' => 9],
+                    ['size' => 'XL', 'color' => 'Olive', 'sku' => 'DRESS-XL-OLV', 'stock' => 3],
+                ],
             ],
             [
                 'name' => 'Florentine Nappa Leather Overcoat',
@@ -146,6 +187,12 @@ class ProductSeeder extends BaseSeeder
                 'subtitle' => 'Cuir Imperial',
                 'bottom_label' => 'Includes Fitting',
                 'image' => 'storage/images/sample/prod-overcoat.jpg',
+                'variants' => [
+                    ['size' => 'M', 'color' => 'Black', 'sku' => 'COAT-M-BLK', 'stock' => 5],
+                    ['size' => 'L', 'color' => 'Black', 'sku' => 'COAT-L-BLK', 'stock' => 8],
+                    ['size' => 'XL', 'color' => 'Brown', 'sku' => 'COAT-XL-BRN', 'stock' => 4],
+                    ['size' => 'XXL', 'color' => 'Black', 'sku' => 'COAT-XXL-BLK', 'stock' => 2],
+                ],
             ],
             [
                 'name' => 'Raw Filament Cashmere Shell',
@@ -165,6 +212,12 @@ class ProductSeeder extends BaseSeeder
                 'subtitle' => 'Knitwear Atelier',
                 'bottom_label' => 'Immediate Dispatch',
                 'image' => 'storage/images/sample/prod-shell.jpg',
+                'variants' => [
+                    ['size' => 'S', 'color' => 'Cream', 'sku' => 'SHELL-S-CRM', 'stock' => 8],
+                    ['size' => 'M', 'color' => 'Cream', 'sku' => 'SHELL-M-CRM', 'stock' => 12],
+                    ['size' => 'L', 'color' => 'White', 'sku' => 'SHELL-L-WHT', 'stock' => 10],
+                    ['size' => 'XL', 'color' => 'Beige', 'sku' => 'SHELL-XL-BG', 'stock' => 6],
+                ],
             ],
         ];
 
@@ -200,6 +253,25 @@ class ProductSeeder extends BaseSeeder
                 'is_primary' => true,
                 'sort_order' => 1,
             ]);
+
+            if (isset($data['variants']) && is_array($data['variants'])) {
+                foreach ($data['variants'] as $variantData) {
+                    $size = $sizes->firstWhere('name', $variantData['size']);
+                    $color = $colors->firstWhere('name', $variantData['color']);
+
+                    if ($size && $color) {
+                        ProductVariant::create([
+                            'product_id' => $product->id,
+                            'size_id' => $size->id,
+                            'color_id' => $color->id,
+                            'sku' => $variantData['sku'],
+                            'stock' => $variantData['stock'],
+                            'is_active' => true,
+                            'unlimited_stock' => false,
+                        ]);
+                    }
+                }
+            }
         }
     }
 }

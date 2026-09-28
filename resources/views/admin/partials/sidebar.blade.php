@@ -37,6 +37,11 @@
                 <span class="nav-icon material-symbols-outlined text-lg">label</span>
                 Labels
             </a>
+            <a href="{{ route('admin.size-guides.index') }}"
+                class="admin-sidebar-nav-item {{ request()->routeIs('admin.size-guides*') ? 'active' : '' }}">
+                <span class="nav-icon material-symbols-outlined text-lg">straighten</span>
+                Size Guides
+            </a>
         </div>
 
         <div class="admin-sidebar-nav-group">

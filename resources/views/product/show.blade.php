@@ -28,6 +28,17 @@
     $hasReviews = $reviewsList->count() > 0;
     $avgRating = $product->average_rating ? round($product->average_rating, 1) : 0;
     $reviewCount = $product->review_count ?? 0;
+
+    $variantData = $product->variants->map(function ($v) {
+        return [
+            'color_id' => $v->color_id,
+            'size_id' => $v->size_id,
+            'price' => $v->effective_price ?? $v->price ?? null,
+            'base_price' => $v->effective_base_price ?? $v->base_price ?? null,
+            'stock' => $v->unlimited_stock ? 9999 : ($v->stock ?? 0),
+            'sku' => $v->sku ?? null,
+        ];
+    })->values();
 @endphp
 
 @section("title", $pageTitle)
@@ -35,7 +46,7 @@
 @section("ogUrl", url()->current())
 @section("ogImage", $pageImage)
 
-@push("head")
+    @push("head")
 <script type="application/ld+json">
 {!! json_encode(array_filter([
     '@context' => 'https://schema.org',
@@ -60,6 +71,12 @@
         'reviewCount' => $reviewCount,
     ] : null,
 ]), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+</script>
+@endpush
+
+@push('scripts')
+<script>
+    window.productVariantData = @json($variantData);
 </script>
 @endpush
 
@@ -618,31 +635,44 @@
         <div class="bg-white max-w-lg w-full rounded-sm shadow-2xl p-6 relative max-h-[90vh] overflow-y-auto">
             <button type="button" id="close-size-guide-btn" class="absolute top-4 right-4 text-neutral-400 hover:text-black font-bold text-lg">✕</button>
             <h3 class="text-base font-extrabold uppercase tracking-tight text-neutral-900 mb-2">Size Guide</h3>
-            <p class="text-xs text-neutral-500 mb-4">Use the following international size conversion guide to choose the best fit for you.</p>
+            <p class="text-xs text-neutral-500 mb-4">Use the following size measurements to choose the best fit for you.</p>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-xs text-left border border-neutral-200">
                     <thead class="bg-neutral-100 text-neutral-800 font-bold uppercase text-[10px]">
                         <tr>
-                            <th class="p-2 border-b">EU</th>
-                            <th class="p-2 border-b">US (Men)</th>
-                            <th class="p-2 border-b">US (Women)</th>
-                            <th class="p-2 border-b">UK</th>
-                            <th class="p-2 border-b">CM</th>
+                            <th class="p-2 border-b">Size</th>
+                            <th class="p-2 border-b">Chest</th>
+                            <th class="p-2 border-b">Waist</th>
+                            <th class="p-2 border-b">Hip</th>
+                            <th class="p-2 border-b">Length</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-neutral-200 text-neutral-600">
-                        <tr><td class="p-2 font-bold text-neutral-900">38</td><td class="p-2">5.5</td><td class="p-2">7.0</td><td class="p-2">5.0</td><td class="p-2">24.0</td></tr>
-                        <tr><td class="p-2 font-bold text-neutral-900">39</td><td class="p-2">6.5</td><td class="p-2">8.0</td><td class="p-2">6.0</td><td class="p-2">24.5</td></tr>
-                        <tr><td class="p-2 font-bold text-neutral-900">40</td><td class="p-2">7.0</td><td class="p-2">8.5</td><td class="p-2">6.0</td><td class="p-2">25.0</td></tr>
-                        <tr><td class="p-2 font-bold text-neutral-900">41</td><td class="p-2">8.0</td><td class="p-2">9.5</td><td class="p-2">7.0</td><td class="p-2">26.0</td></tr>
-                        <tr><td class="p-2 font-bold text-neutral-900">42</td><td class="p-2">8.5</td><td class="p-2">10.0</td><td class="p-2">7.5</td><td class="p-2">26.5</td></tr>
-                        <tr><td class="p-2 font-bold text-neutral-900">43</td><td class="p-2">9.5</td><td class="p-2">11.0</td><td class="p-2">8.5</td><td class="p-2">27.5</td></tr>
-                        <tr><td class="p-2 font-bold text-neutral-900">44</td><td class="p-2">10.0</td><td class="p-2">11.5</td><td class="p-2">9.0</td><td class="p-2">28.0</td></tr>
-                        <tr><td class="p-2 font-bold text-neutral-900">45</td><td class="p-2">11.0</td><td class="p-2">12.5</td><td class="p-2">10.0</td><td class="p-2">29.0</td></tr>
+                        @if(isset($sizeGuides) && $sizeGuides->count() > 0)
+                            @foreach($sizeGuides as $guide)
+                                <tr>
+                                    <td class="p-2 font-bold text-neutral-900">{{ $guide->size_label }}</td>
+                                    <td class="p-2">{{ $guide->chest_cm ? $guide->chest_cm . ' cm' : '-' }}</td>
+                                    <td class="p-2">{{ $guide->waist_cm ? $guide->waist_cm . ' cm' : '-' }}</td>
+                                    <td class="p-2">{{ $guide->hip_cm ? $guide->hip_cm . ' cm' : '-' }}</td>
+                                    <td class="p-2">{{ $guide->body_length_cm ? $guide->body_length_cm . ' cm' : '-' }}</td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="5" class="p-4 text-center text-neutral-500">No size guide available yet.</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
+
+            <div class="mt-4 p-3 bg-neutral-50 rounded-sm text-[11px] text-neutral-500">
+                💡 <strong>Tip:</strong> If you are between two sizes, it is recommended to choose one size larger for maximum comfort.
+            </div>
+        </div>
+    </div>
 
             <div class="mt-4 p-3 bg-neutral-50 rounded-sm text-[11px] text-neutral-500">
                 💡 <strong>Tip:</strong> If you are between two sizes, it is recommended to choose one size larger for maximum sneaker comfort.
@@ -785,6 +815,160 @@
             });
 
             updateStarRating(parseInt(reviewRatingInput.value || '5', 10));
+        }
+
+        // ==========================================
+        // #5: Variant Selection - Color & Size
+        // ==========================================
+        const colorButtons = document.querySelectorAll('.color-swatch-btn');
+        const sizeButtons = document.querySelectorAll('.size-choice-btn');
+        const selectedColorLabel = document.getElementById('selected-color-label');
+        const selectedSizeLabel = document.getElementById('selected-size-label');
+        const mainPriceVal = document.getElementById('main-price-val');
+        const mainBasePriceVal = document.getElementById('main-base-price-val');
+        const stockStatusText = document.getElementById('stock-status-text');
+        const stockStatusBadge = document.getElementById('stock-status-badge');
+        const btnWhatsappOrder = document.getElementById('btn-whatsapp-order');
+
+        let selectedColorId = null;
+        let selectedSizeId = null;
+
+        const variantMap = new Map();
+        if (Array.isArray(window.productVariantData)) {
+            window.productVariantData.forEach(function (item) {
+                if (!item || !item.color_id || !item.size_id) return;
+                const key = item.color_id + '::' + item.size_id;
+                variantMap.set(key, item);
+            });
+        }
+
+        function formatPrice(value) {
+            if (value === null || value === undefined || isNaN(value)) return null;
+            return '$' + Number(value).toFixed(2);
+        }
+
+        function updateVariantUI() {
+            const key = (selectedColorId ? selectedColorId : '') + '::' + (selectedSizeId ? selectedSizeId : '');
+            const variant = variantMap.get(key) || null;
+
+            if (selectedColorLabel) {
+                selectedColorLabel.textContent = selectedColorId ? (document.querySelector('.color-swatch-btn[data-color-id="' + selectedColorId + '"]')?.getAttribute('data-color-name') || 'Selected') : 'Select color';
+            }
+            if (selectedSizeLabel) {
+                selectedSizeLabel.textContent = selectedSizeId ? (document.querySelector('.size-choice-btn[data-size-id="' + selectedSizeId + '"]')?.getAttribute('data-size-name') || 'Selected') : 'Select size';
+            }
+
+            if (variant && mainPriceVal) {
+                const newPrice = formatPrice(variant.price);
+                const newBasePrice = formatPrice(variant.base_price);
+
+                if (newPrice) {
+                    mainPriceVal.textContent = newPrice;
+                    mainPriceVal.classList.remove('hidden');
+                }
+
+                if (mainBasePriceVal) {
+                    if (newBasePrice && newPrice && newBasePrice !== newPrice) {
+                        mainBasePriceVal.textContent = newBasePrice;
+                        mainBasePriceVal.classList.remove('hidden');
+                    } else {
+                        mainBasePriceVal.classList.add('hidden');
+                    }
+                }
+
+                if (stockStatusText) {
+                    if (variant.stock > 0) {
+                        stockStatusText.textContent = variant.stock >= 9999 ? 'In Stock' : 'In Stock (' + variant.stock + ')';
+                        if (stockStatusBadge) {
+                            stockStatusBadge.className = 'text-xs font-semibold flex items-center gap-1.5 text-emerald-600';
+                            stockStatusBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span id="stock-status-text">' + stockStatusText.textContent + '</span>';
+                        }
+                    } else {
+                        stockStatusText.textContent = 'Out of Stock';
+                        if (stockStatusBadge) {
+                            stockStatusBadge.className = 'text-xs font-semibold flex items-center gap-1.5 text-red-600';
+                            stockStatusBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span><span id="stock-status-text">Out of Stock</span>';
+                        }
+                    }
+                }
+
+                if (btnWhatsappOrder) {
+                    const productName = document.querySelector('h1')?.textContent?.trim() || 'Product';
+                    const priceText = newPrice || '';
+                    const sizeText = selectedSizeId ? (document.querySelector('.size-choice-btn[data-size-id="' + selectedSizeId + '"]')?.getAttribute('data-size-name') || '') : '';
+                    const colorText = selectedColorId ? (document.querySelector('.color-swatch-btn[data-color-id="' + selectedColorId + '"]')?.getAttribute('data-color-name') || '') : '';
+                    const detail = [colorText, sizeText].filter(Boolean).join(' - ');
+                    const orderText = encodeURIComponent('Hello Upsilon, I am interested in buying ' + productName + (detail ? ' (' + detail + ')' : '') + ' for ' + priceText + '. Please confirm stock and how to order.');
+                    btnWhatsappOrder.href = 'https://wa.me/{{ $waNumber }}?text=' + orderText;
+                }
+            }
+        }
+
+        colorButtons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                colorButtons.forEach(function (b) {
+                    b.classList.remove('border-black', 'ring-1', 'ring-black');
+                    b.classList.add('border-neutral-300');
+                    const check = b.querySelector('.swatch-check');
+                    if (check) check.classList.add('hidden');
+                });
+
+                this.classList.remove('border-neutral-300');
+                this.classList.add('border-black', 'ring-1', 'ring-black');
+                const check = this.querySelector('.swatch-check');
+                if (check) check.classList.remove('hidden');
+
+                selectedColorId = this.getAttribute('data-color-id');
+                updateVariantUI();
+            });
+        });
+
+        sizeButtons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const available = btn.getAttribute('data-available') === '1';
+                if (!available) return;
+
+                sizeButtons.forEach(function (b) {
+                    b.classList.remove('bg-black', 'text-white', 'border-black');
+                    b.classList.add('bg-white', 'text-neutral-800', 'border-neutral-300');
+                });
+
+                btn.classList.remove('bg-white', 'text-neutral-800', 'border-neutral-300');
+                btn.classList.add('bg-black', 'text-white', 'border-black');
+
+                selectedSizeId = btn.getAttribute('data-size-id');
+                updateVariantUI();
+            });
+        });
+
+        // ==========================================
+        // #6: Size Guide Modal
+        // ==========================================
+        const openSizeGuideBtn = document.getElementById('open-size-guide-btn');
+        const sizeGuideModal = document.getElementById('size-guide-modal');
+        const closeSizeGuideBtn = document.getElementById('close-size-guide-btn');
+
+        if (openSizeGuideBtn && sizeGuideModal) {
+            openSizeGuideBtn.addEventListener('click', function () {
+                sizeGuideModal.classList.remove('hidden');
+                sizeGuideModal.classList.add('flex');
+            });
+        }
+
+        if (closeSizeGuideBtn && sizeGuideModal) {
+            closeSizeGuideBtn.addEventListener('click', function () {
+                sizeGuideModal.classList.add('hidden');
+                sizeGuideModal.classList.remove('flex');
+            });
+        }
+
+        if (sizeGuideModal) {
+            sizeGuideModal.addEventListener('click', function (e) {
+                if (e.target === sizeGuideModal) {
+                    sizeGuideModal.classList.add('hidden');
+                    sizeGuideModal.classList.remove('flex');
+                }
+            });
         }
 
     });

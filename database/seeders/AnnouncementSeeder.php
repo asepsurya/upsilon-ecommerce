@@ -10,36 +10,78 @@ class AnnouncementSeeder extends Seeder
     public function run(): void
     {
         Announcement::create([
-            'title' => 'Special Offer',
-            'message' => 'Free shipping on all orders over $100',
-            'code' => 'FREESHIP100',
-            'type' => 'promo',
-            'animation' => 'slide',
-            'duration' => 6000,
-            'is_active' => true,
-            'sort_order' => 1,
-        ]);
-
-        Announcement::create([
-            'title' => 'New Collection',
-            'message' => 'Discover our latest Autumn Winter 2025 collection now available',
-            'link' => '/shop',
-            'link_text' => 'Shop Now',
-            'type' => 'info',
-            'animation' => 'typewriter',
-            'duration' => 8000,
-            'is_active' => true,
-            'sort_order' => 2,
-        ]);
-
-        Announcement::create([
-            'message' => 'Limited time: Use code HEALTH10 for 10% off your first order',
-            'code' => 'HEALTH10',
+            'title' => 'FREE SHIPPING NATIONWIDE',
+            'message' => 'Next day & standard delivery*',
+            'code' => null,
+            'link' => null,
+            'link_text' => null,
             'type' => 'promo',
             'animation' => 'slide',
             'duration' => 5000,
             'is_active' => true,
+            'sort_order' => 1,
+            'starts_at' => null,
+            'ends_at' => null,
+        ]);
+
+        Announcement::create([
+            'title' => 'ASICS GEL-CUMULUS',
+            'message' => 'Where comfort pursues us',
+            'code' => null,
+            'link' => null,
+            'link_text' => null,
+            'type' => 'info',
+            'animation' => 'slide',
+            'duration' => 5000,
+            'is_active' => true,
+            'sort_order' => 2,
+            'starts_at' => null,
+            'ends_at' => null,
+        ]);
+
+        Announcement::create([
+            'title' => 'CLICK AND COLLECT',
+            'message' => 'Available in web & app',
+            'code' => null,
+            'link' => null,
+            'link_text' => null,
+            'type' => 'info',
+            'animation' => 'slide',
+            'duration' => 5000,
+            'is_active' => true,
             'sort_order' => 3,
+            'starts_at' => null,
+            'ends_at' => null,
+        ]);
+
+        Announcement::create([
+            'title' => 'NEW ARRIVALS',
+            'message' => 'Just landed — fresh picks',
+            'code' => null,
+            'link' => null,
+            'link_text' => null,
+            'type' => 'info',
+            'animation' => 'slide',
+            'duration' => 5000,
+            'is_active' => true,
+            'sort_order' => 4,
+            'starts_at' => null,
+            'ends_at' => null,
+        ]);
+
+        Announcement::create([
+            'title' => 'FLASH SALE',
+            'message' => 'Up to 70% off — today only',
+            'code' => 'FLASH70',
+            'link' => '/shop',
+            'link_text' => 'Shop Now',
+            'type' => 'promo',
+            'animation' => 'slide',
+            'duration' => 5000,
+            'is_active' => true,
+            'sort_order' => 5,
+            'starts_at' => now()->subHours(2),
+            'ends_at' => now()->addHours(22),
         ]);
     }
 }

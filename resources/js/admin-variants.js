@@ -223,14 +223,14 @@ window.AdminVariants = {
                 const stock = row.querySelector('input[name*="[stock]"]')?.value || 0;
                 const priceOverride = row.querySelector('input[name*="[price_override]"]')?.value || '';
                 const salePriceOverride = row.querySelector('input[name*="[sale_price_override]"]')?.value || '';
-                const isActive = row.querySelector('input[name*="[is_active]"]')?.checked ? 1 : 0;
+                const unlimitedStock = row.querySelector('input[name*="[unlimited_stock]"]')?.checked ? true : false;
 
                 variantData[key] = {
                     sku: sku,
                     stock: stock,
                     price_override: priceOverride,
                     sale_price_override: salePriceOverride,
-                    is_active: isActive === 1 ? true : false,
+                    unlimited_stock: unlimitedStock,
                 };
             });
         }
@@ -317,8 +317,8 @@ window.AdminVariants = {
                     html += '<td class="stock-col">' +
                         '<div class="flex items-start gap-3">' +
                             '<label class="unlimited-stock-label flex flex-col items-center cursor-pointer" style="min-width: 90px;">' +
-                                '<input type="checkbox" name="variants[' + index + '][unlimited_stock]" value="1" class="unlimited-stock-checkbox" ' + (existing.unlimited_stock ? 'checked' : '') + ' data-index="' + index + '" style="width: 20px; height: 20px; accent-color: var(--primary);">' +
-                                '<span class="text-xs font-medium text-on-surface mt-1">Unlimited</span>' +
+                                 '<input type="checkbox" name="variants[' + index + '][unlimited_stock]" value="1" class="unlimited-stock-checkbox" ' + (existing.unlimited_stock ? 'checked' : '') + ' data-index="' + index + '" style="width: 20px; height: 20px; accent-color: #2563eb;">' +
+                                '<span class="text-xs font-medium text-on-surface mt-1">Ready Stok</span>' +
                             '</label>' +
                             '<input type="number" name="variants[' + index + '][stock]" min="0" value="' + (existing.stock !== undefined ? existing.stock : 0) + '" class="admin-form-input stock-input" style="width: 80px;"' + (existing.unlimited_stock ? ' disabled' : '') + '>' +
                         '</div>' +

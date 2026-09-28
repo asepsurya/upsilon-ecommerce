@@ -37,16 +37,17 @@
             @endif
 
             <div>
-                <label for="title" class="admin-form-label">Title (Optional)</label>
+                <label for="title" class="admin-form-label">Main Text <span class="text-destructive">*</span></label>
                 <input id="title" name="title" type="text" value="{{ old('title') }}"
-                    class="admin-form-input" placeholder="Short title for internal reference">
+                    class="admin-form-input" placeholder="e.g., FREE SHIPPING NATIONWIDE" required>
+                <p class="text-xs text-muted mt-1">This will appear as the main text in the marquee.</p>
             </div>
 
             <div>
-                <label for="message" class="admin-form-label">Message <span class="text-destructive">*</span></label>
+                <label for="message" class="admin-form-label">Sub Text <span class="text-destructive">*</span></label>
                 <textarea id="message" name="message" rows="3"
-                    class="admin-form-input resize-none" placeholder="Enter your announcement message">{{ old('message') }}</textarea>
-                <p class="text-xs text-muted mt-1">This will be displayed in the top bar.</p>
+                    class="admin-form-input resize-none" placeholder="e.g., Next day & standard delivery*" required>{{ old('message') }}</textarea>
+                <p class="text-xs text-muted mt-1">This will appear as the sub text in the marquee.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -19,6 +19,7 @@ use App\Models\PromoBanner;
 use App\Models\Review;
 use App\Models\Setting;
 use App\Models\Size;
+use App\Models\SizeGuide;
 use App\Models\Slider;
 use App\Models\User;
 use App\Models\Voucher;
@@ -1234,6 +1235,74 @@ class AdminController extends Controller
         $promoBanner->update(['is_active' => ! $promoBanner->is_active]);
 
         return back()->with('success', 'Promo banner status updated successfully');
+    }
+
+    public function sizeGuides()
+    {
+        $sizeGuides = SizeGuide::orderBy('size_type')->orderBy('size_label')->get();
+
+        return view('admin.size-guides.index', compact('sizeGuides'));
+    }
+
+    public function createSizeGuide()
+    {
+        return view('admin.size-guides.create');
+    }
+
+    public function storeSizeGuide(Request $request)
+    {
+        $validated = $request->validate([
+            'size_label' => 'required|string|max:20',
+            'size_type' => 'required|string|max:50',
+            'chest_cm' => 'nullable|string|max:50',
+            'chest_inch' => 'nullable|string|max:50',
+            'waist_cm' => 'nullable|string|max:50',
+            'waist_inch' => 'nullable|string|max:50',
+            'hip_cm' => 'nullable|string|max:50',
+            'hip_inch' => 'nullable|string|max:50',
+            'shoulder_cm' => 'nullable|string|max:50',
+            'sleeve_length_cm' => 'nullable|string|max:50',
+            'body_length_cm' => 'nullable|string|max:50',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        SizeGuide::create($validated);
+
+        return redirect()->route('admin.size-guides.index')->with('success', 'Size guide created successfully');
+    }
+
+    public function editSizeGuide(SizeGuide $sizeGuide)
+    {
+        return view('admin.size-guides.edit', compact('sizeGuide'));
+    }
+
+    public function updateSizeGuide(Request $request, SizeGuide $sizeGuide)
+    {
+        $validated = $request->validate([
+            'size_label' => 'required|string|max:20',
+            'size_type' => 'required|string|max:50',
+            'chest_cm' => 'nullable|string|max:50',
+            'chest_inch' => 'nullable|string|max:50',
+            'waist_cm' => 'nullable|string|max:50',
+            'waist_inch' => 'nullable|string|max:50',
+            'hip_cm' => 'nullable|string|max:50',
+            'hip_inch' => 'nullable|string|max:50',
+            'shoulder_cm' => 'nullable|string|max:50',
+            'sleeve_length_cm' => 'nullable|string|max:50',
+            'body_length_cm' => 'nullable|string|max:50',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        $sizeGuide->update($validated);
+
+        return redirect()->route('admin.size-guides.index')->with('success', 'Size guide updated successfully');
+    }
+
+    public function destroySizeGuide(SizeGuide $sizeGuide)
+    {
+        $sizeGuide->delete();
+
+        return back()->with('success', 'Size guide deleted successfully');
     }
 
     public function settings()

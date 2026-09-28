@@ -22,7 +22,7 @@ class AnnouncementController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'nullable|string|max:255',
+            'title' => 'required|string|max:255',
             'message' => 'required|string',
             'code' => 'nullable|string|max:50',
             'link' => 'nullable|url|max:255',
@@ -50,7 +50,7 @@ class AnnouncementController extends Controller
     public function update(Request $request, Announcement $announcement)
     {
         $validated = $request->validate([
-            'title' => 'nullable|string|max:255',
+            'title' => 'required|string|max:255',
             'message' => 'required|string',
             'code' => 'nullable|string|max:50',
             'link' => 'nullable|url|max:255',

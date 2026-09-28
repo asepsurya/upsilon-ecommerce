@@ -191,6 +191,14 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::put('/flash-sales/{flashSale}', [FlashSaleController::class, 'update'])->name('admin.flash-sales.update');
     Route::delete('/flash-sales/{flashSale}', [FlashSaleController::class, 'destroy'])->name('admin.flash-sales.destroy');
 
+    // Size Guides
+    Route::get('/size-guides', [AdminController::class, 'sizeGuides'])->name('admin.size-guides.index');
+    Route::get('/size-guides/create', [AdminController::class, 'createSizeGuide'])->name('admin.size-guides.create');
+    Route::post('/size-guides', [AdminController::class, 'storeSizeGuide'])->name('admin.size-guides.store');
+    Route::get('/size-guides/{sizeGuide}/edit', [AdminController::class, 'editSizeGuide'])->name('admin.size-guides.edit');
+    Route::put('/size-guides/{sizeGuide}', [AdminController::class, 'updateSizeGuide'])->name('admin.size-guides.update');
+    Route::delete('/size-guides/{sizeGuide}', [AdminController::class, 'destroySizeGuide'])->name('admin.size-guides.destroy');
+
     // Settings
     Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings.index');
     Route::post('/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');

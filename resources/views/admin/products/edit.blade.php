@@ -273,6 +273,7 @@
         'price_override' => $v->price_override,
         'sale_price_override' => $v->sale_price_override,
         'is_active' => (bool) $v->is_active,
+        'unlimited_stock' => (bool) $v->unlimited_stock,
     ]])->toArray();
 @endphp
 
