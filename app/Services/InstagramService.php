@@ -23,50 +23,136 @@ class InstagramService
 
     public function __construct()
     {
-        $this->accessToken = config('services.instagram.access_token') ?? env('INSTAGRAM_ACCESS_TOKEN');
-        $this->accountId = config('services.instagram.account_id') ?? env('INSTAGRAM_ACCOUNT_ID');
-        $this->apiVersion = config('services.instagram.api_version', env('INSTAGRAM_API_VERSION', 'v22.0'));
-        $this->baseUrl = config('services.instagram.api_base_url', env('INSTAGRAM_API_BASE_URL', 'https://graph.facebook.com'));
-        $this->cacheTtl = (int) config('services.instagram.cache_ttl', env('INSTAGRAM_CACHE_TTL', 3600));
+        // config() already resolves the env() values, so no env() fallback here:
+        // `config(...) ?? env(...)` would silently revive a value whenever the
+        // config key is intentionally set to null.
+        $this->accessToken = (string) config('services.instagram.access_token');
+        $this->accountId = (string) config('services.instagram.account_id');
+        $this->apiVersion = (string) config('services.instagram.api_version');
+        $this->cacheTtl = (int) config('services.instagram.cache_ttl');
+        $this->baseUrl = $this->resolveBaseUrl();
     }
 
-    public function getRecentPosts(int $limit = 6): array
+    /**
+     * Instagram hands out two different token families, and each one is only
+     * accepted by its own graph host:
+     *
+     *  - IGAA...  -> "Instagram API with Instagram Login" -> graph.instagram.com
+     *  - EAA/EAAD/EAAG/EAAB... -> "Facebook Login"          -> graph.facebook.com
+     *
+     * Sending a token to the wrong host yields `OAuthException code 190`
+     * ("Cannot parse access token"), so the host is derived from the token
+     * unless it is pinned explicitly via config/env.
+     */
+    protected function resolveBaseUrl(): string
     {
-        return Cache::remember($this->cacheKey, $this->cacheTtl, function () use ($limit) {
+        $configured = config('services.instagram.api_base_url');
+
+        if (filled($configured)) {
+            return rtrim($configured, '/');
+        }
+
+        return str_starts_with($this->accessToken, 'IGAA')
+            ? 'https://graph.instagram.com'
+            : 'https://graph.facebook.com';
+    }
+
+    public function isConfigured(): bool
+    {
+        return filled($this->accessToken) && filled($this->accountId);
+    }
+
+    /**
+     * Fetch a single page of the Instagram media edge.
+     *
+     * @return array{posts: array<int, array<string, mixed>>, next_cursor: string|null}
+     */
+    public function getPostPage(int $limit = 6, ?string $after = null): array
+    {
+        $limit = max(1, min($limit, 100));
+
+        if (! $this->isConfigured()) {
+            Log::warning('Instagram feed skipped: missing INSTAGRAM_ACCESS_TOKEN and/or INSTAGRAM_ACCOUNT_ID.');
+
+            return ['posts' => [], 'next_cursor' => null];
+        }
+
+        $cacheKey = $this->cacheKey.'_page_'.$limit.($after ? '_'.$after : '_first');
+
+        return Cache::remember($cacheKey, $this->cacheTtl, function () use ($limit, $after) {
+            $query = [
+                'fields' => implode(',', $this->mediaFields()),
+                'access_token' => $this->accessToken,
+                'limit' => $limit,
+            ];
+
+            if ($after) {
+                $query['after'] = $after;
+            }
+
             $response = Http::get(
                 "{$this->baseUrl}/{$this->apiVersion}/{$this->accountId}/media",
-                [
-                    'fields' => 'id,caption,media_type,media_url,permalink,timestamp,thumbnail_url',
-                    'access_token' => $this->accessToken,
-                    'limit' => $limit,
-                ]
+                $query
             );
 
             if ($response->failed()) {
                 Log::warning('Instagram API request failed', [
+                    'host' => $this->baseUrl,
                     'status' => $response->status(),
                     'body' => $response->body(),
                 ]);
 
-                return [];
+                return ['posts' => [], 'next_cursor' => null];
             }
 
-            $data = $response->json('data', []);
+            $error = $response->json('error');
 
-            if (isset($data['error'])) {
+            if ($error) {
                 Log::warning('Instagram API returned an error', [
-                    'error' => $data['error'],
+                    'error' => $error,
                 ]);
 
-                return [];
+                return ['posts' => [], 'next_cursor' => null];
             }
 
-            if (! is_array($data)) {
-                return [];
+            $posts = $response->json('data', []);
+
+            if (! is_array($posts)) {
+                return ['posts' => [], 'next_cursor' => null];
             }
 
-            return $data;
+            return [
+                'posts' => $posts,
+                'next_cursor' => $response->json('paging.cursors.after'),
+            ];
         });
+    }
+
+    /**
+     * Fields that are valid on the `/{ig-user-id}/media` edge for both
+     * Instagram Login and Facebook Login. Requesting an unsupported field
+     * makes Meta reject the whole request, so the list stays minimal.
+     *
+     * @return array<int, string>
+     */
+    protected function mediaFields(): array
+    {
+        return [
+            'id',
+            'caption',
+            'media_type',
+            'media_url',
+            'permalink',
+            'timestamp',
+            'thumbnail_url',
+            'like_count',
+            'comments_count',
+        ];
+    }
+
+    public function getRecentPosts(int $limit = 6, ?string $after = null): array
+    {
+        return $this->getPostPage($limit, $after)['posts'];
     }
 
     protected function formatCaption(string $caption): array
@@ -109,36 +195,70 @@ class InstagramService
         return '';
     }
 
-    protected function estimateReadingTime(string $text): int
+    /**
+     * @param  array<string, mixed>  $post
+     * @return array<string, mixed>
+     */
+    protected function formatPost(array $post): array
     {
-        $wordCount = str_word_count($text);
-        $minutes = max(1, (int) ceil($wordCount / 200));
+        $caption = $post['caption'] ?? '';
+        $timestamp = $post['timestamp'] ?? now()->toIso8601String();
+        $date = Carbon::parse($timestamp);
 
-        return $minutes;
+        return [
+            'id' => $post['id'] ?? '',
+            'image' => ($post['media_type'] ?? 'IMAGE') === 'VIDEO'
+                ? ($post['thumbnail_url'] ?? $post['media_url'] ?? '')
+                : ($post['media_url'] ?? ''),
+            'media_url' => $post['media_url'] ?? '',
+            'thumbnail_url' => $post['thumbnail_url'] ?? '',
+            'media_type' => $post['media_type'] ?? 'IMAGE',
+            'category' => $this->extractCategory($caption),
+            'title' => $this->extractTitle($caption),
+            'excerpt' => $this->extractExcerpt($caption),
+            'caption' => $caption,
+            'date' => $date->format('F d, Y'),
+            'timestamp' => $date->toIso8601String(),
+            'permalink' => $post['permalink'] ?? '#',
+            'like_count' => (int) ($post['like_count'] ?? 0),
+            'comments_count' => (int) ($post['comments_count'] ?? 0),
+            'username' => $post['username'] ?? config('services.instagram.username'),
+        ];
     }
 
-    public function getFormattedPosts(int $limit = 6): array
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function getFormattedPosts(int $limit = 6, ?string $after = null): array
     {
-        $posts = $this->getRecentPosts($limit);
+        return array_map(
+            fn (array $post): array => $this->formatPost($post),
+            $this->getRecentPosts($limit, $after)
+        );
+    }
 
-        return array_map(function ($post) {
-            $caption = $post['caption'] ?? '';
-            $timestamp = $post['timestamp'] ?? now()->toIso8601String();
-            $date = Carbon::parse($timestamp);
-            $readingTime = $this->estimateReadingTime($caption);
+    /**
+     * @return array{posts: array<int, array<string, mixed>>, next_cursor: string|null}
+     */
+    public function getFormattedPostPage(int $limit = 6, ?string $after = null): array
+    {
+        $page = $this->getPostPage($limit, $after);
 
-            return [
-                'id' => $post['id'],
-                'image' => $post['media_type'] === 'VIDEO'
-                    ? ($post['thumbnail_url'] ?? $post['media_url'] ?? '')
-                    : ($post['media_url'] ?? ''),
-                'category' => $this->extractCategory($caption),
-                'title' => $this->extractTitle($caption),
-                'excerpt' => $this->extractExcerpt($caption) ?: 'Discover the latest from Atelier Noir\'s atelier.',
-                'date' => $date->format('F d, Y'),
-                'reading_time' => $readingTime,
-                'permalink' => $post['permalink'] ?? '#',
-            ];
-        }, $posts);
+        return [
+            'posts' => array_map(
+                fn (array $post): array => $this->formatPost($post),
+                $page['posts']
+            ),
+            'next_cursor' => $page['next_cursor'],
+        ];
+    }
+
+    public function getProfileUrl(): string
+    {
+        $username = config('services.instagram.username');
+
+        return $username
+            ? 'https://www.instagram.com/'.ltrim($username, '@').'/'
+            : 'https://www.instagram.com/';
     }
 }

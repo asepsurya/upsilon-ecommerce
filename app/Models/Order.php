@@ -18,7 +18,7 @@ class Order extends Model
         'shipping_service', 'tracking_number', 'subtotal', 'shipping_cost',
         'discount', 'total', 'voucher_id', 'voucher_code', 'shipping_address',
         'billing_address', 'notes', 'paid_at', 'shipped_at', 'delivered_at',
-        'cancelled_at',
+        'cancelled_at', 'snap_token',
     ];
 
     protected $casts = [

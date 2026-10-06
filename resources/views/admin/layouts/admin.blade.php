@@ -127,6 +127,60 @@
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
         }
 
+        .admin-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--input);
+            border-radius: 4px;
+            appearance: none;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+        }
+
+        .admin-checkbox:checked {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .admin-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid var(--primary-foreground);
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .admin-checkbox:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .admin-checkbox {
+            border-color: var(--input);
+        }
+
+        .dark .admin-checkbox:focus {
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .admin-checkbox-sm {
+            width: 14px;
+            height: 14px;
+        }
+
+        .admin-checkbox-sm:checked::after {
+            left: 3px;
+            top: 0;
+            width: 4px;
+            height: 8px;
+        }
+
         .dark .bg-white {
             background-color: hsl(var(--card)) !important;
         }
@@ -496,6 +550,32 @@
             outline: none;
             border-color: hsl(var(--ring));
             box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .admin-input-group {
+            display: flex;
+            align-items: stretch;
+        }
+        .admin-input-group-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            padding: 0 10px;
+            background: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+            border: 1px solid var(--input);
+            border-right: none;
+            border-radius: var(--radius) 0 0 var(--radius);
+            white-space: nowrap;
+        }
+        .dark .admin-input-group-text {
+            background: #18181b;
+            color: #fafafa;
+        }
+        .admin-input-group .admin-form-input {
+            border-left: none;
+            border-radius: 0 var(--radius) var(--radius) 0;
         }
 
         .admin-card-footer {

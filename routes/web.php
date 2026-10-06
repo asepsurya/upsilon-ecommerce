@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProductController;
@@ -21,12 +22,18 @@ Route::get('/', [HomepageController::class, 'index'])->name('home');
 
 Route::get('/bundles', [HomepageController::class, 'bundles'])->name('bundles');
 
+Route::get('/flash-sale', [HomepageController::class, 'flashSale'])->name('flash.sale');
+
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+Route::get('/api/search-suggestions', [ShopController::class, 'searchSuggestions'])->name('api.search.suggestions');
 Route::get('/shop/{category:slug}', [ShopController::class, 'category'])->name('shop.category');
 
 Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 
-Route::post('/product/{product:slug}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.login');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
+
+Route::post('/product/{product:slug}/reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
@@ -42,12 +49,18 @@ Route::post('/wishlist/move-to-cart', [WishlistController::class, 'moveToCart'])
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout')->middleware('auth');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store')->middleware('auth');
+Route::get('/checkout/{order}/success', [CheckoutController::class, 'success'])->name('checkout.success')->middleware('auth');
+Route::get('/checkout/{order}/whatsapp', [CheckoutController::class, 'whatsapp'])->name('checkout.whatsapp')->middleware('auth');
+Route::post('/checkout/midtrans-notification', [CheckoutController::class, 'notification'])->name('checkout.notification');
 
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/about', [HomepageController::class, 'about'])->name('about');
 Route::get('/discover-upsilon-style', [HomepageController::class, 'discoverUpsilonStyle'])->name('discover-upsilon-style');
+Route::get('/how-to-order', [HomepageController::class, 'howToOrder'])->name('how.to.order');
+
+Route::get('/instagram/feed', [HomepageController::class, 'instagramFeed'])->name('instagram.feed');
 
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
@@ -55,11 +68,25 @@ Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 // Auth routes
-Route::get('/login', [AccountController::class, 'showLogin'])->name('login');
+Route::get('/login', [AccountController::class, 'showLogin'])->name('login')->middleware('guest');
 Route::post('/login', [AccountController::class, 'login'])->middleware('throttle:login');
-Route::get('/register', [AccountController::class, 'showRegister'])->name('register');
+Route::get('/register', [AccountController::class, 'showRegister'])->name('register')->middleware('guest');
 Route::post('/register', [AccountController::class, 'register']);
 Route::post('/logout', [AccountController::class, 'logout'])->name('logout')->middleware('auth');
+
+// Track Order (guest)
+Route::get('/track-order', [AccountController::class, 'showTrackOrder'])->name('track.order');
+Route::post('/track-order', [AccountController::class, 'trackOrder'])->name('track.order.submit');
+
+// Store Locator
+Route::get('/store-locator', [HomepageController::class, 'storeLocator'])->name('store.locator');
+
+// Download App
+Route::get('/download-app', [HomepageController::class, 'downloadApp'])->name('download.app');
+
+// Deliver To (address selection)
+Route::get('/deliver-to', [AccountController::class, 'showDeliverTo'])->name('deliver.to');
+Route::post('/deliver-to', [AccountController::class, 'updateDeliverTo'])->name('deliver.to.update');
 
 // Password reset routes
 Route::get('/forgot-password', [PasswordResetController::class, 'showLinkRequest'])->name('password.request');
@@ -94,6 +121,7 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/products/{product}/edit', [AdminController::class, 'editProduct'])->name('admin.products.edit');
     Route::patch('/products/{product}', [AdminController::class, 'updateProduct'])->name('admin.products.update');
     Route::delete('/products/{product}', [AdminController::class, 'deleteProduct'])->name('admin.products.destroy');
+    Route::post('/products/bulk-action', [AdminController::class, 'bulkActionProducts'])->name('admin.products.bulk-action');
 
     // Sizes & Colors (AJAX)
     Route::post('/sizes', [AdminController::class, 'storeSize'])->name('admin.sizes.store');

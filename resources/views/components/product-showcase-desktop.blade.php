@@ -65,16 +65,16 @@
                             <div class="flex items-end justify-between mb-6">
                                 <div class="flex items-baseline gap-3">
                                     @if($product->sale_price && $product->sale_price < $product->base_price)
-                                        <span class="font-label-price text-label-price text-2xl text-primary">${{ number_format($product->sale_price, 2) }}</span>
-                                        <span class="font-label-tech text-label-tech text-base text-on-surface-variant line-through">${{ number_format($product->base_price, 2) }}</span>
+                                        <span class="font-label-price text-label-price text-2xl text-primary">{{ currency_format($product->sale_price) }}</span>
+                                        <span class="font-label-tech text-label-tech text-base text-on-surface-variant line-through">{{ currency_format($product->base_price) }}</span>
                                     @else
-                                        <span class="font-label-price text-label-price text-2xl text-primary">${{ number_format($product->base_price, 2) }}</span>
+                                        <span class="font-label-price text-label-price text-2xl text-primary">{{ currency_format($product->base_price) }}</span>
                                     @endif
                                 </div>
                             </div>
 
                             <a
-                                href="https://wa.me/{{ config('services.whatsapp.number') }}?text={{ urlencode('Buy Product: I would like to buy ' . $product->name . ' priced at $' . number_format($product->sale_price ?? $product->base_price, 2) . '. Please provide details.') }}"
+                                href="https://wa.me/{{ config('services.whatsapp.number') }}?text={{ urlencode('Buy Product: I would like to buy ' . $product->name . ' priced at ' . currency_format($product->sale_price ?? $product->base_price) . '. Please provide details.') }}"
                                 class="w-full bg-primary hover:bg-primary/90 text-on-primary font-headline-md text-body-sm font-semibold px-6 py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn"
                                 target="_blank" rel="noopener">
                                 <span class="material-symbols-outlined text-[18px]">shopping_cart</span>

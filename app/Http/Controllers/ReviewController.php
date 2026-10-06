@@ -30,6 +30,7 @@ class ReviewController extends Controller
     protected function updateProductRating(Product $product): void
     {
         $stats = $product->reviews()
+            ->approved()
             ->selectRaw('AVG(rating) as average_rating, COUNT(*) as review_count')
             ->first();
 

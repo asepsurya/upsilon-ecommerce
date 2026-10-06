@@ -1,0 +1,475 @@
+<?php
+
+return [
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Settings Schema
+    |--------------------------------------------------------------------------
+    |
+    | Single source of truth for the /admin/settings screen. Each group holds
+    | the fields rendered inside it, together with the validation rules and the
+    | hint text shown to the administrator. The controller derives stored values
+    | and validation rules from this file, so the form and the backend never
+    | drift apart.
+    |
+    */
+
+    'groups' => [
+        'general' => [
+            'label' => 'Identitas Toko',
+            'icon' => 'storefront',
+            'description' => 'Nama dan URL dasar toko. Nilai ini dipakai di judul halaman, header, email, dan tautan_generate QR.',
+            'fields' => [
+                'app_name' => [
+                    'label' => 'Nama Aplikasi',
+                    'type' => 'text',
+                    'placeholder' => 'Upsilon',
+                    'hint' => 'Ditampilkan pada judul tab browser, header admin, dan nama pengirim email.',
+                    'config' => 'app.name',
+                    'rules' => 'nullable|string|max:255',
+                ],
+                'app_url' => [
+                    'label' => 'URL Aplikasi',
+                    'type' => 'url',
+                    'placeholder' => 'https://tokoanda.com',
+                    'hint' => 'URL dasar tanpa garis miring di akhir. Dipakai untuk tautan absolut pada email dan QR code.',
+                    'config' => 'app.url',
+                    'rules' => 'nullable|url|max:255',
+                ],
+            ],
+        ],
+
+        'currency' => [
+            'label' => 'Mata Uang & Format Harga',
+            'icon' => 'payments',
+            'description' => 'Mengatur simbol, jumlah desimal, dan contoh format harga di seluruh katalog, keranjang, dan struk.',
+            'fields' => [
+                'currency_symbol' => [
+                    'label' => 'Simbol Mata Uang',
+                    'type' => 'text',
+                    'placeholder' => 'Rp',
+                    'hint' => 'Ditampilkan sebelum angka harga, misalnya Rp atau $. Maksimal 8 karakter.',
+                    'default' => '$',
+                    'rules' => 'nullable|string|max:8',
+                ],
+                'currency_decimals' => [
+                    'label' => 'Jumlah Desimal',
+                    'type' => 'select',
+                    'default' => '2',
+                    'options' => [
+                        '0' => '0 desimal — Rp100.000',
+                        '1' => '1 desimal — Rp100.000,0',
+                        '2' => '2 desimal — $100.00',
+                        '3' => '3 desimal — 100.000',
+                        '4' => '4 desimal — kripto/fiat presisi',
+                    ],
+                    'hint' => 'Gunakan 0 untuk Rupiah (IDR), 2 untuk USD/EUR. Nilai ini berlaku untuk seluruh tampilan harga.',
+                    'rules' => 'nullable|integer|in:0,1,2,3,4',
+                    'setting_type' => 'integer',
+                ],
+            ],
+        ],
+
+        'contact' => [
+            'label' => 'Informasi Kontak',
+            'icon' => 'contact_support',
+            'description' => 'Ditampilkan di footer, halaman kontak, dan struk pesanan sehingga pelanggan mudah menghubungi toko.',
+            'fields' => [
+                'contact_email' => [
+                    'label' => 'Email Kontak',
+                    'type' => 'email',
+                    'placeholder' => 'cs@tokoanda.com',
+                    'hint' => 'Alamat email yang tampil pada halaman kontak dan footer.',
+                    'rules' => 'nullable|email|max:255',
+                ],
+                'contact_phone' => [
+                    'label' => 'Nomor Telepon',
+                    'type' => 'tel',
+                    'placeholder' => '+62 812 3456 7890',
+                    'hint' => 'Boleh memuat format tampilan apa saja karena hanya dipakai sebagai teks.',
+                    'rules' => 'nullable|string|max:50',
+                ],
+                'contact_address' => [
+                    'label' => 'Alamat Toko',
+                    'type' => 'textarea',
+                    'rows' => 3,
+                    'placeholder' => 'Jl. Contoh No. 123, Jakarta, Indonesia',
+                    'hint' => 'Alamat lengkap toko atau kantor pusat.',
+                    'rules' => 'nullable|string|max:1000',
+                ],
+                'google_maps_embed' => [
+                    'label' => 'URL Embed Google Maps',
+                    'type' => 'textarea',
+                    'rows' => 2,
+                    'placeholder' => 'https://www.google.com/maps/embed?pb=...',
+                    'hint' => 'Salin dari Google Maps > Bagikan > Sematkan peta. URL ini akan ditampilkan di halaman lokasi toko.',
+                    'rules' => 'nullable|url|max:2000',
+                ],
+                'contact_latitude' => [
+                    'label' => 'Latitude Toko',
+                    'type' => 'text',
+                    'placeholder' => '-6.2088',
+                    'hint' => 'Koordinat latitude toko (contoh: -6.2088 untuk Jakarta). Dipakai untuk memposisikan marker di peta.',
+                    'rules' => 'nullable|numeric|between:-90,90',
+                ],
+                'contact_longitude' => [
+                    'label' => 'Longitude Toko',
+                    'type' => 'text',
+                    'placeholder' => '106.8456',
+                    'hint' => 'Koordinat longitude toko (contoh: 106.8456 untuk Jakarta). Dipakai untuk memposisikan marker di peta.',
+                    'rules' => 'nullable|numeric|between:-180,180',
+                ],
+            ],
+        ],
+
+        'social' => [
+            'label' => 'Media Sosial',
+            'icon' => 'share',
+            'description' => 'Tautan akun resmi toko. Ikon hanya muncul di situs bila tautannya diisi.',
+            'fields' => [
+                'social_instagram' => [
+                    'label' => 'Instagram',
+                    'type' => 'url',
+                    'icon' => 'instagram',
+                    'placeholder' => 'https://instagram.com/tokoanda',
+                    'hint' => 'Tautan profil Instagram toko.',
+                    'rules' => 'nullable|url|max:255',
+                ],
+                'social_facebook' => [
+                    'label' => 'Facebook',
+                    'type' => 'url',
+                    'icon' => 'facebook',
+                    'placeholder' => 'https://facebook.com/tokoanda',
+                    'hint' => 'Tautan halaman Facebook toko.',
+                    'rules' => 'nullable|url|max:255',
+                ],
+                'social_twitter' => [
+                    'label' => 'X (Twitter)',
+                    'type' => 'url',
+                    'icon' => 'alternate_email',
+                    'placeholder' => 'https://x.com/tokoanda',
+                    'hint' => 'Tautan profil X atau Twitter toko.',
+                    'rules' => 'nullable|url|max:255',
+                ],
+                'social_tiktok' => [
+                    'label' => 'TikTok',
+                    'type' => 'url',
+                    'icon' => 'music_note',
+                    'placeholder' => 'https://tiktok.com/@tokoanda',
+                    'hint' => 'Tautan akun TikTok toko.',
+                    'rules' => 'nullable|url|max:255',
+                ],
+                'social_youtube' => [
+                    'label' => 'YouTube',
+                    'type' => 'url',
+                    'icon' => 'smart_display',
+                    'placeholder' => 'https://youtube.com/@tokoanda',
+                    'hint' => 'Tautan channel YouTube toko.',
+                    'rules' => 'nullable|url|max:255',
+                ],
+                'social_linkedin' => [
+                    'label' => 'LinkedIn',
+                    'type' => 'url',
+                    'icon' => 'work',
+                    'placeholder' => 'https://linkedin.com/company/tokoanda',
+                    'hint' => 'Tautan perusahaan LinkedIn toko.',
+                    'rules' => 'nullable|url|max:255',
+                ],
+            ],
+        ],
+
+        'whatsapp' => [
+            'label' => 'WhatsApp',
+            'icon' => 'chat',
+            'description' => 'Mengatur nomor WhatsApp Business dan pesan pembuka pada tombol chat mengambang.',
+            'fields' => [
+                'whatsapp_number' => [
+                    'label' => 'Nomor WhatsApp',
+                    'type' => 'tel',
+                    'placeholder' => '6281234567890',
+                    'hint' => 'Format internasional tanpa tanda + dan tanpa spasi, contoh 6281234567890.',
+                    'config' => 'services.whatsapp.number',
+                    'rules' => 'nullable|string|max:255',
+                ],
+                'whatsapp_default_message' => [
+                    'label' => 'Pesan Default',
+                    'type' => 'textarea',
+                    'rows' => 3,
+                    'placeholder' => 'Halo, saya ingin bertanya tentang produk Anda.',
+                    'hint' => 'Pesan otomatis yang terisi saat pelanggan menekan tombol WhatsApp. Dukungan placeholder {product} dan {url}.',
+                    'config' => 'services.whatsapp.default_message',
+                    'rules' => 'nullable|string|max:1000',
+                ],
+            ],
+        ],
+
+        'checkout' => [
+            'label' => 'Checkout & Pembayaran',
+            'icon' => 'payments',
+            'description' => 'Konfigurasi metode checkout dan pembayaran yang tersedia untuk pelanggan.',
+            'fields' => [
+                'checkout_mode' => [
+                    'label' => 'Mode Checkout',
+                    'type' => 'select',
+                    'default' => 'midtrans',
+                    'options' => [
+                        'whatsapp' => 'WhatsApp Only (Order via WhatsApp)',
+                        'midtrans' => 'Midtrans Only (Payment Gateway)',
+                        'both' => 'Both (Let customer choose)',
+                    ],
+                    'hint' => 'Pilih metode checkout yang ditawarkan ke pelanggan. WhatsApp = manual order via chat, Midtrans = otomatis via payment gateway.',
+                    'rules' => 'nullable|in:whatsapp,midtrans,both',
+                ],
+                'midtrans_environment' => [
+                    'label' => 'Midtrans Environment',
+                    'type' => 'select',
+                    'default' => 'sandbox',
+                    'options' => [
+                        'sandbox' => 'Sandbox (Development)',
+                        'production' => 'Production (Live)',
+                    ],
+                    'hint' => 'Pilih environment Midtrans. Sandbox untuk testing, Production untuk transaksi nyata.',
+                    'rules' => 'nullable|in:sandbox,production',
+                ],
+                'midtrans_merchant_id' => [
+                    'label' => 'Midtrans Merchant ID',
+                    'type' => 'text',
+                    'placeholder' => 'G123456789',
+                    'hint' => 'Merchant ID dari dashboard Midtrans (Settings > Access Keys).',
+                    'rules' => 'nullable|string|max:255',
+                    'config' => 'services.midtrans.merchant_id',
+                ],
+                'midtrans_client_key' => [
+                    'label' => 'Midtrans Client Key',
+                    'type' => 'text',
+                    'placeholder' => 'SB-Mid-client-xxxxxxxx',
+                    'hint' => 'Client Key dari dashboard Midtrans (Settings > Access Keys). Dipakai di frontend.',
+                    'rules' => 'nullable|string|max:255',
+                    'config' => 'services.midtrans.client_key',
+                ],
+                'midtrans_server_key' => [
+                    'label' => 'Midtrans Server Key',
+                    'type' => 'password',
+                    'placeholder' => 'SB-Mid-server-xxxxxxxx',
+                    'hint' => 'Server Key dari dashboard Midtrans (Settings > Access Keys). Disimpan terenkripsi, jangan dibagikan.',
+                    'sensitive' => true,
+                    'rules' => 'nullable|string|max:255',
+                    'config' => 'services.midtrans.server_key',
+                ],
+            ],
+        ],
+
+        'mail' => [
+            'label' => 'Email Pengiriman',
+            'icon' => 'outgoing_mail',
+            'description' => 'Identitas pengirim pada email transaksional seperti konfirmasi pesanan dan reset kata sandi.',
+            'fields' => [
+                'mail_from_name' => [
+                    'label' => 'Nama Pengirim',
+                    'type' => 'text',
+                    'placeholder' => 'Upsilon Store',
+                    'hint' => 'Nama yang tampil pada kolom From, misalnya "Upsilon Store <cs@tokoanda.com>".',
+                    'config' => 'mail.from.name',
+                    'rules' => 'nullable|string|max:255',
+                ],
+                'mail_from_address' => [
+                    'label' => 'Alamat Pengirim',
+                    'type' => 'email',
+                    'placeholder' => 'cs@tokoanda.com',
+                    'hint' => 'Alamat email pengirim. Harus sesuai domain yang sudah diverifikasi pada penyedia email.',
+                    'config' => 'mail.from.address',
+                    'rules' => 'nullable|email|max:255',
+                ],
+            ],
+        ],
+
+        'instagram_api' => [
+            'label' => 'Instagram API',
+            'icon' => 'api',
+            'description' => 'Kredensial integrasi Instagram untuk mengambil feed dan jumlah pengikut. Kosongkan bila tidak dipakai.',
+            'fields' => [
+                'instagram_account_id' => [
+                    'label' => 'Instagram Account ID',
+                    'type' => 'text',
+                    'placeholder' => '17841400000000000',
+                    'hint' => 'ID akun dari Instagram Basic Display API.',
+                    'config' => 'services.instagram.account_id',
+                    'rules' => 'nullable|string|max:255',
+                ],
+                'instagram_access_token' => [
+                    'label' => 'Access Token',
+                    'type' => 'password',
+                    'placeholder' => 'EAAG...',
+                    'hint' => 'Disimpan terenkripsi di basis data. Klik ikon mata untuk menampilkan atau menyembunyikan nilainya.',
+                    'config' => 'services.instagram.access_token',
+                    'sensitive' => true,
+                    'rules' => 'nullable|string|max:255',
+                ],
+                'instagram_api_version' => [
+                    'label' => 'Versi API',
+                    'type' => 'text',
+                    'placeholder' => 'v22.0',
+                    'hint' => 'Versi Graph API yang dipakai, contoh v22.0.',
+                    'config' => 'services.instagram.api_version',
+                    'rules' => 'nullable|string|max:50',
+                ],
+                'instagram_api_base_url' => [
+                    'label' => 'Base URL API',
+                    'type' => 'url',
+                    'placeholder' => 'https://graph.facebook.com',
+                    'hint' => 'Endpoint dasar Graph API. Jangan diubah kecuali memakai proxy resmi.',
+                    'config' => 'services.instagram.api_base_url',
+                    'rules' => 'nullable|url|max:255',
+                ],
+                'instagram_cache_ttl' => [
+                    'label' => 'Durasi Cache',
+                    'type' => 'number',
+                    'unit' => 'detik',
+                    'placeholder' => '3600',
+                    'hint' => 'Berapa lama feed Instagram disimpan sebelum diambil ulang. Nilai besar mengurangi jumlah panggilan API.',
+                    'default' => 3600,
+                    'config' => 'services.instagram.cache_ttl',
+                    'rules' => 'nullable|integer|min:0|max:604800',
+                    'setting_type' => 'integer',
+                ],
+            ],
+        ],
+
+        'env' => [
+            'label' => 'Environment (.env)',
+            'icon' => 'terminal',
+            'description' => 'Nilai variabel lingkungan (.env) saat ini. Hanya untuk referensi — tidak bisa diedit dari sini. Ubah file .env langsung di server untuk mengubah nilai.',
+            'fields' => [
+                'app_env' => [
+                    'label' => 'APP_ENV',
+                    'type' => 'text',
+                    'readonly' => true,
+                    'hint' => 'Environment aplikasi (local, staging, production).',
+                    'rules' => 'nullable|string|max:50',
+                    'value_resolver' => 'env',
+                ],
+                'app_debug' => [
+                    'label' => 'APP_DEBUG',
+                    'type' => 'select',
+                    'readonly' => true,
+                    'options' => [
+                        'true' => 'true (Aktif)',
+                        'false' => 'false (Nonaktif)',
+                    ],
+                    'hint' => 'Mode debug. Harus false di production.',
+                    'rules' => 'nullable|boolean',
+                    'value_resolver' => 'env',
+                ],
+                'app_url' => [
+                    'label' => 'APP_URL',
+                    'type' => 'url',
+                    'readonly' => true,
+                    'hint' => 'URL dasar aplikasi. Dipakai untuk generate link absolut.',
+                    'rules' => 'nullable|url|max:255',
+                    'value_resolver' => 'env',
+                ],
+                'db_connection' => [
+                    'label' => 'DB_CONNECTION',
+                    'type' => 'text',
+                    'readonly' => true,
+                    'hint' => 'Driver database (mysql, pgsql, sqlite, sqlsrv).',
+                    'rules' => 'nullable|string|max:50',
+                    'value_resolver' => 'env',
+                ],
+                'db_host' => [
+                    'label' => 'DB_HOST',
+                    'type' => 'text',
+                    'readonly' => true,
+                    'hint' => 'Host database server.',
+                    'rules' => 'nullable|string|max:255',
+                    'value_resolver' => 'env',
+                ],
+                'db_port' => [
+                    'label' => 'DB_PORT',
+                    'type' => 'text',
+                    'readonly' => true,
+                    'hint' => 'Port database server.',
+                    'rules' => 'nullable|string|max:10',
+                    'value_resolver' => 'env',
+                ],
+                'db_database' => [
+                    'label' => 'DB_DATABASE',
+                    'type' => 'text',
+                    'readonly' => true,
+                    'hint' => 'Nama database yang digunakan.',
+                    'rules' => 'nullable|string|max:255',
+                    'value_resolver' => 'env',
+                ],
+                'db_username' => [
+                    'label' => 'DB_USERNAME',
+                    'type' => 'text',
+                    'readonly' => true,
+                    'hint' => 'Username database.',
+                    'rules' => 'nullable|string|max:255',
+                    'value_resolver' => 'env',
+                ],
+                'mail_mailer' => [
+                    'label' => 'MAIL_MAILER',
+                    'type' => 'text',
+                    'readonly' => true,
+                    'hint' => 'Driver pengiriman email (smtp, mailgun, ses, postmark, log, array).',
+                    'rules' => 'nullable|string|max:50',
+                    'value_resolver' => 'env',
+                ],
+                'mail_host' => [
+                    'label' => 'MAIL_HOST',
+                    'type' => 'text',
+                    'readonly' => true,
+                    'hint' => 'SMTP host server.',
+                    'rules' => 'nullable|string|max:255',
+                    'value_resolver' => 'env',
+                ],
+                'mail_port' => [
+                    'label' => 'MAIL_PORT',
+                    'type' => 'text',
+                    'readonly' => true,
+                    'hint' => 'SMTP port (biasanya 25, 465, atau 587).',
+                    'rules' => 'nullable|string|max:10',
+                    'value_resolver' => 'env',
+                ],
+                'mail_encryption' => [
+                    'label' => 'MAIL_ENCRYPTION',
+                    'type' => 'select',
+                    'readonly' => true,
+                    'options' => [
+                        'tls' => 'TLS',
+                        'ssl' => 'SSL',
+                        '' => 'Tanpa enkripsi',
+                    ],
+                    'hint' => 'Metode enkripsi SMTP.',
+                    'rules' => 'nullable|string|in:tls,ssl',
+                    'value_resolver' => 'env',
+                ],
+                'mail_username' => [
+                    'label' => 'MAIL_USERNAME',
+                    'type' => 'text',
+                    'readonly' => true,
+                    'hint' => 'SMTP username.',
+                    'rules' => 'nullable|string|max:255',
+                    'value_resolver' => 'env',
+                ],
+                'redis_host' => [
+                    'label' => 'REDIS_HOST',
+                    'type' => 'text',
+                    'readonly' => true,
+                    'hint' => 'Redis server host.',
+                    'rules' => 'nullable|string|max:255',
+                    'value_resolver' => 'env',
+                ],
+                'redis_port' => [
+                    'label' => 'REDIS_PORT',
+                    'type' => 'text',
+                    'readonly' => true,
+                    'hint' => 'Redis server port (default 6379).',
+                    'rules' => 'nullable|string|max:10',
+                    'value_resolver' => 'env',
+                ],
+            ],
+        ],
+    ],
+];

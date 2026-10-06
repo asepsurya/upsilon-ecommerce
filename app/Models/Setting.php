@@ -13,6 +13,10 @@ class Setting extends Model
         'value' => 'string',
     ];
 
+    protected static $symbol = null;
+
+    protected static $decimals = null;
+
     public function scopeKey(Builder $query, string $key): Builder
     {
         return $query->where('key', $key);
@@ -34,6 +38,24 @@ class Setting extends Model
         };
     }
 
+    public static function currencySymbol(): string
+    {
+        if (static::$symbol === null) {
+            static::$symbol = static::get('currency_symbol', '$') ?: '$';
+        }
+
+        return static::$symbol;
+    }
+
+    public static function currencyDecimals(): int
+    {
+        if (static::$decimals === null) {
+            static::$decimals = static::get('currency_decimals', 2);
+        }
+
+        return static::$decimals;
+    }
+
     public static function set(string $key, mixed $value, string $type = 'text', ?string $description = null): void
     {
         $casted = match ($type) {
@@ -47,5 +69,13 @@ class Setting extends Model
             ['key' => $key],
             ['value' => $casted, 'type' => $type, 'description' => $description]
         );
+
+        // Clear static cache for currency settings
+        if ($key === 'currency_symbol') {
+            static::$symbol = null;
+        }
+        if ($key === 'currency_decimals') {
+            static::$decimals = null;
+        }
     }
 }

@@ -103,7 +103,7 @@
         </svg>
     </button>
 
-  
+    @include('components.search-modal')
 
     @stack('scripts')
 </body>

@@ -28,6 +28,7 @@
         <table class="admin-table">
             <thead>
                 <tr>
+                    <th style="width: 60px;">Thumbnail</th>
                     <th>Name</th>
                     <th>Slug</th>
                     <th>Bundle Price</th>
@@ -39,9 +40,16 @@
             <tbody>
                 @forelse($bundles as $bundle)
                     <tr>
+                        <td>
+                            @if($bundle->thumbnail)
+                                <img src="{{ asset('storage/' . $bundle->thumbnail) }}" alt="{{ $bundle->name }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                            @else
+                                <span class="text-muted">—</span>
+                            @endif
+                        </td>
                         <td class="font-medium">{{ $bundle->name }}</td>
                         <td>{{ $bundle->slug }}</td>
-                        <td>${{ $bundle->bundle_price ? number_format($bundle->bundle_price, 2) : '—' }}</td>
+                        <td>{{ $bundle->bundle_price ? currency_format($bundle->bundle_price) : '—' }}</td>
                         <td>{{ $bundle->items_count }}</td>
                         <td>
                             @if($bundle->is_active)
@@ -61,7 +69,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted">No bundles found.</td>
+                        <td colspan="7" class="text-center text-muted">No bundles found.</td>
                     </tr>
                 @endforelse
             </tbody>

@@ -44,9 +44,23 @@ return [
         'access_token' => env('INSTAGRAM_ACCESS_TOKEN'),
         'account_id' => env('INSTAGRAM_ACCOUNT_ID'),
         'api_version' => env('INSTAGRAM_API_VERSION', 'v22.0'),
-        'api_base_url' => env('INSTAGRAM_API_BASE_URL', 'https://graph.facebook.com'),
+        // Leave null to auto-detect the graph host from the token prefix.
+        // IGAA... tokens require graph.instagram.com, EAA... require graph.facebook.com.
+        'api_base_url' => env('INSTAGRAM_API_BASE_URL'),
         'cache_ttl' => env('INSTAGRAM_CACHE_TTL', 3600),
-        'short_cache_ttl' => 300,
+        'username' => env('INSTAGRAM_USERNAME'),
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI', env('APP_URL').'/auth/google/callback'),
+    ],
+
+    'midtrans' => [
+        'merchant_id' => env('MIDTRANS_MERCHANT_ID'),
+        'client_key' => env('MIDTRANS_CLIENT_KEY'),
+        'server_key' => env('MIDTRANS_SERVER_KEY'),
+        'is_production' => env('MIDTRANS_IS_PRODUCTION', false),
+    ],
 ];

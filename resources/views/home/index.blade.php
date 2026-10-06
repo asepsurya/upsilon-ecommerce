@@ -8,14 +8,6 @@
         bottom of this document).
        ============================================================================ */
 
-    // --- 0. Fallback helper harga (hapus bila helpers.php sudah terdaftar) ---
-    if (!function_exists('currency')) {
-        function currency($amount)
-        {
-            return '$' . number_format((float) $amount, 2, '.', ',');
-        }
-    }
-
     // --- 1. Produk unggulan dibagi per section ---
     $limitedPairs = $featuredProducts->take(5);           // section "Limited Pairs Only"
 
@@ -56,7 +48,10 @@
 
     // --- 4. Slider fallback ---
     $sliderList = $sliders->isNotEmpty() ? $sliders : collect([
-        (object) ['image_url' => asset('storage/images/upsilon/hero-banner.jpg')],
+        (object) [
+            'image_url' => asset('storage/images/upsilon/hero-banner.jpg'),
+            'image_mobile_url' => asset('storage/images/upsilon/hero-banner.jpg'),
+        ],
     ]);
 
     // --- 5. Artikel fallback (editorial) ---
@@ -121,145 +116,6 @@
     </a>
 
     {{-- ============================================================
-    1. TOP UTILITY BAR
-    ============================================================ --}}
-    <div class="border-b border-gray-200 bg-white px-4 py-1.5 text-[11px] font-medium text-gray-700 lg:px-8">
-        <div class="mx-auto flex max-w-7xl items-center justify-between">
-            <div class="hidden items-center gap-4 md:flex">
-                <a href="#" class="flex items-center gap-1.5 hover:text-black">
-                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                    </svg>
-                    Download the App
-                </a>
-                <span class="text-gray-300" aria-hidden="true">|</span>
-                <a href="#" class="hover:text-black">Help &amp; Contact</a>
-                <span class="text-gray-300" aria-hidden="true">|</span>
-                <a href="#" class="hover:text-black">Track Order</a>
-            </div>
-
-            <div class="ml-auto flex items-center gap-4">
-                <a href="#" class="hidden hover:text-black sm:inline">Store Locator</a>
-                <span class="hidden text-gray-300 sm:inline" aria-hidden="true">|</span>
-                <button type="button" class="flex items-center gap-1 hover:text-black">
-                    Deliver To...
-                    <svg class="ml-0.5 h-3 w-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        aria-hidden="true">
-                        <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                    </svg>
-                </button>
-                <span class="text-gray-300" aria-hidden="true">|</span>
-                <a href="{{ route('login') }}" class="font-semibold text-black hover:underline">Login</a>
-            </div>
-        </div>
-    </div>
-
-    {{-- ============================================================
-    2. HEADER UTAMA
-    ============================================================ --}}
-    <header class="sticky top-0 z-40 bg-white shadow-sm">
-        <div class="mx-auto max-w-7xl px-4 py-3.5 lg:px-8">
-            <div class="flex items-center justify-between gap-4">
-
-                {{-- Hamburger (mobile) --}}
-                <button type="button" id="mobile-menu-btn" class="text-gray-800 md:hidden"
-                    aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-
-                {{-- Logo --}}
-                <a href="{{ route('home') }}" class="shrink-0" aria-label="Upsilon — Home">
-                    <img src="{{ asset('storage/images/sample/logo-black.png') }}" alt="Upsilon"
-                        class="h-8 w-auto object-contain lg:h-9">
-                </a>
-
-                {{-- Search (desktop) --}}
-                <div class="hidden max-w-xl flex-1 md:block">
-                    <form action="{{ route('shop') }}" method="GET" class="relative w-full" role="search">
-                        <label for="desktop-search" class="sr-only">Search products</label>
-                        <input id="desktop-search" type="text" name="search"
-                            class="w-full rounded-full border border-transparent bg-[#f4f4f4] py-2 pl-4 pr-10 text-xs placeholder-gray-500 transition focus:border-black focus:bg-white focus:outline-none"
-                            placeholder="Search products, categories, or brands">
-                        <button type="submit"
-                            class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
-                            aria-label="Search">
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                aria-hidden="true">
-                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2" />
-                            </svg>
-                        </button>
-                    </form>
-                </div>
-
-                {{-- Ikon cepat --}}
-                <div class="flex items-center gap-5">
-                    {{-- Mobile search --}}
-                    <button type="button" id="mobile-search-btn" class="text-gray-800 md:hidden"
-                        aria-label="Open search">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
-                                stroke-linejoin="round" stroke-width="2" />
-                        </svg>
-                    </button>
-                    {{-- Notifications --}}
-                    <a href="#" class="hidden text-gray-800 hover:text-black sm:block" aria-label="Notifications">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path
-                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
-                        </svg>
-                    </a>
-                </div>
-            </div>
-
-            {{-- Mobile search --}}
-            <div id="mobile-search" class="hidden border-t border-gray-100 pt-3 md:hidden">
-                <form action="{{ route('shop') }}" method="GET" class="relative w-full" role="search">
-                    <label for="mobile-search-input" class="sr-only">Search products</label>
-                    <input id="mobile-search-input" type="text" name="search"
-                        class="w-full rounded-full border border-transparent bg-[#f4f4f4] py-2 pl-4 pr-10 text-xs placeholder-gray-500 focus:border-black focus:bg-white focus:outline-none"
-                        placeholder="Search products, categories, or brands">
-                    <button type="submit"
-                        class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
-                        aria-label="Search">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            aria-hidden="true">
-                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
-                                stroke-linejoin="round" stroke-width="2" />
-                        </svg>
-                    </button>
-                </form>
-            </div>
-
-            {{-- Main navigation (desktop) --}}
-            <nav class="mt-2.5 hidden items-center justify-center gap-8 border-t border-gray-100 pt-3 text-xs font-bold uppercase tracking-wider text-black md:flex"
-                aria-label="Main navigation">
-                <a href="{{ route('home') }}" class="transition hover:text-brand-orange">Home</a>
-                <a href="{{ route('shop') }}" class="transition hover:text-brand-orange">Shop</a>
-                <a href="{{ route('about') }}" class="transition hover:text-brand-orange">About</a>
-                <a href="{{ route('contact') }}" class="transition hover:text-brand-orange">Contact</a>
-            </nav>
-
-            {{-- Menu mobile --}}
-            <div id="mobile-menu" class="hidden border-t border-gray-100 pb-2 pt-3 md:hidden">
-                <nav class="flex flex-col gap-1 text-sm font-semibold" aria-label="Mobile navigation">
-                    <a href="{{ route('home') }}" class="rounded px-3 py-2.5 hover:bg-gray-50">Home</a>
-                    <a href="{{ route('shop') }}" class="rounded px-3 py-2.5 hover:bg-gray-50">Shop</a>
-                    <a href="{{ route('about') }}" class="rounded px-3 py-2.5 hover:bg-gray-50">About</a>
-                    <a href="{{ route('contact') }}" class="rounded px-3 py-2.5 hover:bg-gray-50">Contact</a>
-                    <a href="{{ route('login') }}"
-                        class="mt-1 rounded bg-black px-3 py-2.5 text-center text-white">Login</a>
-                </nav>
-            </div>
-        </div>
-    </header>
-
-    {{-- ============================================================
      3. PROMO BAR (SCROLLER)
      ============================================================ --}}
     @php
@@ -310,7 +166,7 @@
                         data-index="{{ $index }}" aria-hidden="{{ $index === 0 ? 'false' : 'true' }}"
                         data-link="{{ $slider->link ?? '#' }}" data-link-text="{{ $slider->link_text ?? 'Shop Now' }}">
                         <picture>
-                            <source media="(max-width: 768px)" src="{{ $slider->image_mobile_url }}">
+                            <source media="(max-width: 768px)" srcset="{{ $slider->image_mobile_url }}">
                             <img src="{{ $slider->image_url }}" alt="{{ $slider->title ?? 'Featured promotion' }}"
                                 class="h-full w-full object-cover object-center">
                         </picture>
@@ -367,52 +223,63 @@
         </section>
 
         {{-- ============================================================
-        5. LIMITED PAIRS + COUNTDOWN
+        5. LIMITED PAIRS + COUNTDOWN (only show if active flash sale exists)
         ============================================================ --}}
+        @if($flashSale && $flashSaleProducts->isNotEmpty())
         <section class="bg-[#2A2E33] py-8 text-white" aria-labelledby="limited-heading">
-            <div class="mx-auto max-w-7xl px-4 lg:px-8">
-                {{-- Header + countdown --}}
-                <div class="mb-6 flex flex-wrap items-center justify-between gap-2 border-b border-gray-700 pb-2">
+            {{-- Header + countdown (centered container) --}}
+            <div class="mx-auto max-w-7xl px-4 lg:px-8 mb-6">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-700 pb-2">
                     <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
                         <h2 id="limited-heading"
                             class="text-2xl font-condensed font-extrabold tracking-wide text-[#FF5000] md:text-3xl">
-                            @if($flashSale && $flashSaleProducts->isNotEmpty())
-                                {{ $flashSale->title }}
-                            @else
-                                Limited Pairs Only
-                            @endif
+                            {{ $flashSale->title }}
                         </h2>
-                        @if($flashSale && $flashSaleProducts->isNotEmpty())
-                            <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-300" data-countdown
-                                role="timer" aria-label="Time remaining">
-                                <span>{{ $flashSale->subtitle ?? 'Ends in' }}</span>
-                                <span class="rounded bg-red-600 px-2 py-0.5 font-bold text-white tabular-nums"
-                                    data-h>20</span>
-                                <span aria-hidden="true">:</span>
-                                <span class="rounded bg-red-600 px-2 py-0.5 font-bold text-white tabular-nums"
-                                    data-m>01</span>
-                                <span aria-hidden="true">:</span>
-                                <span class="rounded bg-red-600 px-2 py-0.5 font-bold text-white tabular-nums"
-                                    data-s>41</span>
-                            </div>
-                        @endif
+                        <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-300" data-countdown
+                            role="timer" aria-label="Time remaining">
+                            <span>{{ $flashSale->subtitle ?? 'Ends in' }}</span>
+                            <span class="rounded bg-red-600 px-2 py-0.5 font-bold text-white tabular-nums"
+                                data-h>20</span>
+                            <span aria-hidden="true">:</span>
+                            <span class="rounded bg-red-600 px-2 py-0.5 font-bold text-white tabular-nums"
+                                data-m>01</span>
+                            <span aria-hidden="true">:</span>
+                            <span class="rounded bg-red-600 px-2 py-0.5 font-bold text-white tabular-nums"
+                                data-s>41</span>
+                        </div>
                     </div>
-                    <a href="{{ route('shop') }}"
+                    <a href="{{ route('flash.sale') }}"
                         class="text-xs font-semibold text-gray-300 underline hover:text-white">View all</a>
                 </div>
             </div>
 
-            {{-- Produk + banner FINAL CALL --}}
-            <div class="flash-sale-scroll-wrapper px-4 md:px-8 lg:px-8">
-                <div class="flash-sale-scroll flex gap-3 overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-6 md:overflow-x-visible">
-                    @foreach ($limitedPairsList as $product)
-                        <div class="flash-sale-scroll-item shrink-0 w-[55%] snap-start md:w-auto">
+            {{-- Produk + banner FINAL CALL (full width) --}}
+            <div class="flash-sale-scroll-wrapper relative">
+                {{-- Desktop Navigation Arrows --}}
+                <button type="button" class="flash-sale-prev hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors absolute left-4 top-1/2 -translate-y-1/2 z-10" aria-label="Previous">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button type="button" class="flash-sale-next hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors absolute right-4 top-1/2 -translate-y-1/2 z-10" aria-label="Next">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+                <div
+                    class="flash-sale-scroll
+                           flex gap-3
+                           overflow-x-auto
+                           snap-x snap-mandatory
+                           md:overflow-x-hidden
+                           md:flex md:justify-center
+                           px-4 md:px-8 lg:px-8"
+                >
+                    @foreach ($flashSaleProducts as $product)
+                        <div class="flash-sale-scroll-item shrink-0 w-[55%] md:w-[180px] snap-start">
                             <x-product-card :product="$product" />
                         </div>
                     @endforeach
                 </div>
             </div>
         </section>
+        @endif
 
         {{-- ============================================================
         6. SHOP BY LABELS
@@ -472,7 +339,7 @@
                                     <div
                                         class="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/80 via-transparent to-transparent pb-8">
                                         <h3 class="font-impact text-3xl tracking-wider text-white md:text-4xl">
-                                            SHOP {{ strtoupper($category->name) }}
+                                            {{ strtoupper($category->name) }}
                                         </h3>
                                     </div>
                                 </div>
@@ -492,18 +359,7 @@
                     Our Top Picks
                 </h2>
 
-                {{-- Category tabs (functional links, adjust the parameters) --}}
-                <div class="mb-6 flex flex-wrap items-center gap-2">
-                    <a href="{{ route('shop', ['gender' => 'men']) }}"
-                        class="rounded-sm bg-black px-4 py-2 text-xs font-bold text-white transition hover:bg-gray-900">Shop
-                        Men's</a>
-                    <a href="{{ route('shop', ['gender' => 'women']) }}"
-                        class="rounded-sm border border-white/50 px-4 py-2 text-xs font-bold text-white transition hover:bg-white/10">Shop
-                        Women's</a>
-                    <a href="{{ route('shop', ['gender' => 'kids']) }}"
-                        class="rounded-sm border border-white/50 px-4 py-2 text-xs font-bold text-white transition hover:bg-white/10">Shop
-                        Kids'</a>
-                </div>
+          
 
                 <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
                     @foreach ($topPicksList as $product)
@@ -520,7 +376,7 @@
             $activePromoBanners = collect($promoBanners ?? [])->filter(fn ($b) => !empty($b->image_url))->values();
         @endphp
         @if($activePromoBanners->isNotEmpty())
-            <section class="bg-black py-4" aria-label="Seasonal promotions">
+            <section class="bg-[#F25C19] py-4" aria-label="Seasonal promotions">
                 <div class="mx-auto max-w-7xl px-4 lg:px-8">
                     @if($activePromoBanners->count() > 1)
                         <div class="relative">
@@ -564,7 +420,7 @@
             <div class="mx-auto max-w-7xl px-4 lg:px-8">
                 <div class="mb-4 flex items-center justify-between">
                     <h2 id="brands-heading" class="text-2xl font-condensed font-black tracking-wide md:text-3xl">
-                        The Brands You Love
+                        Top Upsilon Bundle
                     </h2>
                     <a href="{{ route('bundles') }}"
                         class="text-xs font-bold uppercase tracking-wider hover:underline">View All</a>
@@ -605,59 +461,26 @@
             </div>
         </section>
 
-        {{-- ============================================================
+{{-- ============================================================
         11. DISCOVER JD STYLE (EDITORIAL)
         ============================================================ --}}
-        <section class="bg-[#F25C19] pb-12 text-white" aria-labelledby="editorial-heading">
+        <section class="pb-12  mt-5" aria-labelledby="editorial-heading">
             <div class="mx-auto max-w-7xl px-4 lg:px-8">
                 <div class="mb-4 flex items-center justify-between">
                     <h2 id="editorial-heading" class="text-2xl font-condensed font-black tracking-wide md:text-3xl">
-                        Discover JD Style
+                        Discover Upsilon Style
                     </h2>
                     <a href="{{ route('discover-upsilon-style') }}" class="text-xs font-bold uppercase tracking-wider hover:underline">View All</a>
                 </div>
 
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
-                    @foreach ($articlesList as $article)
-                        @php
-                            // Adjust attribute names (image/permalink) to match your data structure
-                            $articleImage = $article->image_url
-                                ?? ($article->image ?: null)
-                                ?? asset('storage/images/upsilon/article-1.jpg');
-                            $articleUrl = $article->permalink ?? '#';
-                        @endphp
-                        <article class="flex flex-col justify-between overflow-hidden rounded bg-white text-black shadow">
-                            <a href="{{ $articleUrl }}" class="block aspect-square w-full overflow-hidden">
-                                <img src="{{ $articleImage }}" alt="{{ $article->title }}" loading="lazy"
-                                    class="h-full w-full object-cover transition duration-300 hover:scale-105">
-                            </a>
-                            <div class="p-3">
-                                <h3 class="text-xs font-bold leading-snug line-clamp-2">{{ $article->title }}</h3>
-                                <p class="mt-1.5 text-[11px] leading-relaxed text-gray-600 line-clamp-3">
-                                    {{ $article->excerpt }}</p>
-                                <a href="{{ $articleUrl }}"
-                                    class="mt-2 inline-flex items-center gap-1 text-[11px] font-bold uppercase hover:underline">
-                                    Read More <span aria-hidden="true">&rarr;</span>
-                                </a>
-                            </div>
-                        </article>
-                    @endforeach
+{{-- Instagram Feed --}}
+                <section class="bg-white py-12">
+                    <div class="mx-auto max-w-7xl px-4 lg:px-8">
+                        <x-instagram-feed :limit="8" :columns="4" heading="Follow Us On Instagram" />
+                    </div>
+                </section>
 
-                    {{-- Kartu spesial (gradient) melengkapi grid bila artikel < 4 --}} @if ($articlesList->count() < 4)
-                        <a href="#"
-                            class="flex aspect-square items-center justify-center rounded bg-gradient-to-br from-red-600 to-indigo-900 p-4 text-center shadow transition hover:scale-[1.02]">
-                            <div class="text-white">
-                                <span class="block font-impact text-xl tracking-wider md:text-2xl">SPECIAL</span>
-                                <span class="mt-1 block font-impact text-2xl tracking-wide md:text-3xl">WORLD CUP FINAL
-                                    </span>
-                                <span
-                                    class="mt-3 block text-[11px] font-semibold uppercase tracking-widest text-white/80">
-                                    Read Full Editorial &rarr;
-                                </span>
-                            </div>
-                        </a>
-                    @endif
-                </div>
+
             </div>
         </section>
 
@@ -699,6 +522,8 @@
     14. JAVASCRIPT
     ============================================================ --}}
     <script>
+        var CURRENCY_SYMBOL = @json(currency_symbol());
+
         document.addEventListener('DOMContentLoaded', function () {
             var bundlesData = @json($bundles);
 
@@ -806,10 +631,12 @@
             }
 
             /* =====================================================
-               3. FLASH SALE SWIPE ON MOBILE
+               3. FLASH SALE SWIPE ON MOBILE + DESKTOP NAV
                ===================================================== */
             var flashSaleWrapper = document.querySelector('.flash-sale-scroll-wrapper');
             var flashSaleScroll = document.querySelector('.flash-sale-scroll');
+            var flashSalePrev = document.querySelector('.flash-sale-prev');
+            var flashSaleNext = document.querySelector('.flash-sale-next');
 
             if (flashSaleWrapper && flashSaleScroll) {
                 var startX = 0;
@@ -823,6 +650,25 @@
 
                 function setPositionByIndex() {
                     currentTranslate = prevTranslate;
+                }
+
+                function scrollByAmount(amount) {
+                    var maxScroll = flashSaleScroll.scrollWidth - flashSaleScroll.clientWidth;
+                    prevTranslate = Math.max(-maxScroll, Math.min(0, prevTranslate + amount));
+                    flashSaleScroll.scrollTo({
+                        left: -prevTranslate,
+                        behavior: 'smooth'
+                    });
+                    updateArrowVisibility();
+                }
+
+                function updateArrowVisibility() {
+                    if (!flashSalePrev || !flashSaleNext) return;
+                    var maxScroll = flashSaleScroll.scrollWidth - flashSaleScroll.clientWidth;
+                    flashSalePrev.style.opacity = prevTranslate < 0 ? '1' : '0.3';
+                    flashSalePrev.style.pointerEvents = prevTranslate < 0 ? 'auto' : 'none';
+                    flashSaleNext.style.opacity = Math.abs(prevTranslate) < maxScroll - 5 ? '1' : '0.3';
+                    flashSaleNext.style.pointerEvents = Math.abs(prevTranslate) < maxScroll - 5 ? 'auto' : 'none';
                 }
 
                 function touchStart(event) {
@@ -850,24 +696,38 @@
                     }
 
                     setPositionByIndex();
+                    flashSaleScroll.scrollTo({
+                        left: -prevTranslate,
+                        behavior: 'smooth'
+                    });
+                    updateArrowVisibility();
                 }
 
+                // Desktop arrow navigation
+                if (flashSalePrev) {
+                    flashSalePrev.addEventListener('click', function() {
+                        scrollByAmount(200); // Scroll left
+                    });
+                }
+                if (flashSaleNext) {
+                    flashSaleNext.addEventListener('click', function() {
+                        scrollByAmount(-200); // Scroll right
+                    });
+                }
+
+                // Touch events for mobile
                 flashSaleScroll.addEventListener('touchstart', touchStart, { passive: true });
                 flashSaleScroll.addEventListener('touchmove', touchMove, { passive: true });
                 flashSaleScroll.addEventListener('touchend', touchEnd);
-            }
 
-            /* =====================================================
-               4. MOBILE MENU
-               ===================================================== */
-            var menuBtn = document.getElementById('mobile-menu-btn');
-            var mobileMenu = document.getElementById('mobile-menu');
-
-            if (menuBtn && mobileMenu) {
-                menuBtn.addEventListener('click', function () {
-                    var isHidden = mobileMenu.classList.toggle('hidden');
-                    menuBtn.setAttribute('aria-expanded', String(!isHidden));
+                // Scroll event to update arrows
+                flashSaleScroll.addEventListener('scroll', function() {
+                    prevTranslate = -flashSaleScroll.scrollLeft;
+                    updateArrowVisibility();
                 });
+
+                // Initial arrow state
+                updateArrowVisibility();
             }
 
             /* =====================================================
@@ -896,8 +756,8 @@
 
                 var price = Number(bundle.bundle_price || 0);
                 var original = Number(bundle.original_price || 0);
-                document.getElementById('bundle-modal-price').textContent = '$' + price.toLocaleString();
-                document.getElementById('bundle-modal-original').textContent = original > 0 ? ('$' + original.toLocaleString()) : '';
+                document.getElementById('bundle-modal-price').textContent = CURRENCY_SYMBOL + price.toLocaleString();
+                document.getElementById('bundle-modal-original').textContent = original > 0 ? (CURRENCY_SYMBOL + original.toLocaleString()) : '';
 
                 var itemsContainer = document.getElementById('bundle-modal-items');
                 itemsContainer.innerHTML = '';
@@ -917,7 +777,7 @@
 
                     var el = document.createElement('div');
                     el.className = 'flex items-center gap-3';
-                    el.innerHTML = '<img src="' + image + '" alt="' + name + '" class="h-12 w-12 rounded object-cover"><div class="flex-1"><div class="text-sm font-medium text-gray-900">' + name + '</div><div class="text-xs text-gray-500">Qty: ' + quantity + '</div></div><div class="text-sm font-medium text-gray-900">$' + (itemPrice * quantity).toLocaleString() + '</div>';
+                    el.innerHTML = '<img src="' + image + '" alt="' + name + '" class="h-12 w-12 rounded object-cover"><div class="flex-1"><div class="text-sm font-medium text-gray-900">' + name + '</div><div class="text-xs text-gray-500">Qty: ' + quantity + '</div></div><div class="text-sm font-medium text-gray-900">' + CURRENCY_SYMBOL + (itemPrice * quantity).toLocaleString() + '</div>';
                     itemsContainer.appendChild(el);
                 });
                 if ((bundle.items || []).length > 4) {

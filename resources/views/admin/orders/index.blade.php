@@ -48,7 +48,7 @@
                         <td>
                             <span class="admin-badge {{ $order->payment_status == 'paid' ? 'admin-badge-success' : 'admin-badge-info' }}">{{ $order->payment_status }}</span>
                         </td>
-                        <td class="text-right">$ {{ number_format($order->total, 0, '.', ',') }}</td>
+                        <td class="text-right">{{ currency_format($order->total) }}</td>
                     </tr>
                 @endforeach
             </tbody>

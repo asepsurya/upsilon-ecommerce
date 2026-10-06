@@ -12,7 +12,7 @@ class Address extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'full_name', 'phone', 'address', 'province', 'city', 'district',
+        'user_id', 'label', 'full_name', 'phone', 'address', 'province', 'city', 'district',
         'postal_code', 'is_default',
     ];
 

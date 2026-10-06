@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <div class="truncate text-sm font-medium text-gray-900">{{ $product->name }}</div>
-                                    <div class="text-xs text-muted">{{ $product->formatted_price ?? '$' . number_format($product->base_price, 2) }}</div>
+                                    <div class="text-xs text-muted">{{ $product->formatted_price ?? currency_format($product->base_price) }}</div>
                                 </div>
                             </label>
                         @empty

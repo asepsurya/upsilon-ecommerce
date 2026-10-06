@@ -21,6 +21,7 @@ class SettingSeeder extends Seeder
             ['key' => 'instagram_api_version', 'value' => 'v22.0', 'type' => 'text', 'description' => 'Instagram API version'],
             ['key' => 'instagram_api_base_url', 'value' => 'https://graph.facebook.com', 'type' => 'text', 'description' => 'Instagram API base URL'],
             ['key' => 'instagram_cache_ttl', 'value' => '3600', 'type' => 'integer', 'description' => 'Instagram cache TTL in seconds'],
+            ['key' => 'most_viewed_products_limit', 'value' => '10', 'type' => 'integer', 'description' => 'Number of most viewed products to display on dashboard'],
         ];
 
         foreach ($settings as $setting) {

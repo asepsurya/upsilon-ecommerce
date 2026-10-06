@@ -33,12 +33,12 @@
                             @if($voucher->discount_type == 'percentage')
                                 {{ $voucher->discount_value }}%
                             @else
-                                $ {{ number_format($voucher->discount_value, 0) }}
+                                {{ currency_format($voucher->discount_value) }}
                             @endif
                         </td>
-                        <td>$ {{ number_format($voucher->min_purchase, 0) }}</td>
+                        <td>{{ currency_format($voucher->min_purchase) }}</td>
                         <td>{{ $voucher->used_count }} / {{ $voucher->max_usage }}</td>
-                        <td>{{ $voucher->expires_at->format('M d, Y') }}</td>
+                        <td>{{ $voucher->expires_at ? $voucher->expires_at->format('M d, Y') : 'No expiry' }}</td>
                         <td class="text-right">
                             <a href="{{ route('admin.vouchers.edit', $voucher) }}" class="admin-btn admin-btn-secondary admin-btn-sm">Edit</a>
                             <form method="POST" action="{{ route('admin.vouchers.destroy', $voucher) }}" class="d-inline" onsubmit="return confirm('Are you sure?')">

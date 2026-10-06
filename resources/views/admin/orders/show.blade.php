@@ -36,13 +36,13 @@
                                 <img src="{{ $item->variant->product->images->first()?->url ?? 'https://placehold.co/50x60/stone-200/stone-500?text=No+Image' }}" alt="" class="w-12 h-14 object-cover border border-gray-200">
                                 <div>
                                     <p class="font-weight-bold">{{ $item->variant->product->name }}</p>
-                                    <p class="text-muted text-sm">{{ $item->variant->color }} / {{ $item->variant->size }}</p>
+                                    <p class="text-muted text-sm">{{ $item->variant->color?->name }} / {{ $item->variant->size?->name }}</p>
                                 </div>
                             </div>
                         </td>
                         <td>{{ $item->quantity }}</td>
-                        <td>$ {{ number_format($item->price, 2) }}</td>
-                        <td class="text-right">$ {{ number_format($item->subtotal, 2) }}</td>
+                        <td>{{ currency_format($item->price) }}</td>
+                        <td class="text-right">{{ currency_format($item->subtotal) }}</td>
                     </tr>
                 @endforeach
             </tbody>

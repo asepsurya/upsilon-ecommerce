@@ -24,13 +24,6 @@
     $salePrice = $product->sale_price;
     $hasDiscount = $salePrice && $salePrice < $basePrice;
     $displayPrice = $salePrice ?? $basePrice;
-
-    if (!function_exists('currency')) {
-        function currency($amount)
-        {
-            return '$' . number_format((float) $amount, 2, '.', ',');
-        }
-    }
 @endphp
 
 <div class="group relative flex flex-col bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden rounded">
@@ -44,9 +37,9 @@
             </div>
         @endif
 
-        @if($product->badge ?? null)
+        @if($isModel && $product->category)
             <span class="absolute top-2 left-2 bg-black text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded">
-                {{ $product->badge }}
+                {{ $product->category->name }}
             </span>
         @endif
 
@@ -71,7 +64,7 @@
         @endif
 
         <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex justify-center py-3">
-            <a href="https://wa.me/{{ config('services.whatsapp.number', '6281234567890') }}?text={{ urlencode('Hi, I would like to buy ' . $product->name . ' for ' . currency($displayPrice) . '. Can you give me info?') }}"
+            <a href="https://wa.me/{{ config('services.whatsapp.number', '6281234567890') }}?text={{ urlencode('Hi, I would like to buy ' . $product->name . ' for ' . currency_format($displayPrice) . '. Can you give me info?') }}"
                 class="text-[10px] font-bold uppercase tracking-wider text-white hover:text-brand-yellow transition-colors"
                 target="_blank" rel="noopener">
                 Chat on WhatsApp
@@ -98,10 +91,10 @@
         <div class="flex items-center justify-between mt-auto pt-2 border-t border-gray-200">
             <div class="flex flex-col">
                 @if($hasDiscount)
-                    <span class="text-sm font-bold text-brand-orange">${{ number_format($salePrice, 2, '.', ',') }}</span>
-                    <span class="text-xs text-gray-400 line-through">${{ number_format($basePrice, 2, '.', ',') }}</span>
+                    <span class="text-sm font-bold text-brand-orange">{{ currency_format($salePrice) }}</span>
+                    <span class="text-xs text-gray-400 line-through">{{ currency_format($basePrice) }}</span>
                 @else
-                    <span class="text-sm font-bold text-black">${{ number_format($displayPrice, 2, '.', ',') }}</span>
+                    <span class="text-sm font-bold text-black">{{ currency_format($displayPrice) }}</span>
                 @endif
             </div>
             @if($showStock && !$inStock)

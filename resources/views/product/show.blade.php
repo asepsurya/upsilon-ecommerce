@@ -24,13 +24,14 @@
 
     $colorsList = $product->variants->filter(fn($v) => $v->color !== null)->unique('color_id')->values();
     $sizesList = $product->variants->filter(fn($v) => $v->size !== null)->unique('size_id')->values();
-    $reviewsList = $product->reviews ?? collect();
+    $reviewsList = $product->approvedReviews ?? collect();
     $hasReviews = $reviewsList->count() > 0;
     $avgRating = $product->average_rating ? round($product->average_rating, 1) : 0;
     $reviewCount = $product->review_count ?? 0;
 
     $variantData = $product->variants->map(function ($v) {
         return [
+            'id' => $v->id,
             'color_id' => $v->color_id,
             'size_id' => $v->size_id,
             'price' => $v->effective_price ?? $v->price ?? null,
@@ -76,14 +77,13 @@
 
 @push('scripts')
 <script>
+    var CURRENCY_SYMBOL = @json($siteSettings['currency_symbol'] ?: '$');
+    var CURRENCY_DECIMALS = @json($siteSettings['currency_decimals'] ?? 2);
     window.productVariantData = @json($variantData);
 </script>
 @endpush
 
 @section("content")
-    {{-- Header --}}
-    @include('components.site-header')
-
     {{-- Breadcrumb --}}
     <div class="border-b border-neutral-200 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3 text-[11px] text-neutral-500">
@@ -157,9 +157,9 @@
 
                         {{-- Top Left Badges --}}
                         <div class="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
-                            @if($product->badge)
+                            @if($product->category)
                                 <span class="bg-black/90 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-xs backdrop-blur-xs">
-                                    {{ $product->badge }}
+                                    {{ $product->category->name }}
                                 </span>
                             @endif
                             @if($product->edition)
@@ -225,7 +225,7 @@
                         </h1>
 
                         {{-- Rating Summary Row --}}
-                        <div class="flex items-center gap-3 mt-3">
+                        {{-- <div class="flex items-center gap-3 mt-3">
                             <div class="flex items-center gap-1 text-brand-orange">
                                 @for($i = 1; $i <= 5; $i++)
                                     <svg class="w-4 h-4 {{ $i <= round($avgRating) ? 'text-yellow-400' : 'text-neutral-200' }}" fill="currentColor" viewBox="0 0 20 20">
@@ -238,7 +238,7 @@
                             <a href="#reviews-section" class="text-xs text-neutral-500 hover:text-black hover:underline">
                                 {{ $reviewCount }} Reviews
                             </a>
-                        </div>
+                        </div> --}}
                     </div>
 
                     {{-- Price Display --}}
@@ -246,23 +246,23 @@
                         <div class="flex items-baseline gap-3 flex-wrap" id="price-display-wrapper">
                             @if($showPriceRange)
                                 <span class="text-2xl sm:text-3xl font-black text-neutral-900 tracking-tight" id="main-price-val">
-                                    ${{ number_format($minPrice, 2) }} - ${{ number_format($maxPrice, 2) }}
+                                    {{ currency_format($minPrice) }} - {{ currency_format($maxPrice) }}
                                 </span>
                                 @if($hasOverallDiscount)
                                     <span class="text-sm text-neutral-400 line-through" id="main-base-price-val">
-                                        ${{ number_format($minBasePrice, 2) }} - ${{ number_format($maxBasePrice, 2) }}
+                                        {{ currency_format($minBasePrice) }} - {{ currency_format($maxBasePrice) }}
                                     </span>
                                 @endif
                             @elseif($hasOverallDiscount)
                                 <span class="text-2xl sm:text-3xl font-black text-brand-orange tracking-tight" id="main-price-val">
-                                    ${{ number_format($minPrice, 2) }}
+                                    {{ currency_format($minPrice) }}
                                 </span>
                                 <span class="text-sm text-neutral-400 line-through" id="main-base-price-val">
-                                    ${{ number_format($minBasePrice, 2) }}
+                                    {{ currency_format($minBasePrice) }}
                                 </span>
                             @else
                                 <span class="text-2xl sm:text-3xl font-black text-neutral-900 tracking-tight" id="main-price-val">
-                                    ${{ number_format($minPrice, 2) }}
+                                    {{ currency_format($minPrice) }}
                                 </span>
                                 <span class="text-sm text-neutral-400 line-through hidden" id="main-base-price-val"></span>
                             @endif
@@ -358,22 +358,46 @@
 
                     {{-- Action CTA Buttons --}}
                     <div class="space-y-2.5 pt-4 border-t border-neutral-200">
-                        {{-- WhatsApp Order Direct (Primary) --}}
                         @php
+                            $checkoutMode = $siteSettings['checkout_mode'] ?? 'midtrans';
                             $waNumber = config('services.whatsapp.number', '6281234567890');
-                             $defaultWaText = urlencode("Hello Upsilon, I am interested in buying {$product->name} for $" . number_format($minPrice, 2) . ". Please confirm stock and how to order.");
+                            $defaultWaText = urlencode("Hello Upsilon, I am interested in buying {$product->name} for " . currency_format($minPrice) . ". Please confirm stock and how to order.");
                         @endphp
-                        <a id="btn-whatsapp-order"
-                            href="https://wa.me/{{ $waNumber }}?text={{ $defaultWaText }}"
-                            target="_blank" rel="noopener"
-                            class="w-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs uppercase tracking-wider py-3.5 px-6 rounded-sm flex items-center justify-center gap-2 shadow-sm hover:shadow transition-all">
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.58 1.961.902 3.018.902 3.182 0 5.768-2.587 5.768-5.767.001-3.182-2.585-5.768-5.768-5.768zm7.423 5.766c.002 4.093-3.329 7.425-7.424 7.425-1.258 0-2.493-.321-3.585-.931l-4.524 1.187 1.208-4.407c-.71-1.183-1.085-2.535-1.087-3.924.002-4.093 3.33-7.425 7.425-7.425 4.094 0 7.425 3.33 7.427 7.425z"></path>
-                            </svg>
-                             <span>Order Directly via WhatsApp</span>
-                        </a>
 
+                        {{-- Buy Now (Midtrans / Both mode) --}}
+                        @if($checkoutMode !== 'whatsapp')
+                            <button type="button" id="btn-buy-now"
+                                class="w-full bg-black hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-wider py-3.5 px-6 rounded-sm flex items-center justify-center gap-2 shadow-sm hover:shadow transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                <span>Buy Now</span>
+                            </button>
+                        @endif
 
+                        {{-- Order via WhatsApp (WhatsApp / Both mode) --}}
+                        @if($checkoutMode !== 'midtrans')
+                            <a id="btn-whatsapp-order"
+                                href="https://wa.me/{{ $waNumber }}?text={{ $defaultWaText }}"
+                                target="_blank" rel="noopener"
+                                class="w-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs uppercase tracking-wider py-3.5 px-6 rounded-sm flex items-center justify-center gap-2 shadow-sm hover:shadow transition-all {{ $checkoutMode === 'both' ? 'order-2' : '' }}">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.58 1.961.902 3.018.902 3.182 0 5.768-2.587 5.768-5.767.001-3.182-2.585-5.768-5.768-5.768zm7.423 5.766c.002 4.093-3.329 7.425-7.424 7.425-1.258 0-2.493-.321-3.585-.931l-4.524 1.187 1.208-4.407c-.71-1.183-1.085-2.535-1.087-3.924.002-4.093 3.33-7.425 7.425-7.425 4.094 0 7.425 3.33 7.427 7.425z"></path>
+                                </svg>
+                                <span>{{ $checkoutMode === 'both' ? 'Order via WhatsApp' : 'Order Directly via WhatsApp' }}</span>
+                            </a>
+                        @endif
+
+                        {{-- Add to Cart (Midtrans / Both mode) --}}
+                        @if($checkoutMode !== 'whatsapp')
+                            <button type="button" id="btn-add-to-cart"
+                                class="w-full border border-neutral-800 hover:bg-neutral-50 text-neutral-900 font-bold text-xs uppercase tracking-wider py-3.5 px-6 rounded-sm flex items-center justify-center gap-2 transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                <span>Add to Cart</span>
+                            </button>
+                        @endif
                     </div>
 
                     {{-- Retail USP Trust Pillars --}}
@@ -491,44 +515,57 @@
 
                 {{-- Right: Write Review Form --}}
                 <div class="lg:col-span-8 bg-white border border-neutral-200 p-6 rounded-sm">
-                    <h3 class="text-sm font-bold uppercase tracking-wider text-neutral-900 mb-1">Write a Product Review</h3>
-                    <p class="text-xs text-neutral-500 mb-4">Share your experience about the quality, comfort, and sizing of this product.</p>
+                    @auth
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-neutral-900 mb-1">Write a Product Review</h3>
+                        <p class="text-xs text-neutral-500 mb-4">Share your experience about the quality, comfort, and sizing of this product.</p>
 
-                    <form method="POST" action="{{ route('reviews.store', $product) }}" class="space-y-4">
-                        @csrf
+                        <form method="POST" action="{{ route('reviews.store', $product) }}" class="space-y-4">
+                            @csrf
 
-                        {{-- Rating Stars Selector --}}
-                        <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2">Your Rating*</label>
-                            <div class="flex items-center gap-1.5" id="interactive-star-rating">
-                                @for($i = 1; $i <= 5; $i++)
-                                    <button type="button"
-                                        class="review-star-btn text-neutral-300 transition-colors p-1 cursor-pointer"
-                                        data-value="{{ $i }}"
-                                        aria-label="{{ $i }} star">
-                                        <svg class="w-6 h-6 fill-current pointer-events-none" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                        </svg>
-                                    </button>
-                                @endfor
-                                <input type="hidden" name="rating" id="review-rating-value" value="5" required>
-                                <span id="rating-selected-text" class="text-xs font-bold text-neutral-700 ml-2">Very Satisfied (5/5)</span>
+                            {{-- Rating Stars Selector --}}
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2">Your Rating*</label>
+                                <div class="flex items-center gap-1.5" id="interactive-star-rating">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <button type="button"
+                                            class="review-star-btn text-neutral-300 transition-colors p-1 cursor-pointer"
+                                            data-value="{{ $i }}"
+                                            aria-label="{{ $i }} star">
+                                            <svg class="w-6 h-6 fill-current pointer-events-none" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                            </svg>
+                                        </button>
+                                    @endfor
+                                    <input type="hidden" name="rating" id="review-rating-value" value="5" required>
+                                    <span id="rating-selected-text" class="text-xs font-bold text-neutral-700 ml-2">Very Satisfied (5/5)</span>
+                                </div>
                             </div>
-                        </div>
 
-                        {{-- Review Content Textarea --}}
-                        <div>
-                            <label for="review-textarea" class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2">Your Review*</label>
-                            <textarea name="review" id="review-textarea" rows="4" required
-                                placeholder="How is the size and comfort? Tell other buyers..."
-                                class="w-full bg-neutral-50 border border-neutral-300 rounded-sm p-3 text-xs text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-black focus:ring-0 transition-colors"></textarea>
-                        </div>
+                            {{-- Review Content Textarea --}}
+                            <div>
+                                <label for="review-textarea" class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2">Your Review*</label>
+                                <textarea name="review" id="review-textarea" rows="4" required
+                                    placeholder="How is the size and comfort? Tell other buyers..."
+                                    class="w-full bg-neutral-50 border border-neutral-300 rounded-sm p-3 text-xs text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-black focus:ring-0 transition-colors"></textarea>
+                            </div>
 
-                        <button type="submit"
-                            class="bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-wider py-2.5 px-6 rounded-sm transition-colors cursor-pointer">
-                            Submit Review
-                        </button>
-                    </form>
+                            <button type="submit"
+                                class="bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-wider py-2.5 px-6 rounded-sm transition-colors cursor-pointer">
+                                Submit Review
+                            </button>
+                        </form>
+                    @else
+                        <div class="flex flex-col items-center justify-center py-8 text-center">
+                            <svg class="w-12 h-12 text-neutral-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            <h4 class="text-sm font-bold text-neutral-900 mb-1">Login to Write a Review</h4>
+                            <p class="text-xs text-neutral-500 mb-4">You must be logged in to submit a review.</p>
+                            <a href="{{ route('login') }}" class="inline-flex items-center justify-center bg-black px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-neutral-800 rounded-sm">
+                                Login
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -844,7 +881,7 @@
 
         function formatPrice(value) {
             if (value === null || value === undefined || isNaN(value)) return null;
-            return '$' + Number(value).toFixed(2);
+            return CURRENCY_SYMBOL + Number(value).toFixed(CURRENCY_DECIMALS);
         }
 
         function updateVariantUI() {
@@ -968,6 +1005,112 @@
                     sizeGuideModal.classList.add('hidden');
                     sizeGuideModal.classList.remove('flex');
                 }
+            });
+        }
+
+        // ==========================================
+        // #7: Buy Now & Add to Cart (Midtrans mode)
+        // ==========================================
+        function getSelectedVariantId() {
+            const key = (selectedColorId ? selectedColorId : '') + '::' + (selectedSizeId ? selectedSizeId : '');
+            const variant = variantMap.get(key);
+            return variant ? variant.id : null;
+        }
+
+        function getSelectedQuantity() {
+            const qtyInput = document.getElementById('qty-input');
+            return qtyInput ? parseInt(qtyInput.value, 10) || 1 : 1;
+        }
+
+        function addToCart(variantId, quantity) {
+            return fetch("{{ route('cart.add') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                },
+                body: JSON.stringify({
+                    product_variant_id: variantId,
+                    quantity: quantity
+                })
+            }).then(function (response) {
+                return response.json().then(function (data) {
+                    return { ok: response.ok, data: data };
+                });
+            });
+        }
+
+        const btnBuyNow = document.getElementById('btn-buy-now');
+        const btnAddToCart = document.getElementById('btn-add-to-cart');
+
+        if (btnBuyNow) {
+            btnBuyNow.addEventListener('click', function () {
+                const variantId = getSelectedVariantId();
+
+                if (!variantId) {
+                    alert('Silakan pilih warna dan ukuran terlebih dahulu.');
+                    return;
+                }
+
+                const quantity = getSelectedQuantity();
+
+                btnBuyNow.disabled = true;
+                btnBuyNow.querySelector('span').textContent = 'Processing...';
+
+                addToCart(variantId, quantity).then(function (result) {
+                    btnBuyNow.disabled = false;
+                    btnBuyNow.querySelector('span').textContent = 'Buy Now';
+
+                    if (result.ok && result.data.success) {
+                        window.location.href = "{{ route('checkout') }}";
+                    } else if (result.data && result.data.error) {
+                        alert(result.data.error);
+                    } else {
+                        alert('Gagal menambahkan ke keranjang. Silakan coba lagi.');
+                    }
+                }).catch(function () {
+                    btnBuyNow.disabled = false;
+                    btnBuyNow.querySelector('span').textContent = 'Buy Now';
+                    alert('Terjadi kesalahan. Silakan coba lagi.');
+                });
+            });
+        }
+
+        if (btnAddToCart) {
+            btnAddToCart.addEventListener('click', function () {
+                const variantId = getSelectedVariantId();
+
+                if (!variantId) {
+                    alert('Silakan pilih warna dan ukuran terlebih dahulu.');
+                    return;
+                }
+
+                const quantity = getSelectedQuantity();
+
+                btnAddToCart.disabled = true;
+                btnAddToCart.querySelector('span').textContent = 'Adding...';
+
+                addToCart(variantId, quantity).then(function (result) {
+                    btnAddToCart.disabled = false;
+                    btnAddToCart.querySelector('span').textContent = 'Add to Cart';
+
+                    if (result.ok && result.data.success) {
+                        alert('Produk berhasil ditambahkan ke keranjang.');
+                        const cartCountEls = document.querySelectorAll('[data-cart-count]');
+                        cartCountEls.forEach(function (el) {
+                            el.textContent = result.data.count;
+                        });
+                    } else if (result.data && result.data.error) {
+                        alert(result.data.error);
+                    } else {
+                        alert('Gagal menambahkan ke keranjang. Silakan coba lagi.');
+                    }
+                }).catch(function () {
+                    btnAddToCart.disabled = false;
+                    btnAddToCart.querySelector('span').textContent = 'Add to Cart';
+                    alert('Terjadi kesalahan. Silakan coba lagi.');
+                });
             });
         }
 

@@ -1,12 +1,12 @@
 @extends('layouts.home')
 
 @section('title', 'Upsilon Store')
-@section('description', 'Sneakers, clothing, and accessories from Nike, adidas, New Balance, Puma, and more. Free shipping nationwide.')
+@section('description', 'T-shirts from top brands. Free shipping nationwide.')
 @section('ogUrl', url()->current())
 @section('ogImage', asset('storage/images/upsilon/hero-banner.jpg'))
 
 @section('content')
-    @include('components.site-header')
+    @include('components.promo-bar')
 
     @php
         $activeFilterCount = collect([
@@ -135,16 +135,21 @@
                 @endif
 
                 {{-- Color --}}
-                @if($colors->isNotEmpty())
+                @if($colors->where('variants_count', '>', 0)->isNotEmpty())
                     <div class="pt-4">
                         <p class="text-xs font-bold uppercase tracking-wider text-neutral-900 mb-3">Warna</p>
-                        <div class="grid grid-cols-2 gap-y-2 text-neutral-600">
-                            @foreach($colors as $color)
-                                <label class="flex items-center gap-2.5 cursor-pointer hover:text-black text-sm">
+                        <div class="flex flex-wrap gap-2  p-4">
+                            @foreach($colors->where('variants_count', '>', 0) as $color)
+                                <label class="relative cursor-pointer group mt-4">
                                     <input type="checkbox" name="colors[]" value="{{ $color->id }}"
                                         {{ is_array(request('colors')) && in_array($color->id, request('colors')) ? 'checked' : '' }}
-                                        class="rounded border-neutral-300 text-black focus:ring-0 w-4 h-4"/>
-                                    {{ $color->name }}
+                                        class="sr-only peer"/>
+                                    <span class="inline-block w-8 h-8 rounded-full border-2 border-neutral-300 transition-all
+                                        bg-[{{ $color->hex_code ?? '#ccc' }}]
+                                        peer-checked:ring-2 peer-checked:ring-black peer-checked:ring-offset-2
+                                        hover:ring-2 hover:ring-neutral-500"
+                                        title="{{ $color->name }}"
+                                        style="{{ $color->hex_code ? 'background-color: ' . $color->hex_code : '' }}"></span>
                                 </label>
                             @endforeach
                         </div>
@@ -156,9 +161,9 @@
                     <p class="text-xs font-bold uppercase tracking-wider text-neutral-900 mb-3">Harga Maksimum</p>
                     <input type="range" class="w-full" max="{{ $maxPrice }}" min="0" name="price_max"
                         value="{{ request('price_max', $maxPrice) }}"
-                        oninput="document.getElementById('m-price-max-display').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(this.value)"/>
+                        oninput="document.getElementById('m-price-max-display').textContent = CURRENCY_SYMBOL + new Intl.NumberFormat('en-US', {minimumFractionDigits: CURRENCY_DECIMALS, maximumFractionDigits: CURRENCY_DECIMALS}).format(this.value)"/>
                     <div class="text-xs text-neutral-500 mt-2">
-                        Hingga <span class="font-semibold text-black" id="m-price-max-display">Rp {{ number_format(request('price_max', $maxPrice)) }}</span>
+                        Hingga <span class="font-semibold text-black" id="m-price-max-display">{{ currency_format(request('price_max', $maxPrice)) }}</span>
                     </div>
                     <input type="hidden" name="price_min" value="{{ request('price_min', 0) }}">
                 </div>
@@ -225,14 +230,16 @@
                         <!-- Filter: Color -->
                         <div class="pt-4">
                             <p class="text-xs font-bold uppercase tracking-wide py-1 text-neutral-900">Color</p>
-                            <div class="mt-2 space-y-1.5 text-neutral-600 max-h-40 overflow-y-auto pr-1">
-                                @foreach($colors as $color)
-                                    <label class="flex items-center justify-between cursor-pointer hover:text-black">
-                                        <span class="flex items-center gap-2">
-                                            <input type="checkbox" name="colors[]" value="{{ $color->id }}" {{ is_array(request('colors')) && in_array($color->id, request('colors')) ? 'checked' : '' }} class="rounded border-neutral-300 text-black focus:ring-0 w-3.5 h-3.5"/>
-                                            {{ $color->name }}
-                                        </span>
-                                        <span class="text-neutral-400 text-[10px]">{{ $color->products_count ?? 0 }}</span>
+                            <div class="mt-2 pt-4 flex flex-wrap gap-2 max-h-40 overflow-y-auto pr-1">
+@foreach($colors->where('variants_count', '>', 0) as $color)
+                                    <label class="relative cursor-pointer group">
+                                        <input type="checkbox" name="colors[]" value="{{ $color->id }}" {{ is_array(request('colors')) && in_array($color->id, request('colors')) ? 'checked' : '' }} class="sr-only peer"/>
+                                        <span class="inline-block w-7 h-7 rounded-full border-2 border-neutral-300 transition-all
+                                            bg-[{{ $color->hex_code ?? '#ccc' }}]
+                                            peer-checked:ring-2 peer-checked:ring-black peer-checked:ring-offset-2
+                                            hover:ring-2 hover:ring-neutral-500"
+                                            title="{{ $color->name }}"
+                                            style="{{ $color->hex_code ? 'background-color: ' . $color->hex_code : '' }}"></span>
                                     </label>
                                 @endforeach
                             </div>
@@ -242,17 +249,24 @@
                         <div class="pt-4">
                             <p class="text-xs font-bold uppercase tracking-wide py-1 text-neutral-900">Harga</p>
                             <div class="mt-3">
-                                <input type="range" class="w-full" max="{{ $maxPrice }}" min="0" name="price_max" value="{{ request('price_max', $maxPrice) }}" oninput="document.getElementById('price-max-display').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(this.value)"/>
+                                <input type="range" class="w-full" max="{{ $maxPrice }}" min="0" name="price_max" value="{{ request('price_max', $maxPrice) }}" oninput="document.getElementById('price-max-display').textContent = CURRENCY_SYMBOL + new Intl.NumberFormat('en-US', {minimumFractionDigits: CURRENCY_DECIMALS, maximumFractionDigits: CURRENCY_DECIMALS}).format(this.value)"/>
                                 <div class="text-[11px] text-neutral-500 mt-2">
-                                    From <span class="font-semibold text-black">Rp 0</span> - To <span class="font-semibold text-black" id="price-max-display">Rp {{ number_format(request('price_max', $maxPrice)) }}</span>
+                                    From <span class="font-semibold text-black">{{ currency_format(0) }}</span> - To <span class="font-semibold text-black" id="price-max-display">{{ currency_format(request('price_max', $maxPrice)) }}</span>
                                 </div>
                                 <input type="hidden" name="price_min" value="{{ request('price_min', 0) }}">
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full bg-neutral-900 text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded-sm hover:bg-neutral-800 transition-colors mt-4">
-                            Apply Filters
-                        </button>
+                        <div class="mt-4 flex gap-2">
+                            <a href="{{ route('shop') }}"
+                                class="flex-1 text-center border border-neutral-300 text-xs font-bold uppercase tracking-wide py-2.5 rounded-sm hover:border-black hover:text-black transition-colors">
+                                Reset
+                            </a>
+                            <button type="submit"
+                                class="flex-1 bg-neutral-900 text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded-sm hover:bg-neutral-800 transition-colors">
+                                Apply Filters
+                            </button>
+                        </div>
                     </form>
                 </aside>
                 <!-- END: Left Filter Sidebar -->
@@ -268,7 +282,7 @@
              $activeLabel = $labelSlug ? $labelsList->firstWhere('slug', $labelSlug) : null;
 
              $bannerHeading = $activeShopBanner->heading ?? $activeShopBanner->title ?? 'SALE UP TO 50%';
-             $bannerDescription = $activeShopBanner->description ?? 'Belanja di Upsilon Indonesia dan temukan diskon sneakers, clothing dan accessories dari top brand favorit seperti Nike, adidas, New Balance, ASICS, PUMA, dan lainnya di Upsilon. Nikmati Gratis Ongkir* T&C apply.';
+             $bannerDescription = $activeShopBanner->description ?? 'Belanja di Upsilon Indonesia dan temukan koleksi t-shirt premium dari top brand favorit. Nikmati Gratis Ongkir* T&C apply.';
              $bannerLink = $activeShopBanner->link ?? '#';
 
              if ($activeLabel) {
@@ -293,10 +307,10 @@
                              <p class="text-xs text-neutral-300 max-w-xl leading-relaxed mb-4 line-clamp-3">
                                  {{ $bannerDescription }}
                              </p>
-                             <div class="flex flex-wrap gap-2 text-[11px]">
-                                 <span class="border border-white/80 px-3 py-1 rounded-sm font-medium">Footwear Up To 50% Off</span>
-                                 <span class="border border-white/80 px-3 py-1 rounded-sm font-medium">Apparel Up To 50% Off</span>
-                             </div>
+<div class="flex flex-wrap gap-2 text-[11px]">
+    <span class="border border-white/80 px-3 py-1 rounded-sm font-medium">T-Shirts Up To 50% Off</span>
+    <span class="border border-white/80 px-3 py-1 rounded-sm font-medium">New Arrivals Daily</span>
+</div>
                          </div>
 
                          <!-- KANAN: Gambar -->
@@ -338,19 +352,51 @@
         </div>
         <!-- END: Two-Column Product & Filter Layout -->
 
-        <!-- BEGIN: SEO Informational Footer Content -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-8 mt-16 pt-8 border-t border-neutral-200 text-neutral-600">
-            <h2 class="text-sm font-bold text-neutral-900 uppercase">GREAT DEALS - OFFERS &amp; PROMO Upsilon</h2>
-            <h3 class="text-xs font-semibold text-neutral-800 mt-1">Great Deals Up to 50% Off - Diskon Sepatu &amp; Sneakers</h3>
-            <p class="text-neutral-500 mt-2 text-[11px] leading-relaxed line-clamp-2">
-                Temukan penawaran terbaik dan promo diskon produk Adidas Original, Nike, New Balance, ASICS, PUMA, dan lainnya di Upsilon Indonesia. Nikmati penawaran eksklusif online &amp; in-store dengan jaminan produk 100% original.
-            </p>
-            <div class="text-center mt-4">
-                <button class="text-xs font-bold text-black inline-flex items-center gap-1 hover:underline" type="button">
-                    Lihat Lebih Banyak <i class="ph ph-caret-down text-sm"></i>
-                </button>
-            </div>
-        </section>
+<!-- BEGIN: SEO Informational Footer Content -->
+       {{-- ============================================================
+        9. SEASONAL SPOTLIGHT BANNERS
+        ============================================================ --}}
+        @php
+            $activePromoBanners = collect($promoBanners ?? [])->filter(fn ($b) => !empty($b->image_url))->values();
+        @endphp
+        @if($activePromoBanners->isNotEmpty())
+            <section class="py-4" aria-label="Seasonal promotions">
+                <div class="mx-auto max-w-7xl px-4 lg:px-8">
+                    @if($activePromoBanners->count() > 1)
+                        <div class="relative">
+                            <div id="promo-banner-slider" class="overflow-hidden rounded">
+                                <div id="promo-banner-track" class="flex transition-transform duration-500">
+                                    @foreach($activePromoBanners as $banner)
+                                        <div class="w-full flex-shrink-0">
+                                            <a href="{{ $banner->link ?? '#' }}" class="block">
+                                                <img src="{{ $banner->image_url }}" alt="{{ $banner->title ?? 'Promo' }}" loading="lazy"
+                                                    class="h-auto w-full object-cover transition duration-500 hover:scale-[1.02]">
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <button type="button" id="promo-prev" aria-label="Previous banner"
+                                class="absolute left-4 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-black/40 px-3 py-2 text-white transition hover:bg-black/70 md:flex items-center justify-center">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                            </button>
+                            <button type="button" id="promo-next" aria-label="Next banner"
+                                class="absolute right-4 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-black/40 px-3 py-2 text-white transition hover:bg-black/70 md:flex items-center justify-center">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                            </button>
+                        </div>
+                    @else
+                        @foreach($activePromoBanners as $banner)
+                            <a href="{{ $banner->link ?? '#' }}" class="block overflow-hidden rounded">
+                                <img src="{{ $banner->image_url }}" alt="{{ $banner->title ?? 'Promo' }}" loading="lazy"
+                                    class="h-auto w-full object-cover transition duration-500 hover:scale-[1.02]">
+                            </a>
+                        @endforeach
+                    @endif
+                </div>
+            </section>
+        @endif
+
         <!-- END: SEO Informational Footer Content -->
     </main>
 
@@ -360,6 +406,9 @@
 
     <!-- Script Section -->
     <script>
+        var CURRENCY_SYMBOL = @json($siteSettings['currency_symbol'] ?: '$');
+        var CURRENCY_DECIMALS = @json($siteSettings['currency_decimals'] ?? 2);
+
         (function () {
             // Sort select redirect
             const sortSelect = document.getElementById('sort-select');

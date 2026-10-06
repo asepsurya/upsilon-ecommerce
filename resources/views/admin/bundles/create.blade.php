@@ -104,7 +104,7 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td>${{ number_format($product->base_price, 2) }}</td>
+                                <td>{{ currency_format($product->base_price) }}</td>
                                 <td>
                                     <input type="number" name="quantities[{{ $product->id }}]" value="1" min="1" class="admin-form-input product-quantity">
                                 </td>

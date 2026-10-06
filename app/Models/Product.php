@@ -81,6 +81,11 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function approvedReviews(): HasMany
+    {
+        return $this->hasMany(Review::class)->approved();
+    }
+
     public function labels(): BelongsToMany
     {
         return $this->belongsToMany(Label::class, 'label_product');
@@ -152,12 +157,13 @@ class Product extends Model
     public function getFormattedPriceAttribute(): string
     {
         $price = $this->effective_price;
+        $symbol = Setting::currencySymbol();
 
         if ($this->sale_price && $this->sale_price < $this->base_price) {
-            return '$'.number_format($this->sale_price, 2).' <span class="text-muted line-through">$'.number_format($this->base_price, 2).'</span>';
+            return $symbol.number_format($this->sale_price, 2).' <span class="text-muted line-through">'.$symbol.number_format($this->base_price, 2).'</span>';
         }
 
-        return '$'.number_format($price, 2);
+        return $symbol.number_format($price, 2);
     }
 
     public function getImageUrlAttribute(): string

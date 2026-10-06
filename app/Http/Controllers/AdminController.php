@@ -69,7 +69,7 @@ class AdminController extends Controller
         $mostViewed = ProductView::select('product_id', DB::raw('COUNT(*) as view_count'))
             ->groupBy('product_id')
             ->orderByDesc('view_count')
-            ->limit(10)
+            ->limit(Setting::get('most_viewed_products_limit', 10))
             ->with('product:id,name,base_price,sale_price')
             ->get();
 
@@ -164,6 +164,9 @@ class AdminController extends Controller
             'is_bestseller' => 'boolean',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
+            'edition' => 'nullable|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'bottom_label' => 'nullable|string|max:255',
             'label_ids' => 'nullable|array',
             'label_ids.*' => 'exists:labels,id',
             'selected_sizes' => 'nullable|array',
@@ -229,6 +232,9 @@ class AdminController extends Controller
             'is_bestseller' => 'boolean',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
+            'edition' => 'nullable|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'bottom_label' => 'nullable|string|max:255',
             'label_ids' => 'nullable|array',
             'label_ids.*' => 'exists:labels,id',
             'selected_sizes' => 'nullable|array',
@@ -274,6 +280,39 @@ class AdminController extends Controller
         $product->delete();
 
         return back()->with('success', 'Product deleted successfully');
+    }
+
+    public function bulkActionProducts(Request $request)
+    {
+        $request->validate([
+            'product_ids' => 'required|array|min:1',
+            'product_ids.*' => 'exists:products,id',
+            'action' => 'required|in:activate,deactivate,delete',
+        ]);
+
+        $productIds = $request->input('product_ids');
+        $action = $request->input('action');
+
+        $products = Product::whereIn('id', $productIds)->get();
+
+        switch ($action) {
+            case 'activate':
+                $products->each->update(['is_active' => true]);
+                $message = 'Products activated successfully';
+                break;
+            case 'deactivate':
+                $products->each->update(['is_active' => false]);
+                $message = 'Products deactivated successfully';
+                break;
+            case 'delete':
+                foreach ($products as $product) {
+                    $product->delete();
+                }
+                $message = 'Products deleted successfully';
+                break;
+        }
+
+        return back()->with('success', $message);
     }
 
     public function getProductImages(Product $product)
@@ -739,6 +778,7 @@ class AdminController extends Controller
     protected function updateProductRating(Product $product): void
     {
         $stats = $product->reviews()
+            ->approved()
             ->selectRaw('AVG(rating) as average_rating, COUNT(*) as review_count')
             ->first();
 
@@ -1305,47 +1345,151 @@ class AdminController extends Controller
         return back()->with('success', 'Size guide deleted successfully');
     }
 
+    /**
+     * Flat map of every field defined in config/settings.php, keyed by setting key.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    private function settingFields(): array
+    {
+        $fields = [];
+
+        foreach ((array) config('settings.groups', []) as $group) {
+            foreach ((array) ($group['fields'] ?? []) as $key => $field) {
+                $fields[$key] = array_merge($field, ['key' => $key]);
+            }
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Resolve the value shown when a setting has never been saved.
+     *
+     * @param  array<string, mixed>  $field
+     */
+    private function settingFallback(array $field): string
+    {
+        if (array_key_exists('default', $field)) {
+            return (string) $field['default'];
+        }
+
+        if (isset($field['config'])) {
+            return (string) config($field['config'], '');
+        }
+
+        if (isset($field['value_resolver']) && $field['value_resolver'] === 'env') {
+            $envKey = $this->envKeyFromField($field);
+
+            return (string) env($envKey, '');
+        }
+
+        return '';
+    }
+
+    /**
+     * Extract the environment variable key from a field definition.
+     *
+     * @param  array<string, mixed>  $field
+     */
+    private function envKeyFromField(array $field): string
+    {
+        if (isset($field['env_key'])) {
+            return $field['env_key'];
+        }
+
+        // Default: convert field key to SCREAMING_SNAKE_CASE
+        return strtoupper(Str::snake($field['key'] ?? ''));
+    }
+
     public function settings()
     {
-        $settings = Setting::all()->pluck('value', 'key')->toArray();
+        $stored = Setting::all()->pluck('value', 'key');
 
-        $data = [
-            'app_name' => $settings['app_name'] ?? config('app.name', 'Upsilon'),
-            'app_url' => $settings['app_url'] ?? config('app.url', ''),
-            'mail_from_address' => $settings['mail_from_address'] ?? config('mail.from.address', ''),
-            'mail_from_name' => $settings['mail_from_name'] ?? config('mail.from.name', ''),
-            'whatsapp_number' => $settings['whatsapp_number'] ?? config('services.whatsapp.number', ''),
-            'whatsapp_default_message' => $settings['whatsapp_default_message'] ?? config('services.whatsapp.default_message', ''),
-            'instagram_account_id' => $settings['instagram_account_id'] ?? config('services.instagram.account_id', ''),
-            'instagram_access_token' => $settings['instagram_access_token'] ?? config('services.instagram.access_token', ''),
-            'instagram_api_version' => $settings['instagram_api_version'] ?? config('services.instagram.api_version', 'v22.0'),
-            'instagram_api_base_url' => $settings['instagram_api_base_url'] ?? config('services.instagram.api_base_url', 'https://graph.facebook.com'),
-            'instagram_cache_ttl' => $settings['instagram_cache_ttl'] ?? config('services.instagram.cache_ttl', 3600),
-        ];
+        $data = [];
 
-        return view('admin.settings.index', compact('data'));
+        foreach ($this->settingFields() as $key => $field) {
+            $data[$key] = $stored->get($key, $this->settingFallback($field));
+        }
+
+        return view('admin.settings.index', [
+            'groups' => (array) config('settings.groups', []),
+            'data' => $data,
+        ]);
     }
 
     public function updateSettings(Request $request)
     {
-        $validated = $request->validate([
-            'app_name' => 'nullable|string|max:255',
-            'app_url' => 'nullable|url|max:255',
-            'mail_from_address' => 'nullable|email|max:255',
-            'mail_from_name' => 'nullable|string|max:255',
-            'whatsapp_number' => 'nullable|string|max:255',
-            'whatsapp_default_message' => 'nullable|string|max:1000',
-            'instagram_account_id' => 'nullable|string|max:255',
-            'instagram_access_token' => 'nullable|string|max:255',
-            'instagram_api_version' => 'nullable|string|max:50',
-            'instagram_api_base_url' => 'nullable|url|max:255',
-            'instagram_cache_ttl' => 'nullable|integer|min:0',
-        ]);
+        $fields = $this->settingFields();
 
-        foreach ($validated as $key => $value) {
-            Setting::set($key, $value);
+        $rules = [];
+
+        foreach ($fields as $key => $field) {
+            if (! empty($field['readonly'])) {
+                continue;
+            }
+            $rules[$key] = $field['rules'] ?? 'nullable|string|max:255';
         }
 
-        return redirect()->route('admin.settings.index')->with('success', 'Settings updated successfully');
+        // Ensure lat/lng fields have rules even if not in original request
+        if (isset($fields['contact_latitude'])) {
+            $rules['contact_latitude'] = $fields['contact_latitude']['rules'] ?? 'nullable|numeric|between:-90,90';
+        }
+        if (isset($fields['contact_longitude'])) {
+            $rules['contact_longitude'] = $fields['contact_longitude']['rules'] ?? 'nullable|numeric|between:-180,180';
+        }
+
+        $validated = $request->validate($rules, [], array_map(
+            fn (array $field): string => Str::lower($field['label'] ?? $field),
+            $fields
+        ));
+
+        // Auto-extract lat/lng from Google Maps URL if provided
+        if (! empty($validated['google_maps_embed'])) {
+            $coords = $this->extractCoordinatesFromGoogleMapsUrl($validated['google_maps_embed']);
+            if ($coords) {
+                $validated['contact_latitude'] = $coords['lat'];
+                $validated['contact_longitude'] = $coords['lng'];
+            }
+        }
+
+        foreach ($validated as $key => $value) {
+            Setting::set(
+                $key,
+                $value,
+                $fields[$key]['setting_type'] ?? 'text',
+                $fields[$key]['description'] ?? null
+            );
+        }
+
+        return redirect()->route('admin.settings.index')->with('success', 'Pengaturan berhasil disimpan');
+    }
+
+    /**
+     * Extract latitude and longitude from Google Maps URL.
+     *
+     * Supports formats:
+     * - https://www.google.com/maps/place/Name/@lat,lng,zoom...
+     * - https://www.google.com/maps/@lat,lng,zoom...
+     * - https://www.google.com/maps/embed?pb=... (extracts from pb parameter)
+     */
+    private function extractCoordinatesFromGoogleMapsUrl(string $url): ?array
+    {
+        // Format: /@lat,lng,zoom
+        if (preg_match('/@(-?\d+\.?\d*),(-?\d+\.?\d*)/', $url, $matches)) {
+            return ['lat' => (float) $matches[1], 'lng' => (float) $matches[2]];
+        }
+
+        // Format: !3dlat!4dlng (in embed pb parameter)
+        if (preg_match('/!3d(-?\d+\.?\d*)!4d(-?\d+\.?\d*)/', $url, $matches)) {
+            return ['lat' => (float) $matches[1], 'lng' => (float) $matches[2]];
+        }
+
+        // Format: /place/.../@lat,lng or /maps/@lat,lng
+        if (preg_match('/\/@(-?\d+\.?\d*),(-?\d+\.?\d*)/', $url, $matches)) {
+            return ['lat' => (float) $matches[1], 'lng' => (float) $matches[2]];
+        }
+
+        return null;
     }
 }

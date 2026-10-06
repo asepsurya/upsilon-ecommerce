@@ -7,6 +7,7 @@ use App\Models\Color;
 use App\Models\Label;
 use App\Models\Product;
 use App\Models\PromoBanner;
+use App\Models\Setting;
 use App\Models\Size;
 use App\Models\Slider;
 use Illuminate\Http\Request;
@@ -27,7 +28,10 @@ class ShopController extends Controller
         }
 
         if ($request->category) {
-            $query->where('category_id', $request->category);
+            $category = Category::where('slug', $request->category)->first();
+            if ($category) {
+                $query->where('category_id', $category->id);
+            }
         }
 
         if ($request->label) {
@@ -90,7 +94,11 @@ class ShopController extends Controller
         });
 
         $colors = Cache::remember('colors.all', now()->addDay(), function () {
-            return Color::all();
+            return Color::withCount(['variants' => function ($query) {
+                $query->whereHas('product', function ($q) {
+                    $q->where('is_active', true);
+                })->where('is_active', true);
+            }])->get();
         });
 
         $labels = Cache::remember('labels.active', now()->addHours(6), function () {
@@ -122,5 +130,56 @@ class ShopController extends Controller
         });
 
         return view('shop.category', compact('products', 'categories', 'category'));
+    }
+
+    public function searchSuggestions(Request $request)
+    {
+        $q = trim($request->get('q', ''));
+        $categoryId = $request->get('category_id');
+
+        $query = Product::active()
+            ->with(['images' => function ($q) {
+                $q->orderBy('sort_order')->limit(1);
+            }, 'category']);
+
+        if (! empty($categoryId)) {
+            $query->where('category_id', $categoryId);
+        }
+
+        if (! empty($q)) {
+            $query->search($q);
+        } else {
+            $query->latest();
+        }
+
+        $currencySymbol = Setting::currencySymbol();
+
+        $products = $query->limit(6)->get()->map(function ($p) use ($currencySymbol) {
+            return [
+                'id' => $p->id,
+                'name' => $p->name,
+                'slug' => $p->slug,
+                'category_name' => $p->category?->name ?? 'Streetwear',
+                'price' => $currencySymbol.number_format($p->effective_price, 2),
+                'original_price' => ($p->sale_price && $p->sale_price < $p->base_price) ? $currencySymbol.number_format($p->base_price, 2) : null,
+                'image' => $p->image_url,
+                'url' => route('product.show', $p->slug),
+            ];
+        });
+
+        $categories = Cache::remember('categories.search_api', now()->addHours(6), function () {
+            return Category::active()->sorted()->get(['id', 'name', 'slug']);
+        });
+
+        $labels = Cache::remember('labels.search_api', now()->addHours(6), function () {
+            return Label::active()->sorted()->get(['id', 'name', 'slug']);
+        });
+
+        return response()->json([
+            'query' => $q,
+            'products' => $products,
+            'categories' => $categories,
+            'labels' => $labels,
+        ]);
     }
 }

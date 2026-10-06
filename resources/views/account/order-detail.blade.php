@@ -1,4 +1,4 @@
-@extends("layouts.app")
+@extends("layouts.home")
 
 @section("title")
 Order #{{ $order->order_number }} - {{ config('app.name', 'Upsilon') }}
@@ -29,10 +29,10 @@ Order #{{ $order->order_number }} - {{ config('app.name', 'Upsilon') }}
                                         </div>
                                         <div class="flex-1">
                                             <h3 class="font-headline-md text-on-surface">{{ $item->variant->product->name }}</h3>
-                                            <p class="text-sm text-on-surface-variant mt-1">{{ $item->variant->color }} / {{ $item->variant->size }} x {{ $item->quantity }}</p>
+                                            <p class="text-sm text-on-surface-variant mt-1">{{ $item->variant->color?->name }} / {{ $item->variant->size?->name }} x {{ $item->quantity }}</p>
                                         </div>
                                         <div class="text-right">
-                                            <p class="font-medium">$ {{ number_format($item->subtotal, 0, '.', ',') }}</p>
+                                            <p class="font-medium">{{ currency_format($item->subtotal) }}</p>
                                         </div>
                                     </div>
                                 @endforeach
@@ -93,21 +93,21 @@ Order #{{ $order->order_number }} - {{ config('app.name', 'Upsilon') }}
                             <div class="px-8 py-6 space-y-2 text-sm">
                                 <div class="flex justify-between">
                                     <span class="text-on-surface-variant">Subtotal</span>
-                                    <span>$ {{ number_format($order->subtotal, 0, '.', ',') }}</span>
+                                    <span>{{ currency_format($order->subtotal) }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-on-surface-variant">Shipping</span>
-                                    <span>$ {{ number_format($order->shipping_cost, 0, '.', ',') }}</span>
+                                    <span>{{ currency_format($order->shipping_cost) }}</span>
                                 </div>
                                 @if($order->discount > 0)
                                     <div class="flex justify-between">
                                         <span class="text-on-surface-variant">Discount</span>
-                                        <span>-$ {{ number_format($order->discount, 0, '.', ',') }}</span>
+                                        <span>-{{ currency_format($order->discount) }}</span>
                                     </div>
                                 @endif
                                 <div class="flex justify-between pt-2 border-t border-outline-variant/40 font-semibold">
                                     <span>Total</span>
-                                    <span>$ {{ number_format($order->total, 0, '.', ',') }}</span>
+                                    <span>{{ currency_format($order->total) }}</span>
                                 </div>
                             </div>
                         </div>

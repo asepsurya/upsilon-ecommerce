@@ -12,6 +12,7 @@ use App\Models\PromoBanner;
 use App\Models\Slider;
 use App\Services\CartService;
 use App\Services\InstagramService;
+use Illuminate\Http\Request;
 
 class HomepageController extends Controller
 {
@@ -146,5 +147,59 @@ class HomepageController extends Controller
         }
 
         return view('home.discover-upsilon-style', compact('articlesList'));
+    }
+
+    public function storeLocator()
+    {
+        return view('home.store-locator');
+    }
+
+    public function downloadApp()
+    {
+        return view('home.download-app');
+    }
+
+    public function howToOrder()
+    {
+        return view('home.how-to-order');
+    }
+
+    public function flashSale()
+    {
+        $flashSale = FlashSale::active()->first();
+
+        $products = $flashSale
+            ? $flashSale->products()
+                ->active()
+                ->with([
+                    'images' => function ($q) {
+                        $q->orderBy('sort_order');
+                    },
+                    'category',
+                ])
+                ->paginate(12)
+            : null;
+
+        $flashSaleDeadline = $flashSale?->ends_at_timestamp ?? now()->addHours(20)->timestamp;
+
+        return view('home.flash-sale', compact('flashSale', 'products', 'flashSaleDeadline'));
+    }
+
+    public function instagramFeed(Request $request, InstagramService $instagramService)
+    {
+        $validated = $request->validate([
+            'limit' => ['nullable', 'integer', 'min:1', 'max:24'],
+            'after' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $page = $instagramService->getFormattedPostPage(
+            $validated['limit'] ?? 6,
+            $validated['after'] ?? null,
+        );
+
+        return response()->json([
+            'posts' => $page['posts'],
+            'next_cursor' => $page['next_cursor'],
+        ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Services\CartService;
+use App\Services\MidtransService;
 use App\Services\VoucherService;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class CheckoutController extends Controller
 {
     public function __construct(protected CartService $cartService, protected VoucherService $voucherService) {}
 
-    public function index(Request $request)
+    public function index(Request $request, MidtransService $midtransService)
     {
         $user = $request->user();
         $cart = $this->cartService->getCart($request);
@@ -35,24 +36,24 @@ class CheckoutController extends Controller
             'pos' => 'POS Indonesia',
             'other' => 'Other',
         ];
-        $paymentMethods = [
-            'bank_transfer' => 'Bank Transfer',
-            'virtual_account' => 'Virtual Account',
-            'e_wallet' => 'E-Wallet',
-            'qris' => 'QRIS',
-            'payment_gateway' => 'Payment Gateway',
-        ];
 
-        return view('checkout.index', compact('cart', 'addresses', 'couriers', 'paymentMethods'));
+        $checkoutMode = MidtransService::getCheckoutMode();
+        $paymentMethods = $this->getPaymentMethods($checkoutMode);
+
+        return view('checkout.index', compact('cart', 'addresses', 'couriers', 'paymentMethods', 'checkoutMode'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, MidtransService $midtransService)
     {
+        $checkoutMode = MidtransService::getCheckoutMode();
+
         $validated = $request->validate([
             'address_id' => 'required|exists:addresses,id',
             'shipping_courier' => 'required|string|max:255',
             'shipping_service' => 'nullable|string|max:255',
-            'payment_method' => 'required|string|in:bank_transfer,virtual_account,e_wallet,qris,payment_gateway',
+            'payment_method' => $checkoutMode === 'whatsapp'
+                ? 'nullable|string|max:255'
+                : 'required|string|in:'.$this->getAllowedPaymentMethods($checkoutMode),
             'notes' => 'nullable|string|max:1000',
             'voucher_code' => 'nullable|string|max:255',
         ]);
@@ -95,7 +96,7 @@ class CheckoutController extends Controller
             'user_id' => $user->id,
             'status' => 'pending',
             'payment_status' => 'pending',
-            'payment_method' => $validated['payment_method'],
+            'payment_method' => $validated['payment_method'] ?? 'whatsapp',
             'shipping_courier' => $validated['shipping_courier'],
             'shipping_service' => $validated['shipping_service'],
             'subtotal' => $subtotal,
@@ -133,13 +134,96 @@ class CheckoutController extends Controller
 
         Payment::create([
             'order_id' => $order->id,
-            'payment_method' => $validated['payment_method'],
+            'payment_method' => $validated['payment_method'] ?? 'whatsapp',
             'amount' => $total,
             'status' => 'pending',
         ]);
 
         $cart->items()->delete();
 
-        return redirect()->route('checkout.success', $order)->with('success', 'Order placed successfully');
+        // Handle based on selected payment method
+        if (($validated['payment_method'] ?? 'whatsapp') === 'whatsapp') {
+            return redirect()->route('checkout.whatsapp', $order);
+        }
+
+        // Midtrans mode - create snap token
+        $snapToken = $midtransService->createSnapToken($order);
+
+        if (! $snapToken) {
+            return redirect()->route('checkout.index')->with('error', 'Payment gateway is currently unavailable. Please try again.');
+        }
+
+        $order->update(['snap_token' => $snapToken]);
+
+        return view('checkout.midtrans', compact('order', 'snapToken'));
+    }
+
+    public function success(Order $order)
+    {
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $order->load(['items.product.images']);
+
+        return view('checkout.success', compact('order'));
+    }
+
+    public function whatsapp(Order $order)
+    {
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $order->load(['items.product.images']);
+
+        $whatsappNumber = MidtransService::getWhatsAppNumber();
+        $message = MidtransService::buildCheckoutMessage($order);
+
+        $whatsappUrl = 'https://wa.me/'.$whatsappNumber.'?text='.urlencode($message);
+
+        return view('checkout.whatsapp', compact('order', 'whatsappUrl', 'whatsappNumber'));
+    }
+
+    public function notification(Request $request, MidtransService $midtransService)
+    {
+        $result = $midtransService->handleNotification($request);
+
+        return response()->json($result);
+    }
+
+    /**
+     * Get payment methods based on checkout mode
+     */
+    private function getPaymentMethods(string $checkoutMode): array
+    {
+        $methods = [
+            'bank_transfer' => 'Bank Transfer',
+            'virtual_account' => 'Virtual Account',
+            'e_wallet' => 'E-Wallet',
+            'qris' => 'QRIS',
+            'payment_gateway' => 'Payment Gateway',
+        ];
+
+        if ($checkoutMode === 'whatsapp') {
+            return [
+                'whatsapp' => 'WhatsApp (Manual Confirmation)',
+            ];
+        }
+
+        if ($checkoutMode === 'midtrans') {
+            return $methods;
+        }
+
+        // both mode
+        return $methods + ['whatsapp' => 'WhatsApp (Manual Confirmation)'];
+    }
+
+    /**
+     * Get comma-separated allowed payment method keys for validation
+     */
+    private function getAllowedPaymentMethods(string $checkoutMode): string
+    {
+        return implode(',', array_keys($this->getPaymentMethods($checkoutMode)));
     }
 }

@@ -41,6 +41,20 @@
                         <td class="text-muted">{{ Str::limit($review->review, 50) }}</td>
                         <td>{{ $review->created_at->format('M d, Y') }}</td>
                         <td class="text-right">
+                            @if($review->is_approved)
+                                <span class="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium">
+                                    <span class="material-symbols-outlined text-base">check_circle</span>
+                                    Approved
+                                </span>
+                            @else
+                                <form method="POST" action="{{ route('admin.reviews.update', $review) }}" class="d-inline">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="is_approved" value="1">
+                                    <input type="hidden" name="rating" value="{{ $review->rating }}">
+                                    <button type="submit" class="admin-btn admin-btn-success admin-btn-sm">Approve</button>
+                                </form>
+                            @endif
                             <button type="button" class="admin-btn admin-btn-sm" onclick="document.getElementById('reply-form-{{ $review->id }}').classList.toggle('hidden')">Reply</button>
                             <form method="POST" action="{{ route('admin.reviews.destroy', $review) }}" class="d-inline" onsubmit="return confirm('Are you sure?')">
                                 @csrf

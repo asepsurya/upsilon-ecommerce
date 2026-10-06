@@ -153,11 +153,18 @@
                     </div>
                     <div class="admin-form-group">
                         <label class="admin-form-label">Base Price</label>
-                        <input type="number" name="base_price" value="{{ old('base_price', $product->base_price) }}" step="0.01" required class="admin-form-input">
+                        <div class="admin-input-group">
+                            <span class="admin-input-group-text font-semibold">{{ $siteSettings['currency_symbol'] ?: '$' }}</span>
+                            <input type="number" name="base_price" value="{{ old('base_price', $product->base_price) }}" step="0.01" min="0" required class="admin-form-input">
+                        </div>
                     </div>
                     <div class="admin-form-group">
                         <label class="admin-form-label">Sale Price</label>
-                        <input type="number" name="sale_price" value="{{ old('sale_price', $product->sale_price) }}" step="0.01" class="admin-form-input">
+                        <div class="admin-input-group">
+                            <span class="admin-input-group-text font-semibold">{{ $siteSettings['currency_symbol'] ?: '$' }}</span>
+                            <input type="number" name="sale_price" value="{{ old('sale_price', $product->sale_price) }}" step="0.01" min="0" class="admin-form-input">
+                        </div>
+                        <p class="admin-form-hint" style="margin-top: 4px; font-size: 0.8rem; color: hsl(var(--muted-foreground));">Leave empty to remove the discount</p>
                     </div>
                     <div class="admin-form-group">
                         <label class="admin-form-label">Description</label>
@@ -172,6 +179,24 @@
                         <div class="admin-form-group">
                             <label class="admin-form-label">Size Fit</label>
                             <input type="text" name="size_fit" value="{{ old('size_fit', $product->size_fit) }}" class="admin-form-input" placeholder="Contoh: Regular, Slim, Loose">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Edition</label>
+                            <input type="text" name="edition" value="{{ old('edition', $product->edition) }}" class="admin-form-input" placeholder="Contoh: Edition 01/50">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Subtitle</label>
+                            <input type="text" name="subtitle" value="{{ old('subtitle', $product->subtitle) }}" class="admin-form-input" placeholder="Contoh: Atelier Tailoring">
+                        </div>
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Bottom Label</label>
+                            <input type="text" name="bottom_label" value="{{ old('bottom_label', $product->bottom_label) }}" class="admin-form-input" placeholder="Contoh: Handcrafted in Italy">
                         </div>
                     </div>
 

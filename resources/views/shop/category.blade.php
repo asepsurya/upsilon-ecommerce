@@ -9,8 +9,6 @@
 @endsection
 
 @section("content")
-    @include('components.site-header')
-
     <main id="main-content">
 <section class="py-12 px-6 md:px-12 lg:px-24 bg-surface border-b border-outline-variant/40">
             <div class="max-w-7xl mx-auto">

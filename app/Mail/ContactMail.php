@@ -2,12 +2,12 @@
 
 namespace App\Mail;
 
+use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Mail\Mailables\Message;
 use Illuminate\Queue\SerializesModels;
 
-class ContactMail extends Message
+class ContactMail extends Mailable
 {
     use SerializesModels;
 

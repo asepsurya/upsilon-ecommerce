@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Order;
+use App\Models\Province;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -80,8 +81,11 @@ class AccountController extends Controller
     {
         $user = Auth::user();
         $recentOrders = $user->orders()->latest()->limit(5)->get();
+        $totalOrders = $user->orders()->count();
+        $totalSpent = $user->orders()->where('payment_status', 'paid')->sum('total');
+        $wishlistCount = $user->wishlist()->count();
 
-        return view('account.dashboard', compact('recentOrders'));
+        return view('account.dashboard', compact('recentOrders', 'totalOrders', 'totalSpent', 'wishlistCount'));
     }
 
     public function profile()
@@ -140,6 +144,7 @@ class AccountController extends Controller
     public function storeAddress(Request $request)
     {
         $validated = $request->validate([
+            'label' => 'required|string|max:50',
             'full_name' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
             'address' => 'required|string|max:500',
@@ -175,6 +180,7 @@ class AccountController extends Controller
         }
 
         $validated = $request->validate([
+            'label' => 'required|string|max:50',
             'full_name' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
             'address' => 'required|string|max:500',
@@ -217,5 +223,53 @@ class AccountController extends Controller
         ]);
 
         return back()->with('success', 'Password updated successfully');
+    }
+
+    public function showTrackOrder()
+    {
+        return view('account.track-order');
+    }
+
+    public function trackOrder(Request $request)
+    {
+        $validated = $request->validate([
+            'order_number' => 'required|string',
+            'email' => 'required|email',
+        ]);
+
+        $order = Order::where('order_number', $validated['order_number'])
+            ->where('email', $validated['email'])
+            ->with(['items.product.images', 'payments', 'shipments'])
+            ->first();
+
+        if (! $order) {
+            return back()->withErrors([
+                'order_number' => 'No order found with those details. Please check and try again.',
+            ])->onlyInput('order_number');
+        }
+
+        return view('account.track-order-detail', compact('order'));
+    }
+
+    public function showDeliverTo()
+    {
+        $provinces = Province::orderBy('name')->get();
+
+        return view('account.deliver-to', compact('provinces'));
+    }
+
+    public function updateDeliverTo(Request $request)
+    {
+        $validated = $request->validate([
+            'province_id' => 'required|exists:provinces,id',
+            'city_id' => 'nullable|exists:cities,id',
+        ]);
+
+        session([
+            'delivery_province_id' => $validated['province_id'],
+            'delivery_city_id' => $validated['city_id'],
+        ]);
+
+        return redirect()->route('shop')->with('success', 'Delivery location updated');
     }
 }

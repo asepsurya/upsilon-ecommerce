@@ -3,7 +3,6 @@
 @section('title', 'Forgot Password — ' . config('app.name', 'Upsilon'))
 
 @section('content')
-    <div class="auth-card">
 
         {{-- Icon --}}
         <div class="auth-anim auth-anim--1" style="margin-bottom:1.5rem;">
@@ -68,5 +67,4 @@
                 Back to sign in
             </a>
         </div>
-    </div>
-@endsection
+    @endsection

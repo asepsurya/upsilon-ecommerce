@@ -57,9 +57,9 @@ class ProductSeeder extends BaseSeeder
                 'is_featured' => true,
                 'is_bestseller' => false,
                 'sort_order' => 2,
-                'badge' => 'Runway SS25',
-                'edition' => 'Edition 14/40',
-                'subtitle' => 'Sartorial Master',
+                'badge' => 'Tailoring',
+                'edition' => null,
+                'subtitle' => null,
                 'bottom_label' => 'Includes Fitting',
                 'image' => 'storage/images/sample/prod-blazer.jpg',
                 'variants' => [

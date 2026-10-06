@@ -6,7 +6,7 @@
 @section('ogImage', asset('storage/images/upsilon/hero-banner.jpg'))
 
 @section('content')
-    @include('components.site-header')
+    @include('components.promo-bar')
 
     <section class="bg-white py-8 text-black" data-purpose="product-bundles">
         <div class="mx-auto max-w-7xl px-4 lg:px-8">
@@ -69,11 +69,11 @@
                                 <div class="flex items-center gap-3">
                                     @if($bundle->bundle_price)
                                         <span class="font-condensed text-xl text-black font-black">
-                                            ${{ number_format($bundle->bundle_price, 0) }}
+                                            {{ currency_format($bundle->bundle_price) }}
                                         </span>
                                         @if($bundle->original_price > 0)
                                             <span class="font-body-sm text-xs text-gray-500 line-through">
-                                                ${{ number_format($bundle->original_price, 0) }}
+                                                {{ currency_format($bundle->original_price) }}
                                             </span>
                                         @endif
                                     @endif
