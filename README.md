@@ -1,58 +1,291 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Upsilon Ecommerce
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, full-featured e-commerce platform built with Laravel 11. Designed for fashion/retail businesses with comprehensive admin management, multiple payment options, and modern frontend stack.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Customer-Facing
+- **Homepage** – Hero slider, flash sales, new arrivals, bundles, discover style section, Instagram feed
+- **Shop** – Category filtering, search suggestions, product listing with pagination
+- **Product Details** – Images, variants (size/color), reviews, related products, share functionality
+- **Shopping Cart** – Add/update/remove items, quantity management, guest cart merge on login
+- **Wishlist** – Save favorites, move to cart, authenticated persistence
+- **Checkout** – Multi-step flow, address management, voucher support, multiple payment methods
+- **Payments** – Midtrans (Indonesian payment gateway), WhatsApp direct order
+- **User Account** – Profile, order history, address book, password management, order tracking
+- **Authentication** – Email/password, Google OAuth, password reset, email verification
+- **Contact & Newsletter** – Contact form, newsletter subscription
+- **Store Locator** – Physical store locations
+- **Static Pages** – About, How to Order, Download App
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Admin Panel
+- **Dashboard** – Sales overview, recent orders, statistics
+- **Product Management** – CRUD, images (drag-drop, primary), variants (size/color), bulk actions
+- **Category Management** – Hierarchical categories, slugs, SEO fields
+- **Order Management** – View, status updates, tracking numbers, payment status
+- **Customer Management** – View, edit customer details
+- **Voucher System** – Create/edit coupons, usage limits, date ranges
+- **Reviews** – Moderate, reply, delete
+- **Bundles** – Product bundles with discount pricing
+- **Announcements** – Site-wide banners with scheduling
+- **Sliders** – Homepage carousel management
+- **Labels** – Product badges (New, Sale, Bestseller, etc.)
+- **Promo Banners** – Marketing banners with positioning
+- **Flash Sales** – Time-limited promotions with countdown
+- **Size Guides** – Category-specific sizing charts
+- **Settings** – Site configuration (WhatsApp, Instagram, SEO, etc.)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Tech Stack
 
-## Learning Laravel
+| Layer | Technology |
+|-------|------------|
+| **Backend** | Laravel 11, PHP 8.3+ |
+| **Database** | SQLite (default), MySQL/PostgreSQL supported |
+| **Frontend** | Blade templates, Tailwind CSS 4, Alpine.js, Vite |
+| **Images** | Intervention Image, WebP conversion (buglinjo/laravel-webp) |
+| **Payments** | Midtrans PHP SDK |
+| **Auth** | Laravel Socialite (Google OAuth) |
+| **Testing** | PHPUnit, Laravel Boost (AI-assisted development) |
+| **Code Style** | Laravel Pint |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Requirements
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP 8.3+
+- Composer 2+
+- Node.js 18+ & npm
+- SQLite (default) or MySQL/PostgreSQL
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Installation
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. Clone & Install Dependencies
 
 ```bash
-composer require laravel/boost --dev
+git clone <repository-url>
+cd upsilon-ecommerce
 
-php artisan boost:install
+# Install PHP dependencies
+composer install
+
+# Install JS dependencies
+npm install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Environment Setup
 
-## Contributing
+```bash
+# Copy environment file
+cp .env.example .env
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Generate application key
+php artisan key:generate
+```
 
-## Code of Conduct
+### 3. Configure `.env`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Edit `.env` with your settings:
 
-## Security Vulnerabilities
+```env
+# App
+APP_NAME="Upsilon Ecommerce"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Database (SQLite default - no config needed)
+# For MySQL/PostgreSQL:
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=upsilon_ecommerce
+DB_USERNAME=your_user
+DB_PASSWORD=your_password
+
+# Session & Cache (database by default)
+SESSION_DRIVER=database
+CACHE_STORE=database
+QUEUE_CONNECTION=database
+
+# Mail (log driver for local dev)
+MAIL_MAILER=log
+
+# WhatsApp Integration
+WHATSAPP_NUMBER=6281234567890
+WHATSAPP_DEFAULT_MESSAGE="Halo, saya tertarik dengan produk Anda."
+
+# Instagram Feed (optional)
+INSTAGRAM_ACCESS_TOKEN=
+INSTAGRAM_ACCOUNT_ID=
+INSTAGRAM_USERNAME=
+
+# Google OAuth (optional)
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REDIRECT_URI="${APP_URL}/auth/google/callback"
+
+# Midtrans Payment (optional - for production)
+MIDTRANS_SERVER_KEY=
+MIDTRANS_CLIENT_KEY=
+MIDTRANS_IS_PRODUCTION=false
+MIDTRANS_IS_SANITIZED=true
+MIDTRANS_IS_3DS=true
+```
+
+### 4. Database Setup
+
+```bash
+# Run migrations
+php artisan migrate
+
+# Seed database (categories, products, settings, etc.)
+php artisan db:seed
+```
+
+### 5. Build Assets
+
+```bash
+# Development (with hot reload)
+npm run dev
+
+# Production build
+npm run build
+```
+
+### 6. Start Development Server
+
+```bash
+# Option 1: All-in-one (Laravel + Vite)
+composer run dev
+
+# Option 2: Separate terminals
+# Terminal 1:
+php artisan serve
+# Terminal 2:
+npm run dev
+```
+
+Visit `http://localhost:8000`
+
+## Quick Setup (One Command)
+
+```bash
+composer run setup
+```
+
+This runs: `composer install` → `.env` copy → `key:generate` → `migrate` → `npm install` → `npm run build`
+
+## Admin Access
+
+After seeding, login at `/login` with:
+- **Email:** `admin@upsilon.com`
+- **Password:** `password`
+
+Or create a user and assign admin role in database:
+```sql
+UPDATE users SET is_admin = 1 WHERE email = 'your@email.com';
+```
+
+## Project Structure
+
+```
+app/
+├── Http/Controllers/
+│   ├── Admin/          # Admin panel controllers
+│   ├── Auth/           # Authentication controllers
+│   ├── AccountController.php
+│   ├── CartController.php
+│   ├── CheckoutController.php
+│   ├── HomepageController.php
+│   ├── ProductController.php
+│   └── ShopController.php
+├── Models/             # Eloquent models
+├── Policies/           # Authorization policies
+└── Providers/          # Service providers
+
+database/
+├── migrations/         # Schema migrations
+├── seeders/            # Data seeders
+└── factories/          # Model factories
+
+resources/views/
+├── admin/              # Admin panel views
+├── components/         # Reusable Blade components
+├── home/               # Homepage sections
+├── shop/               # Shop/category pages
+├── product/            # Product detail
+├── cart/               # Shopping cart
+├── checkout/           # Checkout flow
+├── account/            # User dashboard
+└── layouts/            # Base layouts
+
+routes/
+├── web.php             # Web routes
+├── api.php             # API routes
+└── console.php         # Artisan commands
+```
+
+## Key Commands
+
+```bash
+# Testing
+php artisan test                    # Run all tests
+php artisan test --filter=ProductTest
+
+# Code Style
+vendor/bin/pint                     # Fix code style
+vendor/bin/pint --test              # Check only
+
+# Database
+php artisan migrate:fresh --seed    # Reset & reseed
+php artisan make:migration name     # New migration
+php artisan make:seeder name        # New seeder
+
+# Cache
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan optimize:clear
+
+# Storage Link (for product images)
+php artisan storage:link
+```
+
+## Deployment
+
+### Laravel Cloud (Recommended)
+```bash
+# Install Laravel Cloud CLI
+composer global require laravel/cloud-cli
+
+# Deploy
+cloud deploy
+```
+
+### Traditional VPS
+1. Set `APP_ENV=production`, `APP_DEBUG=false`
+2. Configure production database
+3. Set secure `APP_KEY`
+4. Configure mail driver (SMTP)
+5. Set up SSL/HTTPS
+6. Run: `php artisan config:cache && php artisan route:cache && php artisan view:cache`
+7. Set up queue worker: `php artisan queue:work --daemon`
+8. Set up scheduler: `* * * * * php /path/to/artisan schedule:run`
+
+## Environment Variables Reference
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `APP_KEY` | Yes | Application encryption key |
+| `DB_*` | Yes* | Database connection (*SQLite needs only DB_CONNECTION) |
+| `WHATSAPP_NUMBER` | Yes | WhatsApp business number for orders |
+| `MIDTRANS_*` | No | Payment gateway credentials |
+| `GOOGLE_*` | No | OAuth credentials |
+| `INSTAGRAM_*` | No | Instagram Graph API for feed |
+| `MAIL_*` | Yes* | Email delivery (*required for password reset) |
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT License - see LICENSE file for details.
+
+---
+
+**Upsilon Ecommerce** - Built with Laravel 11 & ❤️
