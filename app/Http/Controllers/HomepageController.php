@@ -7,6 +7,7 @@ use App\Models\Bundle;
 use App\Models\Category;
 use App\Models\FlashSale;
 use App\Models\Label;
+use App\Models\Material;
 use App\Models\Product;
 use App\Models\PromoBanner;
 use App\Models\Slider;
@@ -18,7 +19,7 @@ class HomepageController extends Controller
 {
     public function index(CartService $cartService, InstagramService $instagramService)
     {
-        $categories = Category::active()->sorted()->limit(6)->get();
+        $categories = Category::sorted()->limit(6)->get();
 
         $products = Product::active()
             ->with(['images' => function ($q) {
@@ -51,6 +52,8 @@ class HomepageController extends Controller
 
         $promoBanners = PromoBanner::active()->get();
 
+        $materials = Material::active()->get();
+
         $flashSale = FlashSale::active()->first();
 
         $flashSaleDeadline = $flashSale?->ends_at_timestamp ?? now()->addHours(20)->timestamp;
@@ -82,7 +85,7 @@ class HomepageController extends Controller
         $announcements = Announcement::active()->get();
 
         return view('home.index', compact(
-            'categories', 'featuredProducts', 'products', 'newArrivals', 'bundles', 'articles', 'sliders', 'flashSale', 'flashSaleDeadline', 'flashSaleProducts', 'promoBanners', 'limitedPairsList', 'topPicksList', 'labels', 'announcements'
+            'categories', 'featuredProducts', 'products', 'newArrivals', 'bundles', 'articles', 'sliders', 'flashSale', 'flashSaleDeadline', 'flashSaleProducts', 'promoBanners', 'materials', 'limitedPairsList', 'topPicksList', 'labels', 'announcements'
         ));
     }
 

@@ -9,6 +9,7 @@ use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Label;
+use App\Models\Material;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -600,6 +601,14 @@ class AdminController extends Controller
         Cache::forget('categories.active');
 
         return back()->with('success', 'Category deleted successfully');
+    }
+
+    public function toggleCategory(Category $category)
+    {
+        $category->update(['is_active' => ! $category->is_active]);
+        Cache::forget('categories.active');
+
+        return back()->with('success', 'Category status updated successfully');
     }
 
     public function orders(Request $request)
@@ -1275,6 +1284,93 @@ class AdminController extends Controller
         $promoBanner->update(['is_active' => ! $promoBanner->is_active]);
 
         return back()->with('success', 'Promo banner status updated successfully');
+    }
+
+    public function materials()
+    {
+        $materials = Material::sorted()->paginate(20);
+
+        return view('admin.materials.index', compact('materials'));
+    }
+
+    public function createMaterial()
+    {
+        return view('admin.materials.create');
+    }
+
+    public function storeMaterial(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
+            'link' => 'nullable|url|max:255',
+            'link_text' => 'nullable|string|max:100',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'materials');
+        }
+
+        Material::create($validated);
+
+        return redirect()->route('admin.materials.index')->with('success', 'Material created successfully');
+    }
+
+    public function editMaterial(Material $material)
+    {
+        return view('admin.materials.edit', compact('material'));
+    }
+
+    public function updateMaterial(Request $request, Material $material)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
+            'link' => 'nullable|url|max:255',
+            'link_text' => 'nullable|string|max:100',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            if ($material->image && str_starts_with($material->image, 'materials/')) {
+                Storage::disk('public')->delete($material->image);
+            }
+
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'materials');
+        }
+
+        $material->update($validated);
+
+        return redirect()->route('admin.materials.index')->with('success', 'Material updated successfully');
+    }
+
+    public function deleteMaterial(Material $material)
+    {
+        if ($material->image && str_starts_with($material->image, 'materials/')) {
+            Storage::disk('public')->delete($material->image);
+        }
+
+        $material->delete();
+
+        return back()->with('success', 'Material deleted successfully');
+    }
+
+    public function toggleMaterial(Material $material)
+    {
+        $material->update(['is_active' => ! $material->is_active]);
+
+        return back()->with('success', 'Material status updated successfully');
     }
 
     public function sizeGuides()

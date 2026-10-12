@@ -42,6 +42,7 @@ class DatabaseSeeder extends BaseSeeder
         DB::table('sliders')->truncate();
         DB::table('flash_sales')->truncate();
         DB::table('promo_banners')->truncate();
+        DB::table('materials')->truncate();
         DB::table('labels')->truncate();
         DB::table('announcements')->truncate();
         DB::table('settings')->truncate();
@@ -62,6 +63,7 @@ class DatabaseSeeder extends BaseSeeder
             SliderSeeder::class,
             FlashSaleSeeder::class,
             PromoBannerSeeder::class,
+            MaterialSeeder::class,
             LabelSeeder::class,
             SettingSeeder::class,
             BundleSeeder::class,

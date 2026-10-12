@@ -85,6 +85,11 @@
                 <span class="nav-icon material-symbols-outlined text-lg">view_carousel</span>
                 Promo Banners
             </a>
+            <a href="{{ route('admin.materials.index') }}"
+                class="admin-sidebar-nav-item {{ request()->routeIs('admin.materials*') ? 'active' : '' }}">
+                <span class="nav-icon material-symbols-outlined text-lg">texture</span>
+                Materials
+            </a>
             <a href="{{ route('admin.reviews.index') }}"
                 class="admin-sidebar-nav-item {{ request()->routeIs('admin.reviews*') ? 'active' : '' }}">
                 <span class="nav-icon material-symbols-outlined text-lg">star</span>

@@ -49,8 +49,13 @@
     // --- 4. Slider fallback ---
     $sliderList = $sliders->isNotEmpty() ? $sliders : collect([
         (object) [
+            'title' => 'Upsilon',
+            'heading' => 'King of Trainers',
+            'description' => 'Sneakers, clothing, and accessories from Nike, adidas, New Balance, Puma, and more.',
             'image_url' => asset('storage/images/upsilon/hero-banner.jpg'),
             'image_mobile_url' => asset('storage/images/upsilon/hero-banner.jpg'),
+            'link' => route('shop'),
+            'link_text' => 'Shop Now',
         ],
     ]);
 
@@ -280,10 +285,60 @@
             </div>
         </section>
         @endif
+         {{-- ============================================================
+        10. THE BRANDS YOU LOVE
+        ============================================================ --}}
+        <section class="py-8 text-white" aria-labelledby="brands-heading">
+            <div class="mx-auto max-w-7xl px-4 lg:px-8">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 id="brands-heading" class="text-2xl font-condensed font-black tracking-wide md:text-3xl" style="
+    color: black;
+">
+                        Top Upsilon Bundle
+                    </h2>
+                    <a href="{{ route('bundles') }}"
+                        class="text-xs font-bold uppercase tracking-wider hover:underline">View All</a>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+                    @foreach ($bundles as $bundle)
+                        <button type="button" class="bundle-card group block w-full text-left" data-bundle-id="{{ $bundle->id }}">
+                            <div class="relative aspect-square w-full overflow-hidden rounded shadow">
+                                @if($bundle->thumbnail)
+                                    <img src="{{ asset('storage/' . $bundle->thumbnail) }}" alt="{{ $bundle->name }}"
+                                        loading="lazy"
+                                        class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
+                                @else
+                                    <img src="https://placehold.co/600x600/1E2125/FFFFFF?text={{ urlencode($bundle->name) }}"
+                                        alt="{{ $bundle->name }}" loading="lazy"
+                                        class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
+                                @endif
+                                @if($bundle->discount_percent > 0)
+                                    <div
+                                        class="absolute top-3 left-3 bg-brand-yellow text-black px-2 py-1 font-condensed text-[10px] uppercase tracking-wider rounded">
+                                        Save {{ $bundle->discount_percent }}%
+                                    </div>
+                                @endif
+                                <div
+                                    class="absolute bottom-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-sm">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        aria-hidden="true">
+                                        <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3 class="mt-2 text-xs font-bold uppercase tracking-wider">{{ $bundle->name }}</h3>
+                        </button>
+                    @endforeach
+                </div>
+            </div>
+        </section>
 
         {{-- ============================================================
         6. SHOP BY LABELS
         ============================================================ --}}
+         @if($labels->isNotEmpty())
         <section class="bg-white py-8 text-neutral-900" aria-labelledby="labels-heading">
             <div class="mx-auto max-w-7xl px-4 lg:px-8">
                 <div class="mb-4 flex items-center justify-between">
@@ -309,12 +364,10 @@
                     @endforeach
                 </div>
 
-                @if($labels->isEmpty())
-                    <p class="text-center text-gray-400 text-sm">No labels available yet.</p>
-                @endif
+             
             </div>
         </section>
-
+        @endif
         {{-- ============================================================
         7. SHOP BY CATEGORY
         ============================================================ --}}
@@ -327,26 +380,131 @@
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
                     @foreach ($categoriesList as $category)
                         @php
+                            $isLocked = isset($category->is_active) && ! $category->is_active;
                             $categoryUrl = isset($category->id)
                                 ? route('shop.category', $category->slug)
                                 : route('shop');
                         @endphp
                         <div class="flex flex-col">
-                            <a href="{{ $categoryUrl }}" class="group block">
+                            <a href="{{ $categoryUrl }}" class="group block" @if($isLocked) aria-label="{{ $category->name }} - coming soon" @endif>
                                 <div class="relative aspect-[3/4] w-full overflow-hidden rounded shadow-lg">
                                     <img src="{{ $category->image_url }}" alt="Category {{ $category->name }}" loading="lazy"
-                                        class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105">
+                                        class="h-full w-full object-cover object-center transition-transform duration-500 {{ $isLocked ? 'grayscale opacity-50' : 'group-hover:scale-105' }}">
                                     <div
                                         class="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/80 via-transparent to-transparent pb-8">
                                         <h3 class="font-impact text-3xl tracking-wider text-white md:text-4xl">
                                             {{ strtoupper($category->name) }}
                                         </h3>
                                     </div>
+                                    @if($isLocked)
+                                        <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/50">
+                                            <span class="rounded bg-brand-yellow px-3 py-1 font-condensed text-xs font-bold uppercase tracking-wider text-black">
+                                                Coming Soon
+                                            </span>
+                                            <span class="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-white/90">
+                                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                                    <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                </svg>
+                                                Locked
+                                            </span>
+                                        </div>
+                                    @endif
                                 </div>
                             </a>
                         </div>
                     @endforeach
                 </div>
+            </div>
+        </section>
+
+        {{-- ============================================================
+        7B. MATERIAL SPOTLIGHT (SLIDER)
+        ============================================================ --}}
+        @php
+            $fallbackMaterials = collect([
+                [
+                    'title' => 'Premium Leather',
+                    'subtitle' => 'Crafted to Last',
+                    'description' => 'Full-grain leather that molds to your feet over time. Durable, breathable, and always in style — built for daily wear.',
+                    'image' => 'material-leather.jpg',
+                    'link_text' => 'Shop Leather',
+                ],
+                [
+                    'title' => 'Engineered Mesh',
+                    'subtitle' => 'Breathe Easy',
+                    'description' => 'Lightweight engineered mesh keeps your feet cool on the move. Flexible, airy, and perfect for warm days.',
+                    'image' => 'material-mesh.jpg',
+                    'link_text' => 'Shop Mesh',
+                ],
+                [
+                    'title' => 'Knit & Textile',
+                    'subtitle' => 'Flexible Fit',
+                    'description' => 'Soft knit uppers wrap around your foot for a sock-like feel. Stretch where you need it, support where it counts.',
+                    'image' => 'material-knit.jpg',
+                    'link_text' => 'Shop Knit',
+                ],
+                [
+                    'title' => 'Classic Suede',
+                    'subtitle' => 'Retro Touch',
+                    'description' => 'Timeless suede with a velvety finish. A premium texture that instantly upgrades any casual outfit.',
+                    'image' => 'material-suede.jpg',
+                    'link_text' => 'Shop Suede',
+                ],
+            ])->map(function ($m) {
+                return (object) array_merge($m, [
+                    'image_url' => asset('storage/images/upsilon/' . $m['image']),
+                    'link' => route('shop'),
+                ]);
+            });
+
+            $materialSlides = $materials->isNotEmpty() ? $materials : $fallbackMaterials;
+        @endphp
+
+        <section class="bg-white py-12" aria-labelledby="materials-heading">
+            <div class="mx-auto max-w-7xl px-4 lg:px-8">
+                <div class="mb-6 flex items-center justify-between">
+                    <h2 id="materials-heading" class="text-2xl font-condensed font-black tracking-wide md:text-3xl">
+                        Material Spotlight
+                    </h2>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="material-prev" aria-label="Previous material"
+                            class="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-800 transition hover:bg-neutral-100">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg>
+                        </button>
+                        <button type="button" id="material-next" aria-label="Next material"
+                            class="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-800 transition hover:bg-neutral-100">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="material-slider" class="overflow-hidden" aria-roledescription="carousel" aria-label="Material spotlight">
+                    <div id="material-track" class="flex transition-transform duration-500 ease-in-out">
+                        @foreach ($materialSlides as $mIndex => $material)
+                            <div class="w-full flex-shrink-0" role="group" aria-roledescription="slide" aria-label="{{ $mIndex + 1 }} of {{ $materialSlides->count() }}">
+                                <div class="grid items-center gap-6 md:grid-cols-2 md:gap-10">
+                                    <div class="relative aspect-[4/3] w-full overflow-hidden rounded shadow">
+                                        <img src="{{ $material->image_url ?: 'https://placehold.co/800x600/1E2125/FFFFFF?text=' . urlencode($material->title) }}" alt="{{ $material->title }} material"
+                                            loading="lazy"
+                                            class="h-full w-full object-cover object-center transition duration-500 hover:scale-[1.03]">
+                                    </div>
+                                    <div class="px-2 md:px-0">
+                                        <span class="text-xs font-bold uppercase tracking-wider text-[#F25C19]">{{ $material->subtitle }}</span>
+                                        <h3 class="mt-2 font-impact text-3xl tracking-wider md:text-5xl">{{ $material->title }}</h3>
+                                        <p class="mt-4 max-w-md text-sm leading-relaxed text-neutral-600 md:text-base">{{ $material->description }}</p>
+                                        <a href="{{ $material->link ?? '#' }}"
+                                            class="mt-6 inline-block bg-black px-6 py-2.5 font-condensed text-xs font-bold tracking-wider text-white transition hover:bg-neutral-800">
+                                            {{ $material->link_text ?? 'Shop Now' }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Dot indicators (generated by JavaScript) --}}
+                <div id="material-dots" class="mt-6 flex items-center justify-center gap-2"></div>
             </div>
         </section>
 
@@ -413,54 +571,7 @@
             </section>
         @endif
 
-        {{-- ============================================================
-        10. THE BRANDS YOU LOVE
-        ============================================================ --}}
-        <section class="bg-[#F25C19] py-8 text-white" aria-labelledby="brands-heading">
-            <div class="mx-auto max-w-7xl px-4 lg:px-8">
-                <div class="mb-4 flex items-center justify-between">
-                    <h2 id="brands-heading" class="text-2xl font-condensed font-black tracking-wide md:text-3xl">
-                        Top Upsilon Bundle
-                    </h2>
-                    <a href="{{ route('bundles') }}"
-                        class="text-xs font-bold uppercase tracking-wider hover:underline">View All</a>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
-                    @foreach ($bundles as $bundle)
-                        <button type="button" class="bundle-card group block w-full text-left" data-bundle-id="{{ $bundle->id }}">
-                            <div class="relative aspect-square w-full overflow-hidden rounded shadow">
-                                @if($bundle->thumbnail)
-                                    <img src="{{ asset('storage/' . $bundle->thumbnail) }}" alt="{{ $bundle->name }}"
-                                        loading="lazy"
-                                        class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
-                                @else
-                                    <img src="https://placehold.co/600x600/1E2125/FFFFFF?text={{ urlencode($bundle->name) }}"
-                                        alt="{{ $bundle->name }}" loading="lazy"
-                                        class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
-                                @endif
-                                @if($bundle->discount_percent > 0)
-                                    <div
-                                        class="absolute top-3 left-3 bg-brand-yellow text-black px-2 py-1 font-condensed text-[10px] uppercase tracking-wider rounded">
-                                        Save {{ $bundle->discount_percent }}%
-                                    </div>
-                                @endif
-                                <div
-                                    class="absolute bottom-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-sm">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                        aria-hidden="true">
-                                        <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <h3 class="mt-2 text-xs font-bold uppercase tracking-wider">{{ $bundle->name }}</h3>
-                        </button>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-
+       
 {{-- ============================================================
         11. DISCOVER JD STYLE (EDITORIAL)
         ============================================================ --}}
@@ -834,6 +945,76 @@
                     promoIndex = (promoIndex + 1) % promoTotal;
                     updatePromo();
                 });
+            }
+
+            /* =====================================================
+               6. MATERIAL SLIDER
+               ===================================================== */
+            var materialTrack = document.getElementById('material-track');
+            var materialPrev = document.getElementById('material-prev');
+            var materialNext = document.getElementById('material-next');
+            var materialDotsBox = document.getElementById('material-dots');
+
+            if (materialTrack && materialPrev && materialNext) {
+                var materialSlides = materialTrack.children;
+                var materialTotal = materialSlides.length;
+                var materialIndex = 0;
+                var materialDots = [];
+
+                function updateMaterial() {
+                    materialTrack.style.transform = 'translateX(-' + (materialIndex * 100) + '%)';
+                    materialDots.forEach(function (dot, i) {
+                        dot.classList.toggle('bg-black', i === materialIndex);
+                        dot.classList.toggle('w-6', i === materialIndex);
+                        dot.classList.toggle('bg-gray-300', i !== materialIndex);
+                        dot.classList.toggle('w-2.5', i !== materialIndex);
+                    });
+                }
+
+                if (materialDotsBox) {
+                    for (var mi = 0; mi < materialTotal; mi++) {
+                        (function (idx) {
+                            var dot = document.createElement('button');
+                            dot.type = 'button';
+                            dot.className = 'h-2.5 w-2.5 rounded-full bg-gray-300 transition-all duration-300';
+                            dot.setAttribute('aria-label', 'Go to material ' + (idx + 1));
+                            dot.addEventListener('click', function () {
+                                materialIndex = idx;
+                                updateMaterial();
+                            });
+                            materialDotsBox.appendChild(dot);
+                            materialDots.push(dot);
+                        })(mi);
+                    }
+                }
+
+                materialPrev.addEventListener('click', function () {
+                    materialIndex = (materialIndex - 1 + materialTotal) % materialTotal;
+                    updateMaterial();
+                });
+
+                materialNext.addEventListener('click', function () {
+                    materialIndex = (materialIndex + 1) % materialTotal;
+                    updateMaterial();
+                });
+
+                // Touch swipe support
+                var materialStartX = 0;
+                materialTrack.addEventListener('touchstart', function (e) {
+                    materialStartX = e.touches[0].clientX;
+                }, { passive: true });
+                materialTrack.addEventListener('touchend', function (e) {
+                    var diff = e.changedTouches[0].clientX - materialStartX;
+                    if (diff < -50) {
+                        materialIndex = (materialIndex + 1) % materialTotal;
+                        updateMaterial();
+                    } else if (diff > 50) {
+                        materialIndex = (materialIndex - 1 + materialTotal) % materialTotal;
+                        updateMaterial();
+                    }
+                });
+
+                updateMaterial();
             }
         });
     </script>

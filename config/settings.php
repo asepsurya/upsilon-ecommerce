@@ -79,7 +79,7 @@ return [
                     'label' => 'Email Kontak',
                     'type' => 'email',
                     'placeholder' => 'cs@tokoanda.com',
-                    'hint' => 'Alamat email yang tampil pada halaman kontak dan footer.',
+                    'hint' => 'Alamat email penerima pesan dari form kontak. Ditampilkan di halaman kontak dan footer.',
                     'rules' => 'nullable|email|max:255',
                 ],
                 'contact_phone' => [

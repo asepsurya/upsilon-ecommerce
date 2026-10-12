@@ -140,6 +140,7 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/categories/{category}/edit', [AdminController::class, 'editCategory'])->name('admin.categories.edit');
     Route::patch('/categories/{category}', [AdminController::class, 'updateCategory'])->name('admin.categories.update');
     Route::delete('/categories/{category}', [AdminController::class, 'deleteCategory'])->name('admin.categories.destroy');
+    Route::post('/categories/{category}/toggle', [AdminController::class, 'toggleCategory'])->name('admin.categories.toggle');
 
     // Orders
     Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders.index');
@@ -210,6 +211,15 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::put('/promo-banners/{promoBanner}', [AdminController::class, 'updatePromoBanner'])->name('admin.promo-banners.update');
     Route::delete('/promo-banners/{promoBanner}', [AdminController::class, 'deletePromoBanner'])->name('admin.promo-banners.destroy');
     Route::post('/promo-banners/{promoBanner}/toggle', [AdminController::class, 'togglePromoBanner'])->name('admin.promo-banners.toggle');
+
+    // Materials
+    Route::get('/materials', [AdminController::class, 'materials'])->name('admin.materials.index');
+    Route::get('/materials/create', [AdminController::class, 'createMaterial'])->name('admin.materials.create');
+    Route::post('/materials', [AdminController::class, 'storeMaterial'])->name('admin.materials.store');
+    Route::get('/materials/{material}/edit', [AdminController::class, 'editMaterial'])->name('admin.materials.edit');
+    Route::put('/materials/{material}', [AdminController::class, 'updateMaterial'])->name('admin.materials.update');
+    Route::delete('/materials/{material}', [AdminController::class, 'deleteMaterial'])->name('admin.materials.destroy');
+    Route::post('/materials/{material}/toggle', [AdminController::class, 'toggleMaterial'])->name('admin.materials.toggle');
 
     // Flash Sales
     Route::get('/flash-sales', [FlashSaleController::class, 'index'])->name('admin.flash-sales.index');

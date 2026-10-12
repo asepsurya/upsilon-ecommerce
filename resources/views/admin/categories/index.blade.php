@@ -21,6 +21,7 @@
                     <th>Name</th>
                     <th>Slug</th>
                     <th>Products</th>
+                    <th>Status</th>
                     <th class="text-right">Actions</th>
                 </tr>
             </thead>
@@ -37,8 +38,21 @@
                         <td>
                             <span class="admin-badge admin-badge-info">{{ $category->products_count ?? 0 }}</span>
                         </td>
+                        <td>
+                            @if($category->is_active)
+                                <span class="admin-badge admin-badge-success">Active</span>
+                            @else
+                                <span class="admin-badge admin-badge-danger">Inactive</span>
+                            @endif
+                        </td>
                         <td class="text-right">
                             <a href="{{ route('admin.categories.edit', $category) }}" class="admin-btn admin-btn-secondary admin-btn-sm">Edit</a>
+                            <form method="POST" action="{{ route('admin.categories.toggle', $category) }}" class="d-inline">
+                                @csrf
+                                <button type="submit" class="admin-btn admin-btn-{{ $category->is_active ? 'warning' : 'success' }} admin-btn-sm">
+                                    {{ $category->is_active ? 'Deactivate' : 'Activate' }}
+                                </button>
+                            </form>
                             <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" class="d-inline" onsubmit="return confirm('Are you sure?')">
                                 @csrf
                                 @method('DELETE')

@@ -117,6 +117,10 @@ class ShopController extends Controller
 
     public function category(Category $category)
     {
+        if (! $category->is_active) {
+            return view('shop.category-coming-soon', compact('category'));
+        }
+
         $products = Product::active()
             ->byCategory($category->id)
             ->with(['images' => function ($q) {

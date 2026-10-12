@@ -10,26 +10,28 @@
 @endphp
 
 {{-- Promo Bar --}}
-<div class="border-y border-yellow-400 bg-brand-yellow font-bold uppercase tracking-tight text-black overflow-hidden"
-    role="region" aria-label="Promo berjalan">
-    <div class="mx-auto max-w-7xl px-4 py-2 lg:px-8">
-        <div class="flex items-center gap-x-4 whitespace-nowrap text-[10px] animate-promo-scroll">
-            @foreach ($promoBarItems as $promo)
-                <span class="flex items-center gap-1.5 shrink-0">
-                    <span>{{ $promo[0] }}</span>
-                    <span class="text-[8px] font-medium">—</span>
-                    <span>{{ $promo[1] }}</span>
-                </span>
-                <span class="text-gray-500 shrink-0" aria-hidden="true">|</span>
-            @endforeach
-            @foreach ($promoBarItems as $promo)
-                <span class="flex items-center gap-1.5 shrink-0">
-                    <span>{{ $promo[0] }}</span>
-                    <span class="text-[8px] font-medium">—</span>
-                    <span>{{ $promo[1] }}</span>
-                </span>
-                <span class="text-gray-500 shrink-0" aria-hidden="true">|</span>
-            @endforeach
+@if (!empty($promoBarItems) && count($promoBarItems) > 0)
+    <div class="border-y border-yellow-400 bg-brand-yellow font-bold uppercase tracking-tight text-black overflow-hidden"
+        role="region" aria-label="Promo berjalan">
+        <div class="mx-auto max-w-7xl px-4 py-2 lg:px-8">
+            <div class="flex items-center gap-x-4 whitespace-nowrap text-[10px] animate-promo-scroll">
+                @foreach ($promoBarItems as $promo)
+                    <span class="flex items-center gap-1.5 shrink-0">
+                        <span>{{ $promo[0] }}</span>
+                        <span class="text-[8px] font-medium">—</span>
+                        <span>{{ $promo[1] }}</span>
+                    </span>
+                    <span class="text-gray-500 shrink-0" aria-hidden="true">|</span>
+                @endforeach
+                @foreach ($promoBarItems as $promo)
+                    <span class="flex items-center gap-1.5 shrink-0">
+                        <span>{{ $promo[0] }}</span>
+                        <span class="text-[8px] font-medium">—</span>
+                        <span>{{ $promo[1] }}</span>
+                    </span>
+                    <span class="text-gray-500 shrink-0" aria-hidden="true">|</span>
+                @endforeach
+            </div>
         </div>
     </div>
-</div>
+@endif
