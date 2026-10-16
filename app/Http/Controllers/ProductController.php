@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bundle;
 use App\Models\Product;
 use App\Models\ProductView;
 use App\Models\SizeGuide;
@@ -35,7 +36,8 @@ class ProductController extends Controller
             ->where('id', '!=', $product->id)
             ->with(['images' => function ($q) {
                 $q->orderBy('sort_order');
-            }])
+            }, 'category', 'labels'])
+            ->withCount('activeVariants')
             ->limit(4)
             ->get();
 
@@ -47,8 +49,23 @@ class ProductController extends Controller
             ->orderBy('size_label')
             ->get();
 
+        $bundles = Bundle::active()
+            ->sorted()
+            ->with([
+                'items' => function ($q) {
+                    $q->orderBy('id');
+                },
+                'items.product.images' => function ($q) {
+                    $q->orderBy('sort_order');
+                },
+                'manualItems' => function ($q) {
+                    $q->orderBy('sort_order');
+                },
+            ])
+            ->get();
+
         return view('product.show', compact(
-            'product', 'related', 'recentlyViewed', 'sizeGuides'
+            'product', 'related', 'recentlyViewed', 'sizeGuides', 'bundles'
         ));
     }
 
@@ -93,7 +110,8 @@ class ProductController extends Controller
             ->where('id', '!=', $current->id)
             ->with(['images' => function ($q) {
                 $q->orderBy('sort_order');
-            }])
+            }, 'category', 'labels'])
+            ->withCount('activeVariants')
             ->limit(4)
             ->get();
     }

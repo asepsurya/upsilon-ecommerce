@@ -31,6 +31,7 @@
                     <th style="width: 60px;">Thumbnail</th>
                     <th>Name</th>
                     <th>Slug</th>
+                    <th>Type</th>
                     <th>Bundle Price</th>
                     <th>Products</th>
                     <th>Status</th>
@@ -49,6 +50,27 @@
                         </td>
                         <td class="font-medium">{{ $bundle->name }}</td>
                         <td>{{ $bundle->slug }}</td>
+                        <td>
+                            @php
+                                $typeLabels = [
+                                    'catalog' => 'Catalog',
+                                    'manual' => 'Manual',
+                                    'mixed' => 'Mixed',
+                                ];
+                                $typeColors = [
+                                    'catalog' => 'admin-badge-info',
+                                    'manual' => 'admin-badge-warning',
+                                    'mixed' => 'admin-badge-purple',
+                                ];
+                            @endphp
+                            @if($bundle->bundle_type)
+                                <span class="admin-badge {{ $typeColors[$bundle->bundle_type] ?? 'admin-badge-secondary' }}">
+                                    {{ $typeLabels[$bundle->bundle_type] ?? ucfirst($bundle->bundle_type) }}
+                                </span>
+                            @else
+                                <span class="admin-badge admin-badge-secondary">Catalog</span>
+                            @endif
+                        </td>
                         <td>{{ $bundle->bundle_price ? currency_format($bundle->bundle_price) : '—' }}</td>
                         <td>{{ $bundle->items_count }}</td>
                         <td>

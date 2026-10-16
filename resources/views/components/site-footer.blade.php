@@ -57,17 +57,6 @@
                 </ul>
             </nav>
 
-            {{-- About --}}
-            <nav aria-label="About JD">
-                <h3 class="font-condensed text-xs font-bold uppercase tracking-wider text-white">About JD</h3>
-                <ul class="mt-3 space-y-2 text-xs">
-                    <li><a href="{{ route('about') }}" class="hover:text-white">About Us</a></li>
-                    <li><a href="#" class="hover:text-white">Careers</a></li>
-                    <li><a href="#" class="hover:text-white">Store Locator</a></li>
-                    <li><a href="#" class="hover:text-white">Loyalty Program</a></li>
-                </ul>
-            </nav>
-
             {{-- Shop --}}
             <nav aria-label="Shop">
                 <h3 class="font-condensed text-xs font-bold uppercase tracking-wider text-white">Shop</h3>

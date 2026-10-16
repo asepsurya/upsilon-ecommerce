@@ -7,6 +7,8 @@
         class="block px-4 py-3 text-sm {{ request()->routeIs('account.profile') ? 'bg-surface-container-lowest text-on-surface tracking-wider' : 'hover:bg-surface-container-high transition-colors' }}">Profile</a>
     <a href="{{ route('account.addresses') }}"
         class="block px-4 py-3 text-sm {{ request()->routeIs('account.addresses*') ? 'bg-surface-container-lowest text-on-surface tracking-wider' : 'hover:bg-surface-container-high transition-colors' }}">Addresses</a>
+    <a href="{{ route('account.reviews') }}"
+        class="block px-4 py-3 text-sm {{ request()->routeIs('account.reviews*') ? 'bg-surface-container-lowest text-on-surface tracking-wider' : 'hover:bg-surface-container-high transition-colors' }}">Reviews</a>
     <a href="{{ route('wishlist') }}"
         class="block px-4 py-3 text-sm hover:bg-surface-container-high transition-colors">Wishlist</a>
 </nav>

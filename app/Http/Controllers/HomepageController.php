@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AboutSlide;
 use App\Models\Announcement;
 use App\Models\Bundle;
 use App\Models\Category;
@@ -14,6 +15,7 @@ use App\Models\Slider;
 use App\Services\CartService;
 use App\Services\InstagramService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class HomepageController extends Controller
 {
@@ -24,7 +26,8 @@ class HomepageController extends Controller
         $products = Product::active()
             ->with(['images' => function ($q) {
                 $q->orderBy('sort_order');
-            }])
+            }, 'category', 'labels'])
+            ->withCount('activeVariants')
             ->sorted()
             ->get();
 
@@ -33,18 +36,30 @@ class HomepageController extends Controller
         $newArrivals = Product::active()
             ->with(['images' => function ($q) {
                 $q->orderBy('sort_order');
-            }])
+            }, 'category', 'labels'])
+            ->withCount('activeVariants')
             ->newArrival()
             ->sorted()
             ->get();
 
         $bundles = Bundle::active()
             ->sorted()
-            ->with(['items' => function ($q) {
-                $q->orderBy('id')->limit(4);
-            }, 'items.product.images' => function ($q) {
-                $q->orderBy('sort_order');
-            }])
+            ->with([
+                'subBundles' => function ($q) {
+                    $q->orderBy('sort_order')
+                        ->with([
+                            'items' => function ($q) {
+                                $q->orderBy('sort_order');
+                            },
+                            'items.product.images' => function ($q) {
+                                $q->orderBy('sort_order');
+                            },
+                            'manualItems' => function ($q) {
+                                $q->orderBy('sort_order');
+                            },
+                        ]);
+                },
+            ])
             ->take(4)
             ->get();
 
@@ -61,7 +76,7 @@ class HomepageController extends Controller
         $flashSaleProducts = $flashSale
             ? $flashSale->products()->active()->with(['images' => function ($q) {
                 $q->orderBy('sort_order');
-            }])->get()
+            }, 'category', 'labels'])->withCount('activeVariants')->get()
             : collect();
 
         $limitedPairsList = $flashSaleProducts->isNotEmpty()
@@ -73,7 +88,8 @@ class HomepageController extends Controller
             : Product::active()
                 ->with(['images' => function ($q) {
                     $q->orderBy('sort_order');
-                }])
+                }, 'category', 'labels'])
+                ->withCount('activeVariants')
                 ->latest()
                 ->take(8)
                 ->get();
@@ -84,25 +100,28 @@ class HomepageController extends Controller
 
         $announcements = Announcement::active()->get();
 
-        return view('home.index', compact(
-            'categories', 'featuredProducts', 'products', 'newArrivals', 'bundles', 'articles', 'sliders', 'flashSale', 'flashSaleDeadline', 'flashSaleProducts', 'promoBanners', 'materials', 'limitedPairsList', 'topPicksList', 'labels', 'announcements'
-        ));
-    }
+        $aboutSlides = AboutSlide::active()->get();
 
-    public function about()
-    {
-        return view('home.about');
+        return view('home.index', compact(
+            'categories', 'featuredProducts', 'products', 'newArrivals', 'bundles', 'articles', 'sliders', 'flashSale', 'flashSaleDeadline', 'flashSaleProducts', 'promoBanners', 'materials', 'limitedPairsList', 'topPicksList', 'labels', 'announcements', 'aboutSlides'
+        ));
     }
 
     public function bundles()
     {
         $bundles = Bundle::active()
             ->sorted()
-            ->with(['items' => function ($q) {
-                $q->orderBy('id')->limit(4);
-            }, 'items.product.images' => function ($q) {
-                $q->orderBy('sort_order');
-            }])
+            ->with([
+                'items' => function ($q) {
+                    $q->orderBy('id')->limit(4);
+                },
+                'items.product.images' => function ($q) {
+                    $q->orderBy('sort_order');
+                },
+                'manualItems' => function ($q) {
+                    $q->orderBy('sort_order')->limit(4);
+                },
+            ])
             ->get();
 
         return view('home.bundles', compact('bundles'));
@@ -167,6 +186,16 @@ class HomepageController extends Controller
         return view('home.how-to-order');
     }
 
+    public function termsConditions()
+    {
+        return view('home.terms-conditions');
+    }
+
+    public function privacyPolicy()
+    {
+        return view('home.privacy-policy');
+    }
+
     public function flashSale()
     {
         $flashSale = FlashSale::active()->first();
@@ -179,7 +208,9 @@ class HomepageController extends Controller
                         $q->orderBy('sort_order');
                     },
                     'category',
+                    'labels',
                 ])
+                ->withCount('activeVariants')
                 ->paginate(12)
             : null;
 
@@ -204,5 +235,52 @@ class HomepageController extends Controller
             'posts' => $page['posts'],
             'next_cursor' => $page['next_cursor'],
         ]);
+    }
+
+    public function createBundle(Request $request)
+    {
+        if ($request->isMethod('GET')) {
+            $products = Product::active()
+                ->sorted()
+                ->with(['variants' => function ($q) {
+                    $q->orderBy('id')->with(['size', 'color']);
+                }])
+                ->get();
+
+            return view('home.create-bundle', compact('products'));
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'bundle_price' => 'nullable|numeric|min:0',
+            'selected_products' => 'nullable|array',
+            'selected_products.*' => 'exists:products,id',
+            'quantities' => 'nullable|array',
+        ]);
+
+        $bundle = Bundle::create([
+            'name' => $validated['name'],
+            'slug' => Str::slug($validated['name']),
+            'description' => $validated['description'] ?? null,
+            'bundle_price' => $validated['bundle_price'] ?? null,
+            'is_active' => true,
+        ]);
+
+        if (! empty($validated['selected_products'])) {
+            $this->createBundleItems($bundle, $validated['selected_products'], $validated['quantities'] ?? []);
+        }
+
+        return redirect()->route('home.create-bundle')->with('success', 'Bundle created successfully');
+    }
+
+    public function createBundleItems(Bundle $bundle, array $productIds, array $quantities): void
+    {
+        foreach ($productIds as $productId) {
+            $bundle->items()->create([
+                'product_id' => $productId,
+                'quantity' => $quantities[$productId] ?? 1,
+            ]);
+        }
     }
 }

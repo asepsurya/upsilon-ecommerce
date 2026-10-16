@@ -21,7 +21,7 @@ class ShopController extends Controller
             ->with(['images' => function ($q) {
                 $q->orderBy('sort_order')->limit(1);
             }, 'category', 'reviews', 'labels'])
-            ->withCount('reviews');
+            ->withCount(['reviews', 'activeVariants']);
 
         if ($request->search) {
             $query->search($request->search);

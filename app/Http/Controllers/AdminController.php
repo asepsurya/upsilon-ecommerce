@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AboutSlide;
 use App\Models\Bundle;
 use App\Models\BundleItem;
+use App\Models\BundleManual;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Category;
@@ -890,11 +892,17 @@ class AdminController extends Controller
             'description' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,gif,webp|max:2048',
             'bundle_price' => 'nullable|numeric|min:0',
+            'bundle_original_price' => 'nullable|numeric|min:0',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
-            'selected_products' => 'nullable|array',
-            'selected_products.*' => 'exists:products,id',
-            'quantities' => 'nullable|array',
+            'sub_bundles' => 'nullable|array',
+            'sub_bundles.*.name' => 'required|string|max:255',
+            'sub_bundles.*.description' => 'nullable|string',
+            'sub_bundles.*.sort_order' => 'nullable|integer|min:0',
+            'sub_bundles.*.selected_products' => 'nullable|array',
+            'sub_bundles.*.selected_products.*' => 'exists:products,id',
+            'sub_bundles.*.quantities' => 'nullable|array',
+            'sub_bundles.*.manual_items' => 'nullable|string',
         ]);
 
         $validated['is_active'] = $request->boolean('is_active', true);
@@ -915,7 +923,54 @@ class AdminController extends Controller
 
         $bundle = Bundle::create($validated);
 
-        $this->syncBundleItems($bundle, $request);
+        // Process sub-bundles and their items
+        $subBundlesData = $request->input('sub_bundles', []);
+        $usedProductIds = []; // bundle-wide unique key: (bundle_id, product_id)
+        $hasCatalogItems = false;
+        $hasManualItems = false;
+
+        foreach ($subBundlesData as $sbData) {
+            if (empty($sbData['name'])) {
+                continue;
+            }
+            $subBundle = $bundle->subBundles()->create([
+                'name' => $sbData['name'],
+                'description' => $sbData['description'] ?? null,
+                'sort_order' => $sbData['sort_order'] ?? 0,
+            ]);
+
+            $sbProducts = $sbData['selected_products'] ?? [];
+            $sbQuantities = $sbData['quantities'] ?? [];
+            $sortOrder = 0;
+            foreach ($sbProducts as $productId) {
+                if (in_array($productId, $usedProductIds)) {
+                    continue;
+                }
+                BundleItem::create([
+                    'bundle_id' => $bundle->id,
+                    'sub_bundle_id' => $subBundle->id,
+                    'product_id' => $productId,
+                    'quantity' => $sbQuantities[$productId] ?? 1,
+                    'sort_order' => $sortOrder++,
+                ]);
+                $usedProductIds[] = $productId;
+                $hasCatalogItems = true;
+            }
+
+            if (! empty($sbData['manual_items'] ?? '')) {
+                $this->processManualBundleItems($bundle, $sbData['manual_items'], $subBundle->id, $usedProductIds);
+                $hasManualItems = true;
+            }
+        }
+
+        // Determine bundle type
+        if ($hasCatalogItems && $hasManualItems) {
+            $bundle->update(['bundle_type' => 'mixed']);
+        } elseif ($hasManualItems) {
+            $bundle->update(['bundle_type' => 'manual']);
+        } else {
+            $bundle->update(['bundle_type' => 'catalog']);
+        }
 
         return redirect()->route('admin.bundles.index')->with('success', 'Bundle created successfully');
     }
@@ -923,7 +978,7 @@ class AdminController extends Controller
     public function editBundle(Bundle $bundle)
     {
         $products = Product::active()->sorted()->get();
-        $bundle->load('items');
+        $bundle->load(['subBundles.items.product', 'subBundles.manualItems']);
 
         return view('admin.bundles.edit', compact('bundle', 'products'));
     }
@@ -936,11 +991,17 @@ class AdminController extends Controller
             'description' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,gif,webp|max:2048',
             'bundle_price' => 'nullable|numeric|min:0',
+            'bundle_original_price' => 'nullable|numeric|min:0',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
-            'selected_products' => 'nullable|array',
-            'selected_products.*' => 'exists:products,id',
-            'quantities' => 'nullable|array',
+            'sub_bundles' => 'nullable|array',
+            'sub_bundles.*.name' => 'required|string|max:255',
+            'sub_bundles.*.description' => 'nullable|string',
+            'sub_bundles.*.sort_order' => 'nullable|integer|min:0',
+            'sub_bundles.*.selected_products' => 'nullable|array',
+            'sub_bundles.*.selected_products.*' => 'exists:products,id',
+            'sub_bundles.*.quantities' => 'nullable|array',
+            'sub_bundles.*.manual_items' => 'nullable|string',
         ]);
 
         $validated['is_active'] = $request->boolean('is_active', true);
@@ -965,24 +1026,121 @@ class AdminController extends Controller
 
         $bundle->update($validated);
 
-        $this->syncBundleItems($bundle, $request);
+        $this->syncSubBundles($bundle, $request);
 
         return redirect()->route('admin.bundles.index')->with('success', 'Bundle updated successfully');
     }
 
-    protected function syncBundleItems(Bundle $bundle, Request $request)
+    protected function syncSubBundles(Bundle $bundle, Request $request): void
     {
-        $selectedProducts = $request->input('selected_products', []);
-        $quantities = $request->input('quantities', []);
-
+        // Delete all existing sub-bundles, their items, and manual items (full replace on update)
+        $bundle->subBundles()->delete();
         $bundle->items()->delete();
+        $bundle->manualItems()->delete();
 
-        foreach ($selectedProducts as $productId) {
-            BundleItem::create([
-                'bundle_id' => $bundle->id,
-                'product_id' => $productId,
-                'quantity' => $quantities[$productId] ?? 1,
+        $subBundlesData = $request->input('sub_bundles', []);
+        $usedProductIds = []; // bundle-wide unique key: (bundle_id, product_id)
+        $hasCatalogItems = false;
+        $hasManualItems = false;
+
+        foreach ($subBundlesData as $sbData) {
+            if (empty($sbData['name'])) {
+                continue;
+            }
+            $subBundle = $bundle->subBundles()->create([
+                'name' => $sbData['name'],
+                'description' => $sbData['description'] ?? null,
+                'sort_order' => $sbData['sort_order'] ?? 0,
             ]);
+
+            $sbProducts = $sbData['selected_products'] ?? [];
+            $sbQuantities = $sbData['quantities'] ?? [];
+            $sortOrder = 0;
+            foreach ($sbProducts as $productId) {
+                if (in_array($productId, $usedProductIds)) {
+                    continue;
+                }
+                BundleItem::create([
+                    'bundle_id' => $bundle->id,
+                    'sub_bundle_id' => $subBundle->id,
+                    'product_id' => $productId,
+                    'quantity' => $sbQuantities[$productId] ?? 1,
+                    'sort_order' => $sortOrder++,
+                ]);
+                $usedProductIds[] = $productId;
+                $hasCatalogItems = true;
+            }
+
+            if (! empty($sbData['manual_items'] ?? '')) {
+                $this->processManualBundleItems($bundle, $sbData['manual_items'], $subBundle->id, $usedProductIds);
+                $hasManualItems = true;
+            }
+        }
+
+        // Determine bundle type
+        if ($hasCatalogItems && $hasManualItems) {
+            $bundle->update(['bundle_type' => 'mixed']);
+        } elseif ($hasManualItems) {
+            $bundle->update(['bundle_type' => 'manual']);
+        } else {
+            $bundle->update(['bundle_type' => 'catalog']);
+        }
+    }
+
+    protected function processManualBundleItems(Bundle $bundle, string $manualItems, ?int $subBundleId = null, array $existingProductIds = []): void
+    {
+        // Normalize line endings: browsers submit LF, but PHP_EOL is \r\n on Windows.
+        $manualItems = str_replace(["\r\n", "\r"], "\n", $manualItems);
+        $lines = explode("\n", $manualItems);
+
+        // Ensure $existingProductIds is a properly indexed array of integers
+        $existingProductIds = array_values(array_filter($existingProductIds, 'is_int'));
+
+        $sortOrder = 0;
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if (empty($line)) {
+                continue;
+            }
+
+            // Parse format: "Product Name: Quantity" (qty optional, defaults to 1)
+            if (strpos($line, ':') !== false) {
+                [$productName, $quantity] = explode(':', $line, 2);
+                $productName = trim($productName);
+                $quantity = trim($quantity);
+            } else {
+                $productName = trim($line);
+                $quantity = '1';
+            }
+
+            if (! is_numeric($quantity)) {
+                continue;
+            }
+
+            // Try to find product by name (case-insensitive, partial match)
+            $product = Product::whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($productName).'%'])
+                ->orWhereRaw('LOWER(name) = ?', [strtolower($productName)])
+                ->first();
+
+            if ($product && ! in_array($product->id, $existingProductIds)) {
+                // Save to catalog table (bundle_items)
+                BundleItem::create([
+                    'bundle_id' => $bundle->id,
+                    'sub_bundle_id' => $subBundleId,
+                    'product_id' => $product->id,
+                    'quantity' => (int) $quantity,
+                ]);
+                $existingProductIds[] = $product->id;
+            } else {
+                // Save to manual table (bundle_manual)
+                BundleManual::create([
+                    'bundle_id' => $bundle->id,
+                    'sub_bundle_id' => $subBundleId,
+                    'product_name' => $productName,
+                    'quantity' => (int) $quantity,
+                    'sort_order' => $sortOrder++,
+                ]);
+            }
         }
     }
 
@@ -1106,6 +1264,93 @@ class AdminController extends Controller
         return back()->with('success', 'Slider status updated successfully');
     }
 
+    public function aboutSlides()
+    {
+        $aboutSlides = AboutSlide::sorted()->paginate(20);
+
+        return view('admin.about-slides.index', compact('aboutSlides'));
+    }
+
+    public function createAboutSlide()
+    {
+        return view('admin.about-slides.create');
+    }
+
+    public function storeAboutSlide(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'required|image|mimes:jpeg,png,gif,webp|max:5120',
+            'link' => 'nullable|url|max:255',
+            'link_text' => 'nullable|string|max:100',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'about-slides');
+        }
+
+        AboutSlide::create($validated);
+
+        return redirect()->route('admin.about-slides.index')->with('success', 'About slide created successfully');
+    }
+
+    public function editAboutSlide(AboutSlide $aboutSlide)
+    {
+        return view('admin.about-slides.edit', compact('aboutSlide'));
+    }
+
+    public function updateAboutSlide(Request $request, AboutSlide $aboutSlide)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
+            'link' => 'nullable|url|max:255',
+            'link_text' => 'nullable|string|max:100',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            if ($aboutSlide->image && str_starts_with($aboutSlide->image, 'about-slides/')) {
+                Storage::disk('public')->delete($aboutSlide->image);
+            }
+
+            $validated['image'] = $this->storeWebPImage($request->file('image'), 'about-slides');
+        }
+
+        $aboutSlide->update($validated);
+
+        return redirect()->route('admin.about-slides.index')->with('success', 'About slide updated successfully');
+    }
+
+    public function deleteAboutSlide(AboutSlide $aboutSlide)
+    {
+        if ($aboutSlide->image && str_starts_with($aboutSlide->image, 'about-slides/')) {
+            Storage::disk('public')->delete($aboutSlide->image);
+        }
+
+        $aboutSlide->delete();
+
+        return back()->with('success', 'About slide deleted successfully');
+    }
+
+    public function toggleAboutSlide(AboutSlide $aboutSlide)
+    {
+        $aboutSlide->update(['is_active' => ! $aboutSlide->is_active]);
+
+        return back()->with('success', 'About slide status updated successfully');
+    }
+
     public function labels()
     {
         $labels = Label::sorted()->paginate(20);
@@ -1215,6 +1460,7 @@ class AdminController extends Controller
             'heading' => 'nullable|string|max:255',
             'title' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
+            'image_mobile' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
             'link' => 'nullable|url|max:255',
             'link_text' => 'nullable|string|max:100',
             'background_color' => 'nullable|string|max:7',
@@ -1227,6 +1473,10 @@ class AdminController extends Controller
 
         if ($request->hasFile('image')) {
             $validated['image'] = $this->storeWebPImage($request->file('image'), 'promo-banners');
+        }
+
+        if ($request->hasFile('image_mobile')) {
+            $validated['image_mobile'] = $this->storeWebPImage($request->file('image_mobile'), 'promo-banners');
         }
 
         PromoBanner::create($validated);
@@ -1245,6 +1495,7 @@ class AdminController extends Controller
             'heading' => 'nullable|string|max:255',
             'title' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
+            'image_mobile' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
             'link' => 'nullable|url|max:255',
             'link_text' => 'nullable|string|max:100',
             'background_color' => 'nullable|string|max:7',
@@ -1263,6 +1514,14 @@ class AdminController extends Controller
             $validated['image'] = $this->storeWebPImage($request->file('image'), 'promo-banners');
         }
 
+        if ($request->hasFile('image_mobile')) {
+            if ($promoBanner->image_mobile && str_starts_with($promoBanner->image_mobile, 'promo-banners/')) {
+                Storage::disk('public')->delete($promoBanner->image_mobile);
+            }
+
+            $validated['image_mobile'] = $this->storeWebPImage($request->file('image_mobile'), 'promo-banners');
+        }
+
         $promoBanner->update($validated);
 
         return redirect()->route('admin.promo-banners.index')->with('success', 'Promo banner updated successfully');
@@ -1272,6 +1531,10 @@ class AdminController extends Controller
     {
         if ($promoBanner->image && str_starts_with($promoBanner->image, 'promo-banners/')) {
             Storage::disk('public')->delete($promoBanner->image);
+        }
+
+        if ($promoBanner->image_mobile && str_starts_with($promoBanner->image_mobile, 'promo-banners/')) {
+            Storage::disk('public')->delete($promoBanner->image_mobile);
         }
 
         $promoBanner->delete();

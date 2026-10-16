@@ -1,8 +1,7 @@
 <aside class="admin-sidebar" id="sidebar">
     <div class="admin-sidebar-header">
         <a href="{{ route('admin.dashboard') }}" class="admin-sidebar-brand">
-            <img src="{{ asset('images/logo-white.png') }}" alt="Upsilon"
-                class="h-7 w-auto">
+            <img src="{{ asset('images/logo-white.png') }}" alt="Upsilon" class="h-7 w-auto">
         </a>
     </div>
     <nav class="admin-sidebar-nav">
@@ -46,7 +45,7 @@
 
         <div class="admin-sidebar-nav-group">
             <div class="admin-sidebar-nav-group-title">Sales & Orders</div>
-            <a href="{{ route('admin.orders.index') }}"
+            {{-- <a href="{{ route('admin.orders.index') }}"
                 class="admin-sidebar-nav-item {{ request()->routeIs('admin.orders*') ? 'active' : '' }}">
                 <span class="nav-icon material-symbols-outlined text-lg">shopping_bag</span>
                 Orders
@@ -55,17 +54,17 @@
                 class="admin-sidebar-nav-item {{ request()->routeIs('admin.customers*') ? 'active' : '' }}">
                 <span class="nav-icon material-symbols-outlined text-lg">people</span>
                 Customers
-            </a>
+            </a> --}}
             <a href="{{ route('admin.flash-sales.index') }}"
                 class="admin-sidebar-nav-item {{ request()->routeIs('admin.flash-sales*') ? 'active' : '' }}">
                 <span class="nav-icon material-symbols-outlined text-lg">local_fire_department</span>
                 Flash Sales
             </a>
-            <a href="{{ route('admin.vouchers.index') }}"
+            {{-- <a href="{{ route('admin.vouchers.index') }}"
                 class="admin-sidebar-nav-item {{ request()->routeIs('admin.vouchers*') ? 'active' : '' }}">
                 <span class="nav-icon material-symbols-outlined text-lg">local_offer</span>
                 Vouchers
-            </a>
+            </a> --}}
         </div>
 
         <div class="admin-sidebar-nav-group">
@@ -79,6 +78,11 @@
                 class="admin-sidebar-nav-item {{ request()->routeIs('admin.sliders*') ? 'active' : '' }}">
                 <span class="nav-icon material-symbols-outlined text-lg">view_carousel</span>
                 Sliders
+            </a>
+            <a href="{{ route('admin.about-slides.index') }}"
+                class="admin-sidebar-nav-item {{ request()->routeIs('admin.about-slides*') ? 'active' : '' }}">
+                <span class="nav-icon material-symbols-outlined text-lg">info</span>
+                About Slides
             </a>
             <a href="{{ route('admin.promo-banners.index') }}"
                 class="admin-sidebar-nav-item {{ request()->routeIs('admin.promo-banners*') ? 'active' : '' }}">

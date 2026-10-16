@@ -108,6 +108,12 @@
                                         <input id="image" name="image" type="file" accept="image/*" class="admin-form-input">
                                         <p class="text-xs text-muted mt-1">Recommended size: 1200x300px. If empty, text-only banner will be shown.</p>
                                     </div>
+
+                                    <div>
+                                        <label for="image_mobile" class="admin-form-label">Mobile Banner Image (Optional)</label>
+                                        <input id="image_mobile" name="image_mobile" type="file" accept="image/*" class="admin-form-input">
+                                        <p class="text-xs text-muted mt-1">Recommended size: 750x300px. If empty, desktop image will be used on mobile.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

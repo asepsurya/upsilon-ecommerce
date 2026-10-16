@@ -12,7 +12,7 @@
             ?? null;
         $productLink = route('product.show', $product->slug ?? $product->id);
         $brand = $product->subtitle ?? optional($product->category)->name ?? 'Upsilon';
-        $inStock = $product->activeVariants()->exists();
+        $inStock = ((int) ($product->active_variants_count ?? 0)) > 0;
     } else {
         $imageUrl = $product->image_url ?? $product->image ?? null;
         $productLink = $product->permalink ?? route('shop');

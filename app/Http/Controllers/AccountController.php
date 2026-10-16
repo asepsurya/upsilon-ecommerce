@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Order;
 use App\Models\Province;
+use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -112,10 +113,12 @@ class AccountController extends Controller
     {
         $orders = $request->user()
             ->orders()
+            ->with('items')
             ->latest()
             ->paginate(10);
 
         return view('account.orders', compact('orders'));
+
     }
 
     public function orderDetail(Order $order)
@@ -134,6 +137,24 @@ class AccountController extends Controller
         $addresses = Auth::user()->addresses()->orderByDesc('is_default')->get();
 
         return view('account.addresses', compact('addresses'));
+    }
+
+    public function updateReview(Request $request, Review $review)
+    {
+        if ($review->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'required|string|max:2000',
+        ]);
+
+        $review->update($validated);
+
+        $this->updateProductRating($review->product);
+
+        return redirect()->route('account.reviews')->with('success', 'Review updated successfully');
     }
 
     public function createAddress()

@@ -134,8 +134,8 @@
                 class="flex flex-col items-center justify-between gap-3 border-t border-neutral-200 pt-6 text-[11px] text-neutral-500 sm:flex-row">
                 <p>&copy; {{ date('Y') }} Upsilon. All rights reserved.</p>
                 <div class="flex items-center gap-4">
-                    <a href="#" class="hover:text-neutral-900">Terms &amp; Conditions</a>
-                    <a href="#" class="hover:text-neutral-900">Privacy Policy</a>
+                    <a href="{{ route('terms.conditions') }}" class="hover:text-neutral-900">Terms &amp; Conditions</a>
+                    <a href="{{ route('privacy.policy') }}" class="hover:text-neutral-900">Privacy Policy</a>
                 </div>
             </div>
         </div>

@@ -44,6 +44,11 @@ class User extends AuthenticatableUser
         return $this->hasMany(Review::class);
     }
 
+    public function canEditReview(Review $review): bool
+    {
+        return $this->id === $review->user_id;
+    }
+
     public function voucherUsages(): HasMany
     {
         return $this->hasMany(VoucherUsage::class);

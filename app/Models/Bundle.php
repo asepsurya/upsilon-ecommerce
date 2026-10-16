@@ -13,7 +13,7 @@ class Bundle extends Model
 
     protected $fillable = [
         'name', 'slug', 'description', 'thumbnail', 'bundle_price',
-        'is_active', 'sort_order',
+        'is_active', 'sort_order', 'bundle_type', 'bundle_original_price',
     ];
 
     protected $casts = [
@@ -27,6 +27,16 @@ class Bundle extends Model
     public function items(): HasMany
     {
         return $this->hasMany(BundleItem::class);
+    }
+
+    public function manualItems(): HasMany
+    {
+        return $this->hasMany(BundleManual::class);
+    }
+
+    public function subBundles(): HasMany
+    {
+        return $this->hasMany(SubBundle::class)->orderBy('sort_order');
     }
 
     public function products()
@@ -47,9 +57,17 @@ class Bundle extends Model
 
     public function getOriginalPriceAttribute(): float
     {
-        return $this->items->sum(function ($item) {
+        // Manual override takes precedence
+        if ($this->bundle_original_price && $this->bundle_original_price > 0) {
+            return (float) $this->bundle_original_price;
+        }
+
+        $catalogTotal = $this->items->sum(function ($item) {
             return ($item->product?->base_price ?? 0) * $item->quantity;
         });
+
+        // Manual items don't have product prices, so we can't calculate original price for them
+        return $catalogTotal;
     }
 
     public function getDiscountPercentAttribute(): int

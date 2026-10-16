@@ -19,7 +19,8 @@ use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomepageController::class, 'index'])->name('home');
-
+Route::get('/create-bundle', [HomepageController::class, 'createBundle'])->name('home.create-bundle');
+Route::post('/create-bundle', [HomepageController::class, 'createBundle'])->name('home.create-bundle');
 Route::get('/bundles', [HomepageController::class, 'bundles'])->name('bundles');
 
 Route::get('/flash-sale', [HomepageController::class, 'flashSale'])->name('flash.sale');
@@ -56,9 +57,10 @@ Route::post('/checkout/midtrans-notification', [CheckoutController::class, 'noti
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-Route::get('/about', [HomepageController::class, 'about'])->name('about');
 Route::get('/discover-upsilon-style', [HomepageController::class, 'discoverUpsilonStyle'])->name('discover-upsilon-style');
 Route::get('/how-to-order', [HomepageController::class, 'howToOrder'])->name('how.to.order');
+Route::get('/terms-conditions', [HomepageController::class, 'termsConditions'])->name('terms.conditions');
+Route::get('/privacy-policy', [HomepageController::class, 'privacyPolicy'])->name('privacy.policy');
 
 Route::get('/instagram/feed', [HomepageController::class, 'instagramFeed'])->name('instagram.feed');
 
@@ -161,12 +163,16 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::patch('/vouchers/{voucher}', [AdminController::class, 'updateVoucher'])->name('admin.vouchers.update');
     Route::delete('/vouchers/{voucher}', [AdminController::class, 'deleteVoucher'])->name('admin.vouchers.destroy');
 
-    // Reviews
     Route::get('/reviews', [AdminController::class, 'reviews'])->name('admin.reviews.index');
     Route::patch('/reviews/{review}', [AdminController::class, 'updateReview'])->name('admin.reviews.update');
     Route::delete('/reviews/{review}', [AdminController::class, 'deleteReview'])->name('admin.reviews.destroy');
     Route::post('/reviews/{review}/replies', [AdminController::class, 'storeReviewReply'])->name('admin.reviews.replies.store');
     Route::delete('/reviews/{review}/replies/{reply}', [AdminController::class, 'destroyReviewReply'])->name('admin.reviews.replies.destroy');
+
+    // User Account Reviews
+    Route::get('/account/reviews', [AccountController::class, 'reviews'])->name('account.reviews');
+    Route::get('/account/reviews/{review}/edit', [AccountController::class, 'editReview'])->name('account.reviews.edit');
+    Route::patch('/account/reviews/{review}', [AccountController::class, 'updateReview'])->name('account.reviews.update');
 
     // Bundles
     Route::get('/bundles', [AdminController::class, 'bundles'])->name('admin.bundles.index');
@@ -193,6 +199,15 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::put('/sliders/{slider}', [AdminController::class, 'updateSlider'])->name('admin.sliders.update');
     Route::delete('/sliders/{slider}', [AdminController::class, 'deleteSlider'])->name('admin.sliders.destroy');
     Route::post('/sliders/{slider}/toggle', [AdminController::class, 'toggleSlider'])->name('admin.sliders.toggle');
+
+    // About Slides
+    Route::get('/about-slides', [AdminController::class, 'aboutSlides'])->name('admin.about-slides.index');
+    Route::get('/about-slides/create', [AdminController::class, 'createAboutSlide'])->name('admin.about-slides.create');
+    Route::post('/about-slides', [AdminController::class, 'storeAboutSlide'])->name('admin.about-slides.store');
+    Route::get('/about-slides/{aboutSlide}/edit', [AdminController::class, 'editAboutSlide'])->name('admin.about-slides.edit');
+    Route::put('/about-slides/{aboutSlide}', [AdminController::class, 'updateAboutSlide'])->name('admin.about-slides.update');
+    Route::delete('/about-slides/{aboutSlide}', [AdminController::class, 'deleteAboutSlide'])->name('admin.about-slides.destroy');
+    Route::post('/about-slides/{aboutSlide}/toggle', [AdminController::class, 'toggleAboutSlide'])->name('admin.about-slides.toggle');
 
     // Labels
     Route::get('/labels', [AdminController::class, 'labels'])->name('admin.labels.index');

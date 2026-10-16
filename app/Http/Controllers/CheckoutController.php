@@ -64,7 +64,9 @@ class CheckoutController extends Controller
             ->firstOrFail();
 
         $cart = $this->cartService->getCart($request);
-        $cart->load(['items.variant.product']);
+        $cart->load(['items.variant.product.images' => function ($q) {
+            $q->orderBy('sort_order')->limit(1);
+        }]);
 
         if ($cart->items->isEmpty()) {
             return redirect()->route('cart')->with('error', 'Your cart is empty');
@@ -121,7 +123,7 @@ class CheckoutController extends Controller
                 'product_name' => $product->name,
                 'size_name' => $variant->size?->name,
                 'color_name' => $variant->color?->name,
-                'image' => $variant->product->images->first()?->url ?? $variant->product->primaryImage->first()?->url,
+                'image' => $variant->product->images->first()?->url ?? asset('storage/images/sample/no-image.png'),
                 'quantity' => $item->quantity,
                 'price' => $variant->effective_price,
                 'subtotal' => $item->subtotal,

@@ -15,6 +15,7 @@ class PromoBanner extends Model
         'heading',
         'title',
         'image',
+        'image_mobile',
         'link',
         'link_text',
         'background_color',
@@ -28,7 +29,7 @@ class PromoBanner extends Model
         'sort_order' => 'integer',
     ];
 
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url', 'image_mobile_url'];
 
     public function getImageUrlAttribute(): string
     {
@@ -37,6 +38,15 @@ class PromoBanner extends Model
         }
 
         return asset(str_starts_with($this->image, 'storage/') ? $this->image : 'storage/'.$this->image);
+    }
+
+    public function getImageMobileUrlAttribute(): string
+    {
+        if (! $this->image_mobile) {
+            return '';
+        }
+
+        return asset(str_starts_with($this->image_mobile, 'storage/') ? $this->image_mobile : 'storage/'.$this->image_mobile);
     }
 
     public function scopeActive(Builder $query): Builder

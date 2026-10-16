@@ -115,6 +115,23 @@
                                             </div>
                                         @endif
                                     </div>
+
+                                    <div>
+                                        <label for="image_mobile" class="admin-form-label">Mobile Banner Image</label>
+                                        <input id="image_mobile" name="image_mobile" type="file" accept="image/*" class="admin-form-input">
+                                        <p class="text-xs text-muted mt-1">Recommended size: 750x300px. If empty, desktop image will be used on mobile.</p>
+                                        @if($promoBanner->image_mobile)
+                                            <div class="mt-2">
+                                                <img src="{{ $promoBanner->image_mobile_url }}" alt="{{ $promoBanner->heading ?? 'Promo Banner Mobile' }}"
+                                                    class="w-full max-h-40 object-cover rounded border border-outline">
+                                            </div>
+                                        @elseif($promoBanner->image)
+                                            <div class="mt-2">
+                                                <img src="{{ $promoBanner->image_url }}" alt="Will use desktop image on mobile"
+                                                    class="w-full max-h-40 object-cover rounded border border-outline">
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>

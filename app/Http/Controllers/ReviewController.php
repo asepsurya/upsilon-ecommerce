@@ -27,6 +27,23 @@ class ReviewController extends Controller
         return back()->with('success', 'Thank you for your review! It will be published after moderation.');
     }
 
+    public function update(Request $request, Review $review)
+    {
+        if ($review->user_id !== $request->user()?->id) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'required|string|max:2000',
+        ]);
+
+        $review->update($validated);
+        $this->updateProductRating($review->product);
+
+        return back()->with('success', 'Review updated successfully');
+    }
+
     protected function updateProductRating(Product $product): void
     {
         $stats = $product->reviews()

@@ -41,24 +41,34 @@
                                     {{ $bundle->name }}
                                 </h3>
                                 <p class="font-body-sm text-xs text-gray-600 font-light">
-                                    {{ $bundle->items->count() }} products
+                                    {{ $bundle->items->count() + $bundle->manualItems->count() }} items
                                 </p>
                                 @php
                                     $shownItems = $bundle->items->take(4);
-                                    $moreCount = $bundle->items->count() - $shownItems->count();
+                                    $shownManualItems = $bundle->manualItems->take(4);
+                                    $allShownItems = $shownItems->concat($shownManualItems);
+                                    $totalItems = $bundle->items->count() + $bundle->manualItems->count();
+                                    $moreCount = $totalItems - $allShownItems->count();
                                 @endphp
                                 <div class="flex flex-wrap gap-2">
-                                    @foreach($shownItems as $item)
+                                    @foreach($allShownItems as $item)
                                         @php
                                             $image = null;
-                                            if (!empty($item->product->images)) {
-                                                $image = $item->product->images->first()->url ?? $item->product->images->first()->image;
+                                            $name = '';
+                                            if ($item instanceof \App\Models\BundleItem) {
+                                                if (!empty($item->product->images)) {
+                                                    $image = $item->product->images->first()->url ?? $item->product->images->first()->image;
+                                                }
+                                                $name = $item->product->name ?? 'Product';
+                                            } else {
+                                                // BundleManual
+                                                $name = $item->product_name;
                                             }
                                             if (!$image) {
-                                                $image = 'https://placehold.co/80x80/f3f4f6/111111?text=' . urlencode($item->product->name ?? 'Product');
+                                                $image = 'https://placehold.co/80x80/f3f4f6/111111?text=' . urlencode($name);
                                             }
                                         @endphp
-                                        <img src="{{ $image }}" alt="{{ $item->product->name ?? 'Product' }}" class="h-12 w-12 rounded object-cover">
+                                        <img src="{{ $image }}" alt="{{ $name }}" class="h-12 w-12 rounded object-cover">
                                     @endforeach
                                     @if($moreCount > 0)
                                         <div class="h-12 w-12 rounded bg-gray-200 flex items-center justify-center text-black text-xs font-bold">

@@ -261,8 +261,6 @@
                     <a class="{{ $navClass }} flex items-center gap-1.5 px-4 h-12 font-label-caps text-xs uppercase tracking-widest transition-colors"
                         href="{{ route('shop') }}">Shop</a>
                     <a class="{{ $navClass }} flex items-center gap-1.5 px-4 h-12 font-label-caps text-xs uppercase tracking-widest transition-colors"
-                        href="{{ route('about') }}">About</a>
-                    <a class="{{ $navClass }} flex items-center gap-1.5 px-4 h-12 font-label-caps text-xs uppercase tracking-widest transition-colors"
                         href="{{ route('how.to.order') }}">How To Order</a>
                     <a class="{{ $navClass }} flex items-center gap-1.5 px-4 h-12 font-label-caps text-xs uppercase tracking-widest transition-colors"
                         href="{{ route('contact') }}">Contact</a>
