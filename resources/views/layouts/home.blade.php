@@ -5,19 +5,86 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>@yield('title', 'Upsilon Store')</title>
-    <meta name="description"
-        content="@yield('description', 'Sneakers, clothing, and accessories from Nike, adidas, New Balance, Puma, and more. Free shipping nationwide.')">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="robots" content="index, follow">
+    @php
+        $orgName = $siteSettings['app_name'] ?? config('app.name', 'Upsilon Store');
+        $tagline = $siteSettings['tagline'] ?? '';
+        $siteTitle = $tagline ? "{$tagline} | {$orgName}" : $orgName;
+        $orgUrl = config('app.url', url()->to('/'));
+        $orgLogo = asset('storage/images/upsilon/hero-banner.jpg');
+        $orgEmail = $siteSettings['contact_email'] ?? null;
+        $orgPhone = $siteSettings['contact_phone'] ?? null;
+        $orgAddress = $siteSettings['contact_address'] ?? null;
 
-    <meta property="og:title" content="@yield('title', 'Upsilon Store')">
-    <meta property="og:description" content="@yield('description', 'Sneakers & streetwear. Free shipping nationwide.')">
-    <meta property="og:type" content="website">
+        $socialLinks = array_values(array_filter([
+            $siteSettings['social_instagram'] ?? null,
+            $siteSettings['social_facebook'] ?? null,
+            $siteSettings['social_twitter'] ?? null,
+            $siteSettings['social_tiktok'] ?? null,
+            $siteSettings['social_youtube'] ?? null,
+            $siteSettings['social_linkedin'] ?? null,
+        ]));
+    @endphp
+
+    <title>@yield('title', $siteTitle)</title>
+    <meta name="description"
+        content="@yield('description', $tagline ?: 'Sneakers, clothing, and accessories. Free shipping nationwide.')">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="robots" content="@yield('robots', 'index, follow')">
+    <link rel="canonical" href="@yield('canonical', url()->current())">
+    <meta name="theme-color" content="#111111">
+
+    <meta property="og:title" content="@yield('title', $siteTitle)">
+    <meta property="og:description"
+        content="@yield('description', $tagline ?: 'Sneakers & streetwear. Free shipping nationwide.')">
+    <meta property="og:type" content="@yield('ogType', 'website')">
     <meta property="og:url" content="@yield('ogUrl', url()->current())">
     <meta property="og:image" content="@yield('ogImage', asset('storage/images/upsilon/hero-banner.jpg'))">
+    <meta property="og:image:alt" content="@yield('ogImageAlt', $siteTitle)">
+    <meta property="og:site_name" content="{{ $orgName }}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', $siteTitle)">
+    <meta name="twitter:description"
+        content="@yield('description', $tagline ?: 'Sneakers & streetwear. Free shipping nationwide.')">
+    <meta name="twitter:image" content="@yield('ogImage', asset('storage/images/upsilon/hero-banner.jpg'))">
+    <meta name="twitter:image:alt" content="@yield('ogImageAlt', $siteTitle)">
 
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Organization',
+            'name' => $orgName,
+            'url' => $orgUrl,
+            'logo' => $orgLogo,
+            'description' => $tagline,
+            'sameAs' => $socialLinks,
+            'contactPoint' => $orgEmail || $orgPhone || $orgAddress ? [
+                [
+                    '@type' => 'ContactPoint',
+                    'email' => $orgEmail,
+                    'telephone' => $orgPhone,
+                    'address' => $orgAddress,
+                    'contactType' => 'customer service',
+                ],
+            ] : [],
+        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
+
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => $orgName,
+            'url' => $orgUrl,
+            'potentialAction' => [
+                '@type' => 'SearchAction',
+                'target' => route('shop') . '?q={search_term_string}',
+                'query-input' => 'required name=search_term_string',
+            ],
+        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 

@@ -11,9 +11,12 @@
             </button>
 
             {{-- Logo --}}
-            <a href="{{ route('home') }}" class="shrink-0" aria-label="Upsilon — Home">
-                <img src="{{ asset('storage/images/sample/logo-black.png') }}" alt="Upsilon"
+            <a href="{{ route('home') }}" class="shrink-0 flex items-center gap-3" aria-label="Upsilon — Home">
+                <img src="{{ asset('storage/images/sample/logo-black.png') }}" alt="{{ $siteSettings['app_name'] ?? config('app.name', 'Upsilon') }}"
                     class="h-8 w-auto object-contain lg:h-9">
+                @if (! empty($siteSettings['tagline'] ?? ''))
+                    <span class="hidden text-xs text-neutral-500 lg:inline-block max-w-[180px] truncate">{{ $siteSettings['tagline'] }}</span>
+                @endif
             </a>
 
             {{-- Search (desktop) --}}

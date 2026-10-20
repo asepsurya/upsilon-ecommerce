@@ -2,7 +2,7 @@
 
 @php
     $primaryImage = $product->images->firstWhere('is_primary', true) ?? $product->images->first();
-    $pageTitle = $product->name . ' - ' . config('app.name', 'Upsilon Store');
+    $pageTitle = $product->name;
     $pageDescription = Str::limit(strip_tags($product->description ?? 'Sneakers, apparel, and accessories from Upsilon Store.'), 160);
     $pageImage = $primaryImage?->url ?? asset('storage/images/sample/prod-trench.jpg');
 
@@ -46,6 +46,43 @@
 @section("description", $pageDescription)
 @section("ogUrl", url()->current())
 @section("ogImage", $pageImage)
+@section("ogImageAlt", $product->name)
+@section("canonical", url()->current())
+
+@push("head")
+    <script type="application/ld+json">
+        {!! json_encode(array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            [
+                '@type' => 'ListItem',
+                'position' => 1,
+                'name' => 'Home',
+                'item' => route('home'),
+            ],
+            [
+                '@type' => 'ListItem',
+                'position' => 2,
+                'name' => 'Shop',
+                'item' => route('shop'),
+            ],
+            $product->category ? [
+                '@type' => 'ListItem',
+                'position' => 3,
+                'name' => $product->category->name,
+                'item' => route('shop', ['category' => $product->category->slug]),
+            ] : null,
+            [
+                '@type' => 'ListItem',
+                'position' => $product->category ? 4 : 3,
+                'name' => $product->name,
+                'item' => url()->current(),
+            ],
+        ],
+    ]), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
+
 
 @push("head")
     <script type="application/ld+json">

@@ -8,12 +8,22 @@
     <title>@yield('title', 'Upsilon')</title>
     <meta name="description" content="@yield('description', 'Upsilon - Modern fashion e-commerce')">
     <meta name="robots" content="@yield('robots', 'index, follow')">
+    <link rel="canonical" href="@yield('canonical', url()->current())">
+    <meta name="theme-color" content="#111111">
 
     <!-- Open Graph -->
     <meta property="og:title" content="@yield('title', 'Upsilon')">
     <meta property="og:description" content="@yield('description', 'Upsilon - Modern fashion e-commerce')">
     <meta property="og:type" content="@yield('ogType', 'website')">
     <meta property="og:url" content="@yield('ogUrl', url()->current())">
+    <meta property="og:image" content="@yield('ogImage', asset('favicon.png'))">
+    <meta property="og:image:alt" content="@yield('ogImageAlt', config('app.name', 'Upsilon'))">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', 'Upsilon')">
+    <meta name="twitter:description" content="@yield('description', 'Upsilon - Modern fashion e-commerce')">
+    <meta name="twitter:image" content="@yield('ogImage', asset('favicon.png'))">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">

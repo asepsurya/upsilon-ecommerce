@@ -1,8 +1,9 @@
 @extends('layouts.home')
 
-@section('title', 'Upsilon Store')
-@section('description', 'T-shirts from top brands. Free shipping nationwide.')
+@section('title', 'Contact Us — Upsilon Store')
+@section('description', 'Have a question about sizing, stock, or orders? Fill the form or reach us directly at Upsilon Store.')
 @section('ogUrl', url()->current())
+@section('canonical', url()->current())
 @section('ogImage', asset('storage/images/upsilon/hero-banner.jpg'))
 @section('content')
     @include('components.promo-bar')

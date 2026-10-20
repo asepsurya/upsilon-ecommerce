@@ -8,6 +8,9 @@
 {{ $category->name }} collection at Upsilon Store. Browse products in the {{ $category->name }} category.
 @endsection
 
+@section("ogUrl", url()->current())
+@section("canonical", url()->current())
+
 @section("content")
     <main id="main-content">
 <section class="py-12 px-6 md:px-12 lg:px-24 bg-surface border-b border-outline-variant/40">

@@ -3,7 +3,11 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
             <div class="lg:col-span-2 pr-0 lg:pr-6">
                 <span class="font-headline-sm text-base tracking-tight text-on-surface uppercase block mb-4">{{ $siteSettings['app_name'] }}</span>
-                <p class="font-body-md text-sm text-on-surface-variant mb-6 max-w-md font-light">An architectural synthesis of haute couture precision, enigmatic obsidian aesthetics, and deliberate bespoke craftsmanship.</p>
+                @if (! empty($siteSettings['tagline'] ?? ''))
+                    <p class="font-body-sm text-sm text-on-surface-variant mb-6 max-w-md font-light">{{ $siteSettings['tagline'] }}</p>
+                @else
+                    <p class="font-body-md text-sm text-on-surface-variant mb-6 max-w-md font-light">An architectural synthesis of haute couture precision, enigmatic obsidian aesthetics, and deliberate bespoke craftsmanship.</p>
+                @endif
                 <div class="mb-6">
                     <span class="font-label-caps text-xs uppercase tracking-widest text-primary block mb-2">Subscribe to the Private Gazette</span>
                     <div class="flex w-full max-w-sm">

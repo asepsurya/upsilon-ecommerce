@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Authentication - ' . config('app.name', 'Upsilon'))</title>
-    <meta name="description" content="{{ $description ?? 'Sign in to your account' }}">
+    <title>@yield('title', ($siteSettings['tagline'] ?? '') . (($siteSettings['tagline'] ?? '') ? ' | ' : '') . ($siteSettings['app_name'] ?? config('app.name', 'Upsilon')))</title>
+    <meta name="description" content="{{ $description ?? ($siteSettings['tagline'] ?? 'Sign in to your account') }}">
 
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">

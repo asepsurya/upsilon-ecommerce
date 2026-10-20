@@ -21,11 +21,19 @@ return [
             'description' => 'Nama dan URL dasar toko. Nilai ini dipakai di judul halaman, header, email, dan tautan_generate QR.',
             'fields' => [
                 'app_name' => [
-                    'label' => 'Nama Aplikasi',
+                    'label' => 'Nama Website',
                     'type' => 'text',
                     'placeholder' => 'Upsilon',
                     'hint' => 'Ditampilkan pada judul tab browser, header admin, dan nama pengirim email.',
                     'config' => 'app.name',
+                    'rules' => 'nullable|string|max:255',
+                ],
+                'tagline' => [
+                    'label' => 'Tagline',
+                    'type' => 'text',
+                    'placeholder' => 'Minimalist elegance. Refined craftsmanship.',
+                    'hint' => 'Deskripsi singkat yang ditampilkan di header dan footer situs.',
+                    'default' => '',
                     'rules' => 'nullable|string|max:255',
                 ],
                 'app_url' => [

@@ -53,6 +53,7 @@ class AdminSettingsTest extends TestCase
     {
         $response = $this->actingAs($this->admin())->post(route('admin.settings.update'), [
             'app_name' => 'Upsilon Official',
+            'tagline' => 'Minimalist elegance. Refined craftsmanship.',
             'currency_symbol' => 'Rp',
             'currency_decimals' => '0',
             'whatsapp_number' => '6281234567890',
@@ -64,11 +65,23 @@ class AdminSettingsTest extends TestCase
         $response->assertSessionHas('success');
 
         $this->assertSame('Upsilon Official', Setting::get('app_name'));
+        $this->assertSame('Minimalist elegance. Refined craftsmanship.', Setting::get('tagline'));
         $this->assertSame('Rp', Setting::get('currency_symbol'));
         $this->assertSame(0, Setting::get('currency_decimals'));
         $this->assertSame('6281234567890', Setting::get('whatsapp_number'));
         $this->assertSame('cs@tokoanda.com', Setting::get('contact_email'));
         $this->assertSame(900, Setting::get('instagram_cache_ttl'));
+    }
+
+    public function test_settings_page_renders_tagline_field(): void
+    {
+        Setting::set('tagline', 'Crafted with precision.');
+
+        $response = $this->actingAs($this->admin())->get(route('admin.settings.index'));
+
+        $response->assertOk();
+        $response->assertSee(config('settings.groups')['general']['fields']['tagline']['label']);
+        $response->assertSee('Crafted with precision.');
     }
 
     public function test_settings_validation_rejects_invalid_values_per_field(): void

@@ -1,8 +1,10 @@
 @extends("layouts.app")
 
-@section("title")
-{{ config('app.name', 'Laravel') }}
-@endsection
+@section("title", "Welcome — " . config('app.name', 'Upsilon Store'))
+@section("description", "Upsilon Store - Modern fashion e-commerce. Sneakers, clothing, and accessories from top brands. Free shipping.")
+@section("ogType", "website")
+@section("ogImage", asset('storage/images/upsilon/hero-banner.jpg'))
+@section("ogImageAlt", "Upsilon Store - Sneakers & streetwear")
 
 @section("content")
 <div class="text-[13px] leading-[20px] flex-1 p-6 pb-6 lg:p-20 lg:pb-10 bg-surface dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-bl-lg rounded-br-lg lg:rounded-tl-lg lg:rounded-br-none">

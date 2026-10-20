@@ -1,8 +1,9 @@
 @extends('layouts.home')
 
-@section('title', 'Bundles | Upsilon')
-@section('description', 'Shop exclusive bundles and deals at Upsilon.')
+@section('title', 'Bundles | Upsilon Store')
+@section('description', 'Shop exclusive product bundles and deals at Upsilon Store. Get more for less with curated sneaker and clothing bundles.')
 @section('ogUrl', url()->current())
+@section('canonical', url()->current())
 @section('ogImage', asset('storage/images/upsilon/hero-banner.jpg'))
 
 @section('content')

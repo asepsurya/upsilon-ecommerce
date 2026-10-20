@@ -11,6 +11,7 @@ class SettingSeeder extends Seeder
     {
         $settings = [
             ['key' => 'app_name', 'value' => 'Upsilon', 'type' => 'text', 'description' => 'Application name'],
+            ['key' => 'tagline', 'value' => '', 'type' => 'text', 'description' => 'Site tagline / short description'],
             ['key' => 'app_url', 'value' => config('app.url', 'http://localhost'), 'type' => 'text', 'description' => 'Application URL'],
             ['key' => 'mail_from_address', 'value' => 'noreply@upsilon.com', 'type' => 'text', 'description' => 'Mail from address'],
             ['key' => 'mail_from_name', 'value' => 'Upsilon', 'type' => 'text', 'description' => 'Mail from name'],

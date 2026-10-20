@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with('siteSettings', [
                 'app_name' => $settings['app_name'] ?? config('app.name', 'Upsilon'),
+                'tagline' => $settings['tagline'] ?? '',
                 'currency_symbol' => $settings['currency_symbol'] ?? '$',
                 'currency_decimals' => (int) ($settings['currency_decimals'] ?? 2),
                 'contact_email' => $settings['contact_email'] ?? '',
