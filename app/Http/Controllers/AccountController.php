@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Province;
 use App\Models\Review;
 use App\Models\User;
@@ -137,6 +138,26 @@ class AccountController extends Controller
         $addresses = Auth::user()->addresses()->orderByDesc('is_default')->get();
 
         return view('account.addresses', compact('addresses'));
+    }
+
+    public function reviews(Request $request)
+    {
+        $reviews = $request->user()
+            ->reviews()
+            ->with('product.images')
+            ->latest()
+            ->paginate(10);
+
+        return view('account.reviews', compact('reviews'));
+    }
+
+    public function editReview(Review $review)
+    {
+        if ($review->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return view('account.review-form', compact('review'));
     }
 
     public function updateReview(Request $request, Review $review)
@@ -292,5 +313,18 @@ class AccountController extends Controller
         ]);
 
         return redirect()->route('shop')->with('success', 'Delivery location updated');
+    }
+
+    protected function updateProductRating(Product $product): void
+    {
+        $stats = $product->reviews()
+            ->approved()
+            ->selectRaw('AVG(rating) as average_rating, COUNT(*) as review_count')
+            ->first();
+
+        $product->update([
+            'average_rating' => (float) ($stats->average_rating ?? 0),
+            'review_count' => (int) ($stats->review_count ?? 0),
+        ]);
     }
 }

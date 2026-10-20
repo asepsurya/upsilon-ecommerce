@@ -110,6 +110,10 @@ Route::prefix('/account')->middleware('auth')->group(function () {
     Route::patch('/addresses/{address}', [AccountController::class, 'updateAddress'])->name('account.addresses.update');
     Route::delete('/addresses/{address}', [AccountController::class, 'deleteAddress'])->name('account.addresses.delete');
     Route::patch('/password', [AccountController::class, 'updatePassword'])->name('account.password.update');
+
+    Route::get('/reviews', [AccountController::class, 'reviews'])->name('account.reviews');
+    Route::get('/reviews/{review}/edit', [AccountController::class, 'editReview'])->name('account.reviews.edit');
+    Route::patch('/reviews/{review}', [AccountController::class, 'updateReview'])->name('account.reviews.update');
 });
 
 // Admin routes
@@ -168,11 +172,6 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::delete('/reviews/{review}', [AdminController::class, 'deleteReview'])->name('admin.reviews.destroy');
     Route::post('/reviews/{review}/replies', [AdminController::class, 'storeReviewReply'])->name('admin.reviews.replies.store');
     Route::delete('/reviews/{review}/replies/{reply}', [AdminController::class, 'destroyReviewReply'])->name('admin.reviews.replies.destroy');
-
-    // User Account Reviews
-    Route::get('/account/reviews', [AccountController::class, 'reviews'])->name('account.reviews');
-    Route::get('/account/reviews/{review}/edit', [AccountController::class, 'editReview'])->name('account.reviews.edit');
-    Route::patch('/account/reviews/{review}', [AccountController::class, 'updateReview'])->name('account.reviews.update');
 
     // Bundles
     Route::get('/bundles', [AdminController::class, 'bundles'])->name('admin.bundles.index');
