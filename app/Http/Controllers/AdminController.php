@@ -10,6 +10,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\ContactSubmission;
 use App\Models\Label;
 use App\Models\Material;
 use App\Models\Order;
@@ -43,6 +44,8 @@ class AdminController extends Controller
         $totalCustomers = User::customer()->count();
         $totalProducts = Product::count();
         $revenue = $totalSales;
+        $totalViews = ProductView::count();
+        $totalContacts = ContactSubmission::count();
 
         $pendingOrders = Order::where('status', 'pending')->count();
         $processingOrders = Order::where('status', 'processing')->count();
@@ -77,15 +80,22 @@ class AdminController extends Controller
             ->get();
 
         $chartData = $this->getSalesChartData();
-
         $monthlySales = $this->getMonthlySalesData();
+        $viewsChartData = $this->getViewsChartData();
+        $monthlyViewsData = $this->getMonthlyViewsData();
+        $contactsChartData = $this->getContactsChartData();
+        $monthlyContactsData = $this->getMonthlyContactsData();
 
         return view('admin.dashboard', compact(
             'totalSales', 'totalOrders', 'totalCustomers',
             'totalProducts', 'revenue', 'bestSelling', 'mostViewed',
+            'totalViews', 'totalContacts',
             'pendingOrders', 'processingOrders', 'shippedOrders',
             'deliveredOrders', 'cancelledOrders', 'totalCarts',
-            'activeCarts', 'cartItems', 'abandonedCarts', 'chartData', 'monthlySales'
+            'activeCarts', 'cartItems', 'abandonedCarts',
+            'chartData', 'monthlySales',
+            'viewsChartData', 'monthlyViewsData',
+            'contactsChartData', 'monthlyContactsData'
         ));
     }
 
@@ -120,6 +130,78 @@ class AdminController extends Controller
                 ->whereMonth('created_at', $date->month)
                 ->whereYear('created_at', $date->year)
                 ->sum('total');
+        }
+
+        return [
+            'labels' => $months,
+            'values' => $values,
+        ];
+    }
+
+    private function getViewsChartData(): array
+    {
+        $days = [];
+        $values = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $days[] = $date->format('D');
+            $values[] = (int) ProductView::whereDate('viewed_at', $date)->count();
+        }
+
+        return [
+            'labels' => $days,
+            'values' => $values,
+        ];
+    }
+
+    private function getMonthlyViewsData(): array
+    {
+        $months = [];
+        $values = [];
+
+        for ($i = 11; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $months[] = $date->format('M Y');
+            $values[] = (int) ProductView::whereMonth('viewed_at', $date->month)
+                ->whereYear('viewed_at', $date->year)
+                ->count();
+        }
+
+        return [
+            'labels' => $months,
+            'values' => $values,
+        ];
+    }
+
+    private function getContactsChartData(): array
+    {
+        $days = [];
+        $values = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $days[] = $date->format('D');
+            $values[] = (int) ContactSubmission::whereDate('submitted_at', $date)->count();
+        }
+
+        return [
+            'labels' => $days,
+            'values' => $values,
+        ];
+    }
+
+    private function getMonthlyContactsData(): array
+    {
+        $months = [];
+        $values = [];
+
+        for ($i = 11; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $months[] = $date->format('M Y');
+            $values[] = (int) ContactSubmission::whereMonth('submitted_at', $date->month)
+                ->whereYear('submitted_at', $date->year)
+                ->count();
         }
 
         return [
