@@ -7,7 +7,7 @@
 
 @section('content')
     @php
-        $whatsappNumber = preg_replace('/\D+/', '', $siteSettings['whatsapp_number'] ?? '');
+        $whatsappNumber = preg_replace('/\D+/', '', config('services.whatsapp.number', ''));
         $whatsappLink = $whatsappNumber ? 'https://wa.me/' . $whatsappNumber : null;
 
         $orderMessage = "Hi Upsilon, I'd like to place an order. Please help me with the details:\n"

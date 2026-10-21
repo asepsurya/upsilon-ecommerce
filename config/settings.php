@@ -189,7 +189,7 @@ return [
         'whatsapp' => [
             'label' => 'WhatsApp',
             'icon' => 'chat',
-            'description' => 'Mengatur nomor WhatsApp Business dan pesan pembuka pada tombol chat mengambang.',
+            'description' => 'Nomor WhatsApp dan pesan pembuka. Nilai ini disimpan di .env (WHATSAPP_NUMBER / WHATSAPP_DEFAULT_MESSAGE) dan dipakai di seluruh situs.',
             'fields' => [
                 'whatsapp_number' => [
                     'label' => 'Nomor WhatsApp',
@@ -197,6 +197,7 @@ return [
                     'placeholder' => '6281234567890',
                     'hint' => 'Format internasional tanpa tanda + dan tanpa spasi, contoh 6281234567890.',
                     'config' => 'services.whatsapp.number',
+                    'env_key' => 'WHATSAPP_NUMBER',
                     'rules' => 'nullable|string|max:255',
                 ],
                 'whatsapp_default_message' => [
@@ -204,8 +205,9 @@ return [
                     'type' => 'textarea',
                     'rows' => 3,
                     'placeholder' => 'Halo, saya ingin bertanya tentang produk Anda.',
-                    'hint' => 'Pesan otomatis yang terisi saat pelanggan menekan tombol WhatsApp. Dukungan placeholder {product} dan {url}.',
+                    'hint' => 'Pesan otomatis yang terisi saat pelanggan menekan tombol WhatsApp.',
                     'config' => 'services.whatsapp.default_message',
+                    'env_key' => 'WHATSAPP_DEFAULT_MESSAGE',
                     'rules' => 'nullable|string|max:1000',
                 ],
             ],

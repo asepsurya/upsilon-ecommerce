@@ -115,18 +115,38 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
         const toggle = document.getElementById('sidebar-toggle');
-        let isOpen = true;
 
-        if (toggle && sidebar) {
-            toggle.addEventListener('click', function () {
-                isOpen = !isOpen;
-                if (isOpen) {
-                    sidebar.style.transform = 'translateX(0)';
-                } else {
-                    sidebar.style.transform = 'translateX(-100%)';
-                }
+        if (!sidebar || !toggle) return;
+
+        const isMobile = function () {
+            return window.matchMedia('(max-width: 1023px)').matches;
+        };
+
+        let isOpen = !isMobile();
+
+        function setSidebar(open) {
+            isOpen = open;
+            sidebar.classList.toggle('active', isOpen);
+            if (overlay) {
+                overlay.classList.toggle('active', isOpen);
+            }
+        }
+
+        toggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            setSidebar(!isOpen);
+        });
+
+        if (overlay) {
+            overlay.addEventListener('click', function () {
+                setSidebar(false);
             });
         }
+
+        window.addEventListener('resize', function () {
+            setSidebar(!isMobile());
+        });
     });
 </script>

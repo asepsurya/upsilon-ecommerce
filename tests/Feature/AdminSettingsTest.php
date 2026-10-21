@@ -56,7 +56,6 @@ class AdminSettingsTest extends TestCase
             'tagline' => 'Minimalist elegance. Refined craftsmanship.',
             'currency_symbol' => 'Rp',
             'currency_decimals' => '0',
-            'whatsapp_number' => '6281234567890',
             'contact_email' => 'cs@tokoanda.com',
             'instagram_cache_ttl' => '900',
         ]);
@@ -68,7 +67,6 @@ class AdminSettingsTest extends TestCase
         $this->assertSame('Minimalist elegance. Refined craftsmanship.', Setting::get('tagline'));
         $this->assertSame('Rp', Setting::get('currency_symbol'));
         $this->assertSame(0, Setting::get('currency_decimals'));
-        $this->assertSame('6281234567890', Setting::get('whatsapp_number'));
         $this->assertSame('cs@tokoanda.com', Setting::get('contact_email'));
         $this->assertSame(900, Setting::get('instagram_cache_ttl'));
     }
@@ -115,5 +113,30 @@ class AdminSettingsTest extends TestCase
         $response->assertRedirect(route('admin.settings.index'));
         $this->assertSame('Aman', Setting::get('app_name'));
         $this->assertSame(0, Setting::where('key', 'is_admin')->count());
+    }
+
+    public function test_whatsapp_settings_are_written_to_env_not_database(): void
+    {
+        $envPath = base_path('.env');
+        $originalEnv = file_get_contents($envPath);
+
+        try {
+            $response = $this->actingAs($this->admin())->post(route('admin.settings.update'), [
+                'whatsapp_number' => '6282212345678',
+                'whatsapp_default_message' => 'Halo, saya inginkan bertanya.',
+            ]);
+
+            $response->assertRedirect(route('admin.settings.index'));
+            $response->assertSessionHas('success');
+
+            $this->assertNull(Setting::where('key', 'whatsapp_number')->first());
+            $this->assertNull(Setting::where('key', 'whatsapp_default_message')->first());
+
+            $envContent = file_get_contents($envPath);
+            $this->assertStringContainsString('WHATSAPP_NUMBER="6282212345678"', $envContent);
+            $this->assertStringContainsString('WHATSAPP_DEFAULT_MESSAGE="Halo, saya inginkan bertanya."', $envContent);
+        } finally {
+            file_put_contents($envPath, $originalEnv);
+        }
     }
 }

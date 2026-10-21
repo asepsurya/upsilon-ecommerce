@@ -30,10 +30,13 @@ use App\Models\Voucher;
 use Buglinjo\LaravelWebp\Facades\Webp;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
 
 class AdminController extends Controller
 {
@@ -1815,6 +1818,14 @@ class AdminController extends Controller
             return (string) $field['default'];
         }
 
+        if (isset($field['env_key'])) {
+            $envValue = env($field['env_key']);
+
+            if ($envValue !== null && $envValue !== '') {
+                return (string) $envValue;
+            }
+        }
+
         if (isset($field['config'])) {
             return (string) config($field['config'], '');
         }
@@ -1895,6 +1906,16 @@ class AdminController extends Controller
         }
 
         foreach ($validated as $key => $value) {
+            if (isset($fields[$key]['env_key'])) {
+                $this->updateEnvFile($fields[$key]['env_key'], (string) $value);
+
+                if (isset($fields[$key]['config'])) {
+                    config([$fields[$key]['config'] => $value]);
+                }
+
+                continue;
+            }
+
             Setting::set(
                 $key,
                 $value,
@@ -1904,6 +1925,46 @@ class AdminController extends Controller
         }
 
         return redirect()->route('admin.settings.index')->with('success', 'Pengaturan berhasil disimpan');
+    }
+
+    /**
+     * Update a variable in the .env file.
+     */
+    private function updateEnvFile(string $key, string $value): void
+    {
+        $envPath = base_path('.env');
+
+        if (! file_exists($envPath)) {
+            return;
+        }
+
+        $escaped = str_replace('"', '\\"', $value);
+        $content = file_get_contents($envPath);
+
+        if (preg_match("/^[ \t]*{$key}=/m", $content)) {
+            $content = preg_replace("/^[ \t]*{$key}=.*$/m", "{$key}=\"{$escaped}\"", $content);
+        } else {
+            $content .= PHP_EOL."{$key}=\"{$escaped}\"".PHP_EOL;
+        }
+
+        file_put_contents($envPath, $content);
+
+        $this->clearCachedConfig();
+    }
+
+    private function clearCachedConfig(): void
+    {
+        $cachedConfigPath = base_path('bootstrap/cache/config.php');
+
+        if (! file_exists($cachedConfigPath)) {
+            return;
+        }
+
+        try {
+            Artisan::call('config:clear');
+        } catch (\Throwable) {
+            @unlink($cachedConfigPath);
+        }
     }
 
     /**
@@ -1932,5 +1993,19 @@ class AdminController extends Controller
         }
 
         return null;
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'confirmed', Password::min(8)],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return back()->with('success', 'Password updated successfully');
     }
 }

@@ -82,8 +82,8 @@
         }
 
         .dark .admin-stat-icon {
-            background: var(--secondary) !important;
-            color: var(--secondary-foreground) !important;
+            background: var(--secondary);
+            color: var(--secondary-foreground);
         }
 
         .dark .admin-table th,
@@ -416,15 +416,26 @@
         .admin-stat-change.negative {
             color: #dc2626;
         }
+
+        .admin-stat-icon-gray { background: #f5f5f5; color: #0a0a0b; }
+        .admin-stat-icon-amber { background: #fef3c7; color: #92400e; }
+        .admin-stat-icon-green { background: #dcfce7; color: #166534; }
+        .admin-stat-icon-blue { background: #dbeafe; color: #1e40af; }
+        .admin-stat-icon-red { background: #fee2e2; color: #991b1b; }
         .dark-card {
             background: #0a0a0a;
             color: #fafafa;
             border-color: #0a0a0a;
         }
         .dark-card .admin-stat-icon {
-            background: #262626 !important;
-            color: #fafafa !important;
+            background: #262626;
+            color: #fafafa;
         }
+        .dark .admin-stat-icon-gray { background: #27272a; color: #a3a3a3; }
+        .dark .admin-stat-icon-amber { background: #713f12; color: #fde68a; }
+        .dark .admin-stat-icon-green { background: #14532d; color: #86efac; }
+        .dark .admin-stat-icon-blue { background: #1e3a5f; color: #93c5fd; }
+        .dark .admin-stat-icon-red { background: #7f1d1d; color: #fecaca; }
         .dark-card .admin-stat-label {
             color: #a3a3a3;
         }
@@ -585,14 +596,144 @@
             border-radius: 0 0 var(--radius) var(--radius);
         }
 
-        @media (max-width: 1023px) {
-            .admin-sidebar {
-                transform: translateX(-100%);
-            }
-            .admin-main {
-                margin-left: 0;
-            }
-        }
+         /* Chart Grid */
+         .admin-chart-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+             gap: 24px;
+             margin-bottom: 24px;
+         }
+         .admin-chart-grid-2 {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+             gap: 24px;
+             margin-bottom: 24px;
+         }
+
+         /* Bar Chart */
+         .admin-bar-chart {
+             display: flex;
+             align-items: flex-end;
+             gap: 12px;
+             height: 220px;
+             padding-top: 16px;
+         }
+         .admin-bar-chart-sm {
+             gap: 8px;
+         }
+         .admin-bar-item {
+             flex: 1;
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             gap: 8px;
+             min-width: 40px;
+         }
+         .admin-bar-item-sm {
+             gap: 6px;
+             min-width: 24px;
+         }
+         .admin-bar-value {
+             font-size: 0.75rem;
+             font-weight: 500;
+             color: hsl(var(--muted-foreground));
+         }
+         .admin-bar-value-sm {
+             font-size: 0.65rem;
+             font-weight: 500;
+             color: hsl(var(--muted-foreground));
+         }
+         .admin-bar-label {
+             font-size: 0.75rem;
+             color: hsl(var(--muted-foreground));
+         }
+         .admin-bar-label-vertical {
+             font-size: 0.65rem;
+             color: hsl(var(--muted-foreground));
+             writing-mode: vertical-lr;
+             transform: rotate(180deg);
+         }
+         .admin-bar-fill {
+             width: 100%;
+             border-radius: 6px 6px 0 0;
+             min-height: 4px;
+         }
+         .admin-bar-fill-sm {
+             border-radius: 4px 4px 0 0;
+         }
+         .admin-bar-fill-primary { background: linear-gradient(180deg, #0a0a0a 0%, #262626 100%); }
+         .admin-bar-fill-blue { background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%); }
+         .admin-bar-fill-amber { background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%); }
+         .admin-bar-fill-purple { background: linear-gradient(180deg, #7c3aed 0%, #5b21b6 100%); }
+
+         .dark .admin-bar-fill-primary { background: linear-gradient(180deg, #fafafa 0%, #e5e5e5 100%); }
+         .dark .admin-bar-fill-blue { background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%); }
+         .dark .admin-bar-fill-amber { background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%); }
+         .dark .admin-bar-fill-purple { background: linear-gradient(180deg, #a78bfa 0%, #8b5cf6 100%); }
+
+         .admin-cart-summary-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+             gap: 16px;
+             margin-top: 8px;
+         }
+
+         /* Table wrapper */
+         .admin-table-responsive {
+             overflow-x: auto;
+         }
+
+         /* Mini Stat Card */
+         .admin-mini-stat {
+             padding: 16px;
+             border-radius: var(--radius);
+         }
+
+         /* Sidebar Overlay (mobile) */
+         .admin-sidebar-overlay {
+             position: fixed;
+             inset: 0;
+             z-index: 30;
+             background: rgba(0, 0, 0, 0.5);
+             opacity: 0;
+             visibility: hidden;
+             transition: opacity 0.3s ease;
+         }
+         .admin-sidebar-overlay.active {
+             opacity: 1;
+             visibility: visible;
+         }
+
+         @media (max-width: 1023px) {
+             .admin-sidebar {
+                 transform: translateX(-100%);
+             }
+             .admin-sidebar.active {
+                 transform: translateX(0);
+             }
+             .admin-sidebar-overlay.active {
+                 opacity: 1;
+                 visibility: visible;
+             }
+             .admin-main {
+                 margin-left: 0;
+             }
+             .admin-header {
+                 padding: 0 16px;
+             }
+             .admin-content {
+                 padding: 20px 16px;
+             }
+             .admin-chart-grid,
+             .admin-chart-grid-2 {
+                 grid-template-columns: 1fr;
+             }
+             .notification-container {
+                 right: 12px;
+                 min-width: 280px;
+                 max-width: calc(100vw - 24px);
+             }
+         }
 
         .admin-dropdown {
             position: relative;
@@ -813,15 +954,82 @@
         .dark .notification-close:hover {
             background-color: rgba(255, 255, 255, 0.05);
         }
+
+        /* Modal */
+        .admin-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+        }
+        .admin-modal.hidden {
+            display: none;
+        }
+        .admin-modal-content {
+            background: var(--popover);
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 420px;
+            margin: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            color: hsl(var(--popover-foreground));
+        }
+        .admin-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px 12px;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+        .admin-modal-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .admin-modal-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: var(--radius);
+            background: none;
+            color: hsl(var(--muted-foreground));
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+        .admin-modal-close:hover {
+            background: hsl(var(--secondary));
+        }
+        .admin-modal-form {
+            padding: 20px;
+        }
+        .admin-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 8px;
+            padding-top: 16px;
+            border-top: 1px solid hsl(var(--border));
+        }
     </style>
     @stack('head')
 </head>
 <body>
     <div class="admin-wrapper">
-        <!-- Sidebar -->
-        @include('admin.partials.sidebar')
+         <!-- Sidebar -->
+         @include('admin.partials.sidebar')
 
-        <!-- Main Content -->
+         <!-- Mobile Overlay -->
+         <div id="sidebar-overlay" class="admin-sidebar-overlay"></div>
+
+         <!-- Main Content -->
         <div class="admin-main">
             <!-- Header -->
             <header class="admin-header">
@@ -834,7 +1042,7 @@
                         @yield('breadcrumb')
                     </div>
                 </div>
-                <div class="admin-header-right" style="gap: 8px;">
+                <div class="admin-header-right">
                     @php
                         $user = auth()->user();
                         $initials = '';
@@ -857,10 +1065,50 @@
                         <div id="user-dropdown" class="admin-dropdown-menu hidden">
                             <a href="{{ route('account.profile') }}" class="admin-dropdown-item">Profile</a>
                             <a href="{{ route('account.dashboard') }}" class="admin-dropdown-item">Account</a>
+                            <button type="button" class="admin-dropdown-item" id="change-password-btn">Change Password</button>
                             <div class="admin-dropdown-divider"></div>
                             <form method="POST" action="{{ route('logout') }}" class="admin-dropdown-form">
                                 @csrf
                                 <button type="submit" class="admin-dropdown-item">Logout</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Change Password Modal -->
+                    <div id="change-password-modal" class="admin-modal hidden" aria-hidden="true" tabindex="-1">
+                        <div class="admin-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+                            <div class="admin-modal-header">
+                                <h3 id="modal-title" class="admin-modal-title">Ubah Password</h3>
+                                <button type="button" class="admin-modal-close" id="change-password-close" aria-label="Close">
+                                    <span class="material-symbols-outlined">close</span>
+                                </button>
+                            </div>
+                            <form method="POST" action="{{ route('admin.password.update') }}" class="admin-modal-form">
+                                @csrf
+                                <div class="admin-form-group">
+                                    <label for="cp_current_password" class="admin-form-label">Password Saat Ini</label>
+                                    <input type="password" id="cp_current_password" name="current_password" class="admin-form-input" required autocomplete="current-password">
+                                </div>
+                                <div class="admin-form-group">
+                                    <label for="cp_password" class="admin-form-label">Password Baru</label>
+                                    <input type="password" id="cp_password" name="password" class="admin-form-input" required autocomplete="new-password">
+                                </div>
+                                <div class="admin-form-group">
+                                    <label for="cp_password_confirmation" class="admin-form-label">Konfirmasi Password Baru</label>
+                                    <input type="password" id="cp_password_confirmation" name="password_confirmation" class="admin-form-input" required autocomplete="new-password">
+                                </div>
+                                @if ($errors->any())
+                                    @foreach ($errors->all() as $error)
+                                        <p class="text-xs text-red-500 dark:text-red-400 mb-2">{{ $error }}</p>
+                                    @endforeach
+                                @endif
+                                <div class="admin-modal-footer">
+                                    <button type="button" class="admin-btn admin-btn-secondary" id="change-password-cancel">Batal</button>
+                                    <button type="submit" class="admin-btn admin-btn-primary">
+                                        <span class="material-symbols-outlined text-lg">save</span>
+                                        Simpan
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -963,6 +1211,59 @@
                 });
             }
             setupDropdown('user-toggle', 'user-dropdown');
+
+            // Change Password Modal
+            const modal = document.getElementById('change-password-modal');
+            const modalOpenBtn = document.getElementById('change-password-btn');
+            const modalCloseBtn = document.getElementById('change-password-close');
+            const modalCancelBtn = document.getElementById('change-password-cancel');
+
+            function openChangePasswordModal() {
+                if (!modal) return;
+                const dropdown = document.getElementById('user-dropdown');
+                if (dropdown) dropdown.classList.add('hidden');
+                modal.classList.remove('hidden');
+                modal.setAttribute('aria-hidden', 'false');
+                const pwdInput = modal.querySelector('#cp_current_password');
+                if (pwdInput) {
+                    pwdInput.focus();
+                }
+            }
+
+            function closeChangePasswordModal() {
+                if (!modal) return;
+                modal.classList.add('hidden');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+
+            if (modalOpenBtn) {
+                modalOpenBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    openChangePasswordModal();
+                });
+            }
+
+            [modalCloseBtn, modalCancelBtn].forEach(function(btn) {
+                if (btn) {
+                    btn.addEventListener('click', function() {
+                        closeChangePasswordModal();
+                    });
+                }
+            });
+
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        closeChangePasswordModal();
+                    }
+                });
+            }
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+                    closeChangePasswordModal();
+                }
+            });
 
             // Auto-generate slug for all forms that have a slug field
             const slugInput = document.querySelector('input[name="slug"]');

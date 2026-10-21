@@ -211,7 +211,7 @@
     @include('components.search-modal')
 
     {{-- Floating WhatsApp contact button --}}
-    <a href="https://wa.me/6281234567890" target="_blank" rel="noopener"
+    <a href="https://wa.me/{{ config('services.whatsapp.number') }}" target="_blank" rel="noopener"
         class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-110 transition-transform"
         aria-label="Chat on WhatsApp">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">

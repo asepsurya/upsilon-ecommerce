@@ -64,7 +64,7 @@
         @endif
 
         <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex justify-center py-3">
-            <a href="https://wa.me/{{ config('services.whatsapp.number', '6281234567890') }}?text={{ urlencode('Hi, I would like to buy ' . $product->name . ' for ' . currency_format($displayPrice) . '. Can you give me info?') }}"
+            <a href="https://wa.me/{{ config('services.whatsapp.number') }}?text={{ urlencode('Hi, I would like to buy ' . $product->name . ' for ' . currency_format($displayPrice) . '. Can you give me info?') }}"
                 class="text-[10px] font-bold uppercase tracking-wider text-white hover:text-brand-yellow transition-colors"
                 target="_blank" rel="noopener">
                 Chat on WhatsApp

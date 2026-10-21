@@ -140,7 +140,7 @@
                                 Tautan yang dihasilkan
                             </p>
                             <code class="block truncate rounded-[var(--radius)] border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 font-mono text-xs" data-whatsapp-preview>—</code>
-                            <p class="mt-2 mb-0 text-xs text-[hsl(var(--muted-foreground))]">Pastikan nomor tanpa tanda + agar tautan wa.me valid.</p>
+                            <p class="mt-2 mb-0 text-xs text-[hsl(var(--muted-foreground))]">Nilai disimpan ke .env dan dipakai di seluruh situs.</p>
                         </div>
                     @endif
 

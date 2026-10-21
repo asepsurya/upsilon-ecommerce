@@ -193,19 +193,19 @@ class MidtransService
     }
 
     /**
-     * Get WhatsApp number from settings
+     * Get WhatsApp number from environment
      */
     public static function getWhatsAppNumber(): string
     {
-        return Setting::get('whatsapp_number', config('services.whatsapp.number', '6281234567890'));
+        return config('services.whatsapp.number', '6281234567890');
     }
 
     /**
-     * Get default WhatsApp message
+     * Get default WhatsApp message from environment
      */
     public static function getWhatsAppMessage(array $replacements = []): string
     {
-        $message = Setting::get('whatsapp_default_message', config('services.whatsapp.default_message', 'Hello, I would like to inquire about your products.'));
+        $message = config('services.whatsapp.default_message', 'Hello, I would like to inquire about your products.');
 
         foreach ($replacements as $key => $value) {
             $message = str_replace('{'.$key.'}', $value, $message);

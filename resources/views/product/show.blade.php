@@ -50,43 +50,43 @@
 @section("canonical", url()->current())
 
 @push("head")
-    <script type="application/ld+json">
+<script type="application/ld+json">
         {!! json_encode(array_filter([
-        '@context' => 'https://schema.org',
-        '@type' => 'BreadcrumbList',
-        'itemListElement' => [
-            [
-                '@type' => 'ListItem',
-                'position' => 1,
-                'name' => 'Home',
-                'item' => route('home'),
-            ],
-            [
-                '@type' => 'ListItem',
-                'position' => 2,
-                'name' => 'Shop',
-                'item' => route('shop'),
-            ],
-            $product->category ? [
-                '@type' => 'ListItem',
-                'position' => 3,
-                'name' => $product->category->name,
-                'item' => route('shop', ['category' => $product->category->slug]),
-            ] : null,
-            [
-                '@type' => 'ListItem',
-                'position' => $product->category ? 4 : 3,
-                'name' => $product->name,
-                'item' => url()->current(),
-            ],
+    '@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        [
+            '@type' => 'ListItem',
+            'position' => 1,
+            'name' => 'Home',
+            'item' => route('home'),
         ],
-    ]), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+        [
+            '@type' => 'ListItem',
+            'position' => 2,
+            'name' => 'Shop',
+            'item' => route('shop'),
+        ],
+        $product->category ? [
+            '@type' => 'ListItem',
+            'position' => 3,
+            'name' => $product->category->name,
+            'item' => route('shop', ['category' => $product->category->slug]),
+        ] : null,
+        [
+            '@type' => 'ListItem',
+            'position' => $product->category ? 4 : 3,
+            'name' => $product->name,
+            'item' => url()->current(),
+        ],
+    ],
+]), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
     </script>
 
 
 @push("head")
     <script type="application/ld+json">
-                    {!! json_encode(array_filter([
+                                            {!! json_encode(array_filter([
         '@context' => 'https://schema.org',
         '@type' => 'Product',
         'name' => $product->name,
@@ -109,7 +109,7 @@
             'reviewCount' => $reviewCount,
         ] : null,
     ]), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
-                    </script>
+                                            </script>
 @endpush
 
 @push('scripts')
@@ -434,7 +434,7 @@
                 <div class="space-y-2.5 pt-4 border-t border-neutral-200">
                     @php
                         $checkoutMode = $siteSettings['checkout_mode'] ?? 'midtrans';
-                        $waNumber = config('services.whatsapp.number', '6281234567890');
+                        $waNumber = config('services.whatsapp.number');
                         $defaultWaText = urlencode("Hello Upsilon, I am interested in buying {$product->name} for " . currency_format($minPrice) . ". Please confirm stock and how to order.");
                     @endphp
 
@@ -769,67 +769,7 @@
     @endif
 
     {{-- BUNDLES --}}
-    @if(isset($bundles) && $bundles->isNotEmpty())
-        <section class="mt-20 pt-10 border-t border-neutral-200">
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-neutral-400 block mb-1">Bundle
-                        Offers</span>
-                    <h2 class="text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-neutral-900">Top Upsilon
-                        Bundles</h2>
-                </div>
-                <a href="{{ route('bundles') }}" class="text-xs font-bold text-neutral-900 hover:underline">
-                    View All &rarr;
-                </a>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                @foreach($bundles as $bundle)
-                    <button type="button" class="bundle-card group block w-full text-left" data-bundle-id="{{ $bundle->id }}">
-                        <div class="relative aspect-square w-full overflow-hidden rounded shadow">
-                            @if($bundle->thumbnail)
-                                <img src="{{ asset('storage/' . $bundle->thumbnail) }}" alt="{{ $bundle->name }}" loading="lazy"
-                                    class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
-                            @else
-                                <img src="https://placehold.co/600x600/1E2125/FFFFFF?text={{ urlencode($bundle->name) }}"
-                                    alt="{{ $bundle->name }}" loading="lazy"
-                                    class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
-                            @endif
-                            @if($bundle->discount_percent > 0)
-                                <div
-                                    class="absolute top-3 left-3 bg-brand-yellow text-black px-2 py-1 font-condensed text-[10px] uppercase tracking-wider rounded">
-                                    Save {{ $bundle->discount_percent }}%
-                                </div>
-                            @endif
-                            <div
-                                class="absolute bottom-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-sm">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                </svg>
-                            </div>
-                        </div>
-                        <h3 class="mt-2 text-xs font-bold uppercase tracking-wider">{{ $bundle->name }}</h3>
-                        @php
-                            $typeLabels = [
-                                'catalog' => 'Catalog',
-                                'manual' => 'Manual',
-                                'mixed' => 'Mixed',
-                            ];
-                            $typeColors = [
-                                'catalog' => 'bg-blue-50 text-blue-700',
-                                'manual' => 'bg-yellow-50 text-yellow-700',
-                                'mixed' => 'bg-purple-50 text-purple-700',
-                            ];
-                            $currentType = $bundle->bundle_type ?? 'catalog';
-                        @endphp
-                        <span
-                            class="inline-block text-[10px] font-bold uppercase tracking-tighter px-2 py-0.5 rounded {{ $typeColors[$currentType] ?? 'bg-neutral-100 text-neutral-700' }} mt-1">
-                            {{ $typeLabels[$currentType] ?? ucfirst($currentType) }}
-                        </span>
-                    </button>
-                @endforeach
-            </div>
-        </section>
-    @endif
+
 
     {{-- RECENTLY VIEWED PRODUCTS --}}
     @if(isset($recentlyViewed) && $recentlyViewed->isNotEmpty())
@@ -865,9 +805,9 @@
                 <span id="bundle-modal-original" class="text-sm text-neutral-500 line-through"></span>
             </div>
 
-            <a id="bundle-modal-cta" href="#" target="_blank" rel="noopener"
+            <a id="bundle-modal-cta" href="{{ route('home.create-bundle') }}"
                 class="mt-4 inline-flex w-full items-center justify-center rounded bg-yellow-400 px-4 py-2 text-sm font-bold text-black hover:bg-yellow-300">
-                Order Bundle
+                Create Bundle
             </a>
         </div>
     </div>
@@ -921,10 +861,10 @@
     </div>
 </div>
 
-<div class="mt-4 p-3 bg-neutral-50 rounded-sm text-[11px] text-neutral-500">
+{{-- <div class="mt-4 p-3 bg-neutral-50 rounded-sm text-[11px] text-neutral-500">
     💡 <strong>Tip:</strong> If you are between two sizes, it is recommended to choose one size larger for maximum
     sneaker comfort.
-</div>
+</div> --}}
 </div>
 </div>
 @endsection
@@ -1457,7 +1397,7 @@
                 }
 
                 var cta = document.getElementById('bundle-modal-cta');
-                cta.href = 'https://wa.me/{{ config("services.whatsapp.number") }}?text=' + encodeURIComponent('Hello, I am interested in ' + bundle.name + ' bundle.');
+                cta.href = '{{ route('home.create-bundle') }}';
 
                 document.getElementById('bundle-modal').classList.remove('hidden');
             };

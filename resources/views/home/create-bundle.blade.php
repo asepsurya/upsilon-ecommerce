@@ -22,7 +22,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('home.create-bundle') }}" class="space-y-8" id="bundle-form">
+            <form method="POST" action="{{ route('home.create-bundle.store') }}" class="space-y-8" id="bundle-form">
                 @csrf
 
                 <div class="bg-gray-50 rounded-lg p-6 space-y-6">

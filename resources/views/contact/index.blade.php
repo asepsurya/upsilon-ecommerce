@@ -68,7 +68,10 @@
                         </div>
                         @endif
 
-                        @if($siteSettings['contact_phone'])
+                    @php
+                        $contactWhatsApp = preg_replace('/\D+/', '', config('services.whatsapp.number', ''));
+                    @endphp
+                    @if($contactWhatsApp)
                         <div class="flex items-start gap-3">
                             <div
                                 class="mt-0.5 flex h-9 w-9 items-center justify-center rounded-sm border border-neutral-200 bg-neutral-50">
@@ -80,10 +83,10 @@
                             </div>
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-neutral-900">WhatsApp</p>
-                                <a href="https://wa.me/{{ preg_replace('/\D/', '', $siteSettings['contact_phone']) }}?text={{ urlencode($siteSettings['whatsapp_default_message']) }}" target="_blank" rel="noopener" class="text-sm text-neutral-700 hover:text-primary">{{ $siteSettings['contact_phone'] }}</a>
+                                <a href="https://wa.me/{{ $contactWhatsApp }}?text={{ urlencode(config('services.whatsapp.default_message', 'Hello, I would like to inquire about your products.')) }}" target="_blank" rel="noopener" class="text-sm text-neutral-700 hover:text-primary">{{ $contactWhatsApp }}</a>
                             </div>
                         </div>
-                        @endif
+                    @endif
 
                         @if($siteSettings['contact_address'])
                         <div class="flex items-start gap-3">

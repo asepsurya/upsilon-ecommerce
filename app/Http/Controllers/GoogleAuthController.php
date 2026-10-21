@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -15,7 +16,7 @@ class GoogleAuthController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
-    public function callback()
+    public function callback(Request $request)
     {
         try {
             $googleUser = Socialite::driver('google')->user();
@@ -50,10 +51,12 @@ class GoogleAuthController extends Controller
 
         Auth::login($user);
 
+        $request->session()->regenerate();
+
         if ($user->is_admin) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->intended(route('admin.dashboard'));
         }
 
-        return redirect()->route('account.dashboard');
+        return redirect()->intended(route('account.dashboard'));
     }
 }

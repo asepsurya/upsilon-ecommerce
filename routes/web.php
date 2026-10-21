@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomepageController::class, 'index'])->name('home');
 Route::get('/create-bundle', [HomepageController::class, 'createBundle'])->name('home.create-bundle');
-Route::post('/create-bundle', [HomepageController::class, 'createBundle'])->name('home.create-bundle');
+Route::post('/create-bundle', [HomepageController::class, 'createBundle'])->name('home.create-bundle.store');
 Route::get('/bundles', [HomepageController::class, 'bundles'])->name('bundles');
 
 Route::get('/flash-sale', [HomepageController::class, 'flashSale'])->name('flash.sale');
@@ -254,4 +254,7 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     // Settings
     Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings.index');
     Route::post('/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
+
+    // Password
+    Route::post('/password', [AdminController::class, 'updatePassword'])->name('admin.password.update');
 });

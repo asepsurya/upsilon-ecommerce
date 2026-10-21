@@ -7,7 +7,7 @@
 
 @section('content')
     @php
-        $waNumber = preg_replace('/\D+/', '', $siteSettings['whatsapp_number'] ?? '');
+        $waNumber = preg_replace('/\D+/', '', config('services.whatsapp.number', ''));
         $waLink = $waNumber
             ? 'https://wa.me/' . $waNumber . '?text=' . urlencode("Hi Upsilon, I'd like to order from the Flash Sale page.")
             : null;
